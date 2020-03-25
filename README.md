@@ -1,11 +1,11 @@
-#VITask
+# VITask
 VITask is a dynamic API server for VTOP.
 
-###Prerequisites
+### Prerequisites
 
 -Python 3.2 or higher
 
-###Installation
+### Installation
 
 -Creating Virtual Environment and Installing Flask:
     -Open cmd
@@ -18,13 +18,13 @@ VITask is a dynamic API server for VTOP.
     -Go to VITask directory
     -Run this 'pip install -r requirements.txt'
     
-###Before you run main.py
+### Before you run main.py
 
 -Replace the directory name inside main.py according to your system
     -for example if you see a directory name like this '"C:\\Users\\name\\Desktop\\"+username1+"-profile"+".html"' then replace it with yours by changing according to your system.
 -Authorize Firebase by saving firebase.json in a suitable location and then executing 'set GOOGLE_APPLICATION_CREDENTIALS=path_to_your_firebase.json\firebase.json' in cmd.
     
-###Running main.py
+### Running main.py
 
 -Open cmd
 -Change current directory to VITask folder
