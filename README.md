@@ -10,7 +10,7 @@ Python 3.2 or higher
 1.Creating Virtual Environment and Installing Flask
 * Open cmd
 * Change current directory to VITask directory
-* Run this 'py -3 -m venv venv' or 'python3 -m venv venv'
+* Run this ''py -3 -m venv venv' or 'python3 -m venv venv''
 * To activate virtual environment, run this 'venv\Scripts\activate'
 * Now install Flask using 'pip install Flask'
     
