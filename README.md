@@ -1,7 +1,7 @@
 # VITask
 VITask is a dynamic API server for VTOP.
 
-## Guide for Web
+## Guide for Web Application
 
 ### Prerequisites
 
