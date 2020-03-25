@@ -1,0 +1,160 @@
+* {
+  box-sizing: border-box;
+  line-height: 1.5;
+  font-family: 'Open Sans', sans-serif;
+}
+
+html { 
+    background: linear-gradient(to bottom, rgba(195, 20, 50, 0.8), rgba(36, 11, 54, 0.8)),url('../images/bg.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 700px;
+}
+
+.card {
+  position: relative;
+  background: #333;
+  width: 900px;
+  height: 550px;
+  border-radius: 6px;
+  padding: 0rem;
+  color: #aaa;
+  box-shadow: 0 .25rem .25rem rgba(0,0,0,0.2),
+    0 0 1rem rgba(0,0,0,0.2);
+  overflow: hidden;
+    
+}
+
+.card .side img{
+    height: 550px;
+}
+
+.card .logo .leaf img{
+    position:absolute;
+    height:100px;
+    top:20px;
+    right:250px;
+}
+
+.card .logo form{
+    position: absolute;
+    right:180px;
+    top:150px;
+}
+
+.card .logo form .captcha{
+    position: absolute;
+    padding: 10px;
+    margin-top: -10px;
+    right: 18px;
+}
+
+.card .logo form .captcha img{
+    height: 50px;
+    border: 2px white solid;
+    border-radius: 5px;
+}
+
+.card .logo .info input[type=text] {
+    background: #333;
+    width: 250px;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: 0px;
+    border: 1px white solid;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    caret-color: white;
+    color: white;
+}
+
+.card .logo .info input[type=password] {
+    background: #333;
+    width: 250px;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: 0px;
+    border: 1px white solid;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    caret-color: white;
+    color: white;
+}
+
+.card .logo .captchainfo input[type=text] {
+    background: #333;
+    width: 250px;
+    padding: 10px;
+    box-sizing: border-box;
+    outline: 0px;
+    border: 1px white solid;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-top: 70px;
+    caret-color: white;
+    color: white;
+}
+
+.card .logo .info input[type=password]::placeholder {
+    color:white;
+    font-family: sans-serif;
+    font-size: 15px;
+}
+
+.card .logo .info input[type=text]::placeholder {
+    color:white;
+    font-size: 15px;
+    font-family: sans-serif;
+}
+
+.card .logo .captchainfo input[type=text]::placeholder {
+    color:white;
+    font-family: sans-serif;
+    font-size: 15px;
+}
+
+button{
+    position: absolute;
+    background: linear-gradient(to left, rgba(195, 20, 50, 1), rgba(195, 7, 54, 0.8));
+    color:white;
+    font-size: 20px;
+    outline: 0px;
+    border: 1px white solid;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: 250px;
+}
+button:hover{
+    background: linear-gradient(to right, rgba(195, 20, 50, 1), rgba(195, 7, 54, 0.8));
+    color:white;
+    font-size: 20px;
+    outline: 0px;
+    border: 1px white solid;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: 250px;
+}
+
+
+::-webkit-input-placeholder { opacity: 1; -webkit-transition: opacity .5s; transition: opacity .5s; }  /* Chrome <=56, Safari < 10 */
+:-moz-placeholder { opacity: 1; -moz-transition: opacity .5s; transition: opacity .5s; } /* FF 4-18 */
+::-moz-placeholder { opacity: 1; -moz-transition: opacity .5s; transition: opacity .5s; } /* FF 19-51 */
+:-ms-input-placeholder { opacity: 1; -ms-transition: opacity .5s; transition: opacity .5s; } /* IE 10+ */
+::placeholder { opacity: 1; transition: opacity .5s; } /* Modern Browsers */
+
+*:focus::-webkit-input-placeholder { opacity: 0; } /* Chrome <=56, Safari < 10 */
+*:focus:-moz-placeholder { opacity: 0; } /* FF 4-18 */
+*:focus::-moz-placeholder { opacity: 0; } /* FF 19-50 */
+*:focus:-ms-input-placeholder { opacity: 0; } /* IE 10+ */
+*:focus::placeholder { opacity: 0; } /* Modern Browsers */

@@ -1,0 +1,15 @@
+{
+  "name": "shoppinglist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Apratim Shukla",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^7.1.10",
+    "request": "^2.88.0"
+  }
+}

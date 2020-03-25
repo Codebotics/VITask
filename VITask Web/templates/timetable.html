@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>
+    VITask | Timetable
+  </title>
+  <!-- Favicon -->
+  <link href="{{ url_for('static', filename='assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Icons -->
+  <link href="{{ url_for('static', filename='assets/js/plugins/nucleo/css/nucleo.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="{{ url_for('static', filename='assets/css/argon-dashboard.css') }}" rel="stylesheet" />
+  <!-- jQuery CDN -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        /*Scrollbar */
+        /* width */
+        ::-webkit-scrollbar {
+          width: 1em;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+          box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background-color: #32325d;
+            outline: 1px solid slategrey;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #b30000; 
+        }
+        /*Scrollbar */
+    </style>
+</head>
+
+<body class="">
+  <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
+    <div class="container-fluid">
+      <!-- Toggler -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Brand -->
+      <a class="navbar-brand pt-0" href="../index.html">
+        <img src="{{ url_for('static', filename='assets/img/brand/blue.png') }}" class="navbar-brand-img" alt="...">
+      </a>
+      <!-- User -->
+      <ul class="nav align-items-center d-md-none">
+        <li class="nav-item dropdown">
+          
+          <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right" aria-labelledby="navbar-default_dropdown_1">
+            <a class="dropdown-item" href="{{ url_for('profile') }}">Dashboard</a>
+            <a class="dropdown-item" href="#">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="media align-items-center">
+              <span class="avatar avatar-sm rounded-circle">
+                <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/maple.png') }}">
+              </span>
+            </div>
+          </a>
+          <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+            <div class=" dropdown-header noti-title">
+              <h6 class="text-overflow m-0">Welcome!</h6>
+            </div>
+            <a href="{{ url_for('profile') }}" class="dropdown-item">
+              <i class="ni ni-single-02"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="#" class="dropdown-item">
+              <i class="ni ni-settings-gear-65"></i>
+              <span>Settings</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ url_for('logout') }}" class="dropdown-item">
+              <i class="ni ni-user-run"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+      <!-- Collapse -->
+      <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+        <!-- Collapse header -->
+        <div class="navbar-collapse-header d-md-none">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="{{ url_for('profile') }}">
+                <img src="{{ url_for('static', filename='assets/img/brand/blue.png') }}">
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+          <a class=" nav-link" href="{{ url_for('profile') }}"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="#">
+              <i class="ni ni-hat-3 text-blue"></i> Academic History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="{{ url_for('classes') }}">
+              <i class="ni ni-time-alarm text-orange"></i> Attendance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="#">
+              <i class="ni ni-paper-diploma text-pink"></i> Marks
+            </a>
+          </li>
+         <li class="nav-item">
+            <a class="nav-link " href="#">
+              <i class="ni ni-books text-yellow"></i> Moodle
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link active" href="{{ url_for('timetable') }}">
+              <i class="ni ni-calendar-grid-58 text-red"></i> Timetable
+            </a>
+          </li>
+        </ul>
+        <!-- Divider -->
+        <hr class="my-3">
+        <!-- Heading -->
+        <h6 class="navbar-heading text-muted">VITask API</h6>
+        <!-- Navigation -->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="ni ni-spaceship"></i> API Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="ni ni-palette"></i> API Console
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="main-content">
+    <!-- Navbar -->
+     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+      <div class="container-fluid">
+        <!-- Brand -->
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('profile') }}">Dashboard</a>
+        
+        <!-- User -->
+        <ul class="navbar-nav align-items-center d-none d-md-flex">
+          <li class="nav-item dropdown">
+            <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div class="media align-items-center">
+                <span class="avatar avatar-sm rounded-circle">
+                  <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/maple.png') }}">
+                </span>
+                <div class="media-body ml-2 d-none d-lg-block">
+                  <span class="mb-0 text-sm  font-weight-bold">{{ name }}</span>
+                </div>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+              <div class=" dropdown-header noti-title">
+                <h6 class="text-overflow m-0">Welcome!</h6>
+              </div>
+              <a href="{{ url_for('profile') }}" class="dropdown-item">
+                <i class="ni ni-single-02"></i>
+                <span>Dashboard</span>
+              </a>
+              <a href="#" class="dropdown-item">
+                <i class="ni ni-settings-gear-65"></i>
+                <span>Settings</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="{{ url_for('logout') }}" class="dropdown-item">
+                <i class="ni ni-user-run"></i>
+                <span>Logout</span>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <!-- Header -->
+    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+      <div class="container-fluid">
+        <div class="header-body">
+          <!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-2 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0" id="Monstyle">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Montext">Monday</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-danger text-white rounded-circle shadow" onclick="Monday()">
+                        <i class="fa fa-fighter-jet"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Monday"]|length }} classes</span>
+                    <span class="text-nowrap"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+           <div class="col-xl-2 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0" id="Tuestyle">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Tuetext">Tuesday</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow" onclick="Tuesday()">
+                        <i class="fa fa-bolt"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Tuesday"]|length }} classes</span>
+                    <span class="text-nowrap"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+               <div class="col-xl-2 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0" id="Wedstyle">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Wedtext">Wednesday</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-primary text-white rounded-circle shadow" onclick="Wednesday()">
+                        <i class="fa fa-bicycle"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Wednesday"]|length }} classes</span>
+                    <span class="text-nowrap"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+               <div class="col-xl-2 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0" id="Thustyle">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Thutext">Thursday</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-success text-white rounded-circle shadow" onclick="Thursday()">
+                        <i class="fa fa-car"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Thursday"]|length }} classes</span>
+                    <span class="text-nowrap"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+               <div class="col-xl-2 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0" id="Fristyle">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Fritext">Friday</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-dark text-white rounded-circle shadow" onclick="Friday()">
+                        <i class="fa fa-paw"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Friday"]|length }} classes</span>
+                    <span class="text-nowrap"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+              
+              
+              
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid mt--7">
+      <!-- Table -->
+      
+      <!-- Dark table -->
+      
+        
+          <div class="row mt-5" id="Monday">
+        <div class="col">
+          <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Timetable: Monday</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Timing</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in tt["Monday"] %}
+                    
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                    {% if i[0][:3:1]=="MAT" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
+                    {% elif i[0][:3:1]=="CSE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
+                    {% elif i[0][:3:1]=="EEE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
+                    {% elif i[0][:3:1]=="ECE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
+                    {% elif i[0][:3:1]=="ECM" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
+                    {% elif i[0][:3:1]=="MEC" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
+                    {% elif i[0][:3:1]=="CIV" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
+                    {% elif i[0][:3:1]=="STS" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
+                    {% endif %}
+                          
+                        </a>
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      {{ i[0] }}
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        
+                      </div>
+                    </td>
+                    <td class="text-right">
+                      <div class="dropdown">
+                       
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+        
+        
+        <div class="row mt-5" id="Tuesday">
+        <div class="col">
+          <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Timetable: Tuesday</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Timing</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in tt["Tuesday"] %}
+                    
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                    {% if i[0][:3:1]=="MAT" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
+                    {% elif i[0][:3:1]=="CSE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
+                    {% elif i[0][:3:1]=="EEE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
+                    {% elif i[0][:3:1]=="ECE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
+                    {% elif i[0][:3:1]=="ECM" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
+                    {% elif i[0][:3:1]=="MEC" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
+                    {% elif i[0][:3:1]=="CIV" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
+                    {% elif i[0][:3:1]=="STS" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
+                    {% endif %}
+                          
+                        </a>
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      {{ i[0] }}
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        
+                      </div>
+                    </td>
+                    <td class="text-right">
+                      <div class="dropdown">
+                       
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+        
+        
+          <div class="row mt-5" id="Wednesday">
+        <div class="col">
+          <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Timetable: Wednesday</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Timing</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in tt["Wednesday"] %}
+                    
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                    {% if i[0][:3:1]=="MAT" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
+                    {% elif i[0][:3:1]=="CSE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
+                    {% elif i[0][:3:1]=="EEE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
+                    {% elif i[0][:3:1]=="ECE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
+                    {% elif i[0][:3:1]=="ECM" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
+                    {% elif i[0][:3:1]=="MEC" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
+                    {% elif i[0][:3:1]=="CIV" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
+                    {% elif i[0][:3:1]=="STS" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
+                    {% endif %}
+                          
+                        </a>
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      {{ i[0] }}
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        
+                      </div>
+                    </td>
+                    <td class="text-right">
+                      <div class="dropdown">
+                       
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+        
+        
+         <div class="row mt-5" id="Thursday">
+        <div class="col">
+          <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Timetable: Thursday</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Timing</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in tt["Thursday"] %}
+                    
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                    {% if i[0][:3:1]=="MAT" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
+                    {% elif i[0][:3:1]=="CSE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
+                    {% elif i[0][:3:1]=="EEE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
+                    {% elif i[0][:3:1]=="ECE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
+                    {% elif i[0][:3:1]=="ECM" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
+                    {% elif i[0][:3:1]=="MEC" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
+                    {% elif i[0][:3:1]=="CIV" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
+                    {% elif i[0][:3:1]=="STS" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
+                    {% endif %}
+                          
+                        </a>
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      {{ i[0] }}
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        
+                      </div>
+                    </td>
+                    <td class="text-right">
+                      <div class="dropdown">
+                       
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+          <div class="row mt-5" id="Friday">
+        <div class="col">
+          <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Timetable: Friday</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Timing</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in tt["Friday"] %}
+                    
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                    {% if i[0][:3:1]=="MAT" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
+                    {% elif i[0][:3:1]=="CSE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
+                    {% elif i[0][:3:1]=="EEE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
+                    {% elif i[0][:3:1]=="ECE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
+                    {% elif i[0][:3:1]=="ECM" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
+                    {% elif i[0][:3:1]=="MEC" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
+                    {% elif i[0][:3:1]=="CIV" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
+                    {% elif i[0][:3:1]=="STS" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
+                    {% endif %}
+                          
+                        </a>
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      {{ i[0] }}
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        
+                      </div>
+                    </td>
+                    <td class="text-right">
+                      <div class="dropdown">
+                       
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     <br>
+        
+        
+       
+        
+        
+    </div>
+  </div>
+    <!-- Loader -->
+    <script>
+        $(document).ready(function() {
+            $("#Monday").show();
+            $("#Monstyle").css("background-color", "#32325d");
+            $("#Montext").css("color", "white");
+            $("#Tuestyle").css("background-color", "");
+            $("#Tuetext").css("color", "");
+            $("#Wedstyle").css("background-color", "");
+            $("#Wedtext").css("color", "");
+            $("#Thustyle").css("background-color", "");
+            $("#Thutext").css("color", "");
+            $("#Fristyle").css("background-color", "");
+            $("#Fritext").css("color", "");
+            $("#Tuesday").hide();
+            $("#Wednesday").hide();
+            $("#Thursday").hide();
+            $("#Friday").hide();
+        });
+        function Monday(){
+            $("#Monday").show();
+            $("#Monstyle").css("background-color", "#32325d");
+            $("#Montext").css("color", "white");
+            $("#Tuestyle").css("background-color", "");
+            $("#Tuetext").css("color", "");
+            $("#Wedstyle").css("background-color", "");
+            $("#Wedtext").css("color", "");
+            $("#Thustyle").css("background-color", "");
+            $("#Thutext").css("color", "");
+            $("#Fristyle").css("background-color", "");
+            $("#Fritext").css("color", "");
+            $("#Tuesday").hide();
+            $("#Wednesday").hide();
+            $("#Thursday").hide();
+            $("#Friday").hide();
+        }
+        function Tuesday(){
+            $("#Monday").hide();
+            $("#Tuesday").show();
+            $("#Monstyle").css("background-color", "");
+            $("#Montext").css("color", "");
+            $("#Tuestyle").css("background-color", "#32325d");
+            $("#Tuetext").css("color", "white");
+            $("#Wedstyle").css("background-color", "");
+            $("#Wedtext").css("color", "");
+            $("#Thustyle").css("background-color", "");
+            $("#Thutext").css("color", "");
+            $("#Fristyle").css("background-color", "");
+            $("#Fritext").css("color", "");
+            $("#Wednesday").hide();
+            $("#Thursday").hide();
+            $("#Friday").hide();
+        }
+        function Wednesday(){
+            $("#Monday").hide();
+            $("#Tuesday").hide();
+            $("#Wednesday").show();
+            $("#Monstyle").css("background-color", "");
+            $("#Montext").css("color", "");
+            $("#Tuestyle").css("background-color", "");
+            $("#Tuetext").css("color", "");
+            $("#Wedstyle").css("background-color", "#32325d");
+            $("#Wedtext").css("color", "white");
+            $("#Thustyle").css("background-color", "");
+            $("#Thutext").css("color", "");
+            $("#Fristyle").css("background-color", "");
+            $("#Fritext").css("color", "");
+            $("#Thursday").hide();
+            $("#Friday").hide();
+        }
+        function Thursday(){
+            $("#Monday").hide();
+            $("#Tuesday").hide();
+            $("#Wednesday").hide();
+            $("#Thursday").show();
+            $("#Monstyle").css("background-color", "");
+            $("#Montext").css("color", "");
+            $("#Tuestyle").css("background-color", "");
+            $("#Tuetext").css("color", "");
+            $("#Wedstyle").css("background-color", "");
+            $("#Wedtext").css("color", "");
+            $("#Thustyle").css("background-color", "#32325d");
+            $("#Thutext").css("color", "white");
+            $("#Fristyle").css("background-color", "");
+            $("#Fritext").css("color", "");
+            $("#Friday").hide();
+        }
+        function Friday(){
+            $("#Monday").hide();
+            $("#Tuesday").hide();
+            $("#Wednesday").hide();
+            $("#Thursday").hide();
+            $("#Friday").show();
+            $("#Monstyle").css("background-color", "");
+            $("#Montext").css("color", "");
+            $("#Tuestyle").css("background-color", "");
+            $("#Tuetext").css("color", "");
+            $("#Wedstyle").css("background-color", "");
+            $("#Wedtext").css("color", "");
+            $("#Thustyle").css("background-color", "");
+            $("#Thutext").css("color", "");
+            $("#Fristyle").css("background-color", "#32325d");
+            $("#Fritext").css("color", "white");
+        }
+    </script>
+  <!--   Core   -->
+  <script src="{{ url_for('static', filename='assets/js/plugins/jquery/dist/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+  <!--   Optional JS   -->
+  <!--   Argon JS   -->
+  <script src="{{ url_for('static', filename='assets/js/argon-dashboard.min.js') }}"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+
+</body>
+
+</html>

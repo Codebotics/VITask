@@ -1,0 +1,175 @@
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans);
+
+body,
+.container{background:#75a7ff;padding:.3em 0 2em}
+
+h1{
+font-family: "Noto Sans", "Helvetica Neue", Helvetica, arial, sans-serif;
+font-size:3em;
+text-align:center;
+text-transform: uppercase;
+color: #999;
+font-weight: 100;
+text-shadow:-1px 1px 0px #fff   
+}
+
+/* #Canvas Element Circular charts
+================================================== */
+canvas, video {display: inline-block;}
+
+
+.stats-container {
+margin: 0;
+padding: 0;
+list-style: none;
+text-align: center;
+padding-bottom: 70px;
+}
+
+.stats-container li {
+display: inline-block;
+margin: 0 4% 5px;
+position: relative;
+}
+
+.circular-stat {
+position: relative;
+}
+
+.circular-stat .digit-label {
+color:  #db4dc2;
+font-family: "Noto Sans", "Helvetica Neue", Helvetica, arial, sans-serif;
+font-size: 3.2em;
+text-align: center;
+display: inline-block;
+position: absolute;
+top: 11.5%;
+width: 75%;
+left: 12.5%;
+padding: 30px 0 0 30px;
+  text-shadow:-1px 1px 0px #fff 
+white-space: nowrap;
+overflow: hidden;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-o-box-sizing: border-box;
+-ms-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+.circular-stat .text-label {
+font-family:"Noto Sans", "Helvetica Neue", Helvetica, arial, sans-serif;
+color: #333;
+font-size:1.5em;
+top: 50%;
+left: 21.875%;
+width: 56.25%;
+padding-top: 6px;
+display: inline-block;
+position: absolute;
+text-align: center;
+border-top: 1px solid #999;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-o-box-sizing: border-box;
+-ms-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+span.text-title {
+color:  #444;
+font-family: "Noto Sans", "Helvetica Neue", Helvetica, arial, sans-serif;
+text-align: center;
+letter-spacing: -1px;
+font-size: 1.3em;
+font-weight: 400;
+text-shadow: -1px 1px 0px #FFF;
+padding: 30px 10px 0 0px;
+margin-top: 240px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+z-index: 99999;
+display: block;
+text-shadow: -1px 1px 0px #fff;
+}
+
+span.text-dates{
+font-size: 1.5em;
+font-family: "Noto Sans", "Helvetica Neue", Helvetica, arial, sans-serif;
+color: black;
+text-shadow: -1px 1px 0px #fff;
+}
+
+@media only screen and (min-width: 1010px) { 
+.stats-container li {margin: 0 2% 5px;}
+}
+@media only screen and (max-width: 1009px) { 
+.stats-container li {margin: 0 -.2em 5px;}
+}
+
+
+body{
+  text-align: center; 
+}
+
+
+
+button{
+  position: relative;
+  border: none;
+  outline:none;
+  cursor: pointer;
+  background: #89669b;
+  color: white;
+  padding: 18px 60px;
+  border-radius: 2px;
+  font-size: 22px;
+}
+
+.fab{
+  border-radius: 50%;
+  margin:0;
+  padding: 20px;
+}
+
+.material{
+  position:relative;
+  color:white;
+  margin: 20px auto;
+  height:400px;
+  width:500px;
+  background:#f45673;
+  
+}
+
+.ripple{
+  overflow:hidden;
+}
+
+.ripple-effect{
+  position: absolute;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background: white;
+
+    
+  animation: ripple-animation 2s;
+}
+
+
+@keyframes ripple-animation {
+    from {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+    to {
+      transform: scale(100);
+      opacity: 0;
+    }
+}
+
+
+
+

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>VITask</title>
+        <link href="css/style.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="card">
+                <div class="side">
+                    <img src="images/side.png">
+                </div>
+                <div class="logo">
+                    <div class="leaf">
+                        <img src="images/leaf.png">
+                    </div>
+                    
+                    <form>
+                        <div class="info">
+                            <input type="text" placeholder="Registration Number" required>
+                        </div>
+                        <div class="info">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="captcha">
+                            <img src="images/loader.gif" id="captcha">
+                        </div>
+                        <div class="captchainfo">
+                            <input type="text" placeholder="Captcha" required>
+                        </div>
+                        <button type="submit">Login</button>
+                        
+                    </form>
+                </div>
+                <div class="content">
+                    
+                </div>
+                
+                
+            </div>
+        </div>
+        <script>
+            const electron =  require('electron');
+            const {ipcRenderer} = electron;
+            const ul = document.querySelector('ul');
+            
+            let request = require('request');
+
+            let url = `http://localhost:5000/captcha`
+
+            request(url, function (err, response, body) {
+              if(err){
+                console.log('error:', error);
+              } else {
+                let result = JSON.parse(body)
+                document.getElementById("captcha").src() = result.Captcha;
+              }
+            });
+            
+            ipcRenderer.on('item:add',function(e,item){
+                const li=document.createElement('li');
+                const itemText=document.createTextNode(item);
+                li.appendChild(itemText);
+                ul.appendChild(li);
+            });
+        </script>
+    </body>
+</html>
+    
