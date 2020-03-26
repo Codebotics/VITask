@@ -97,7 +97,10 @@ def authenticate():
     if(user_token is not None):
         # Decoding API token
         temptoken = user_token.encode('ascii')
-        appno = base64.b64decode(temptoken)
+        try:
+            appno = base64.b64decode(temptoken)
+        except:
+            return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
     
         temp = ref.child(key).child(key).get()
