@@ -25,8 +25,8 @@ try:
     password = driver.find_elements_by_xpath("//*[@id='passwd']")[0]
     captcha = driver.find_elements_by_xpath("//*[@id='captchaCheck']")[0]
     captchasolver = input()
-    username.send_keys("18blc1085")
-    password.send_keys("$Earthing1horse")
+    username.send_keys("yourregno")
+    password.send_keys("yourpassword")
     captcha.send_keys(captchasolver)
     loginfinal_button = driver.find_elements_by_xpath("//*[@id='captcha']")[0]
     loginfinal_button.click()
