@@ -15,6 +15,8 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import firebase_admin
 from firebase_admin import db
+from PIL import Image
+from PIL import ImageFilter
 import pandas as pd 
 import pickle
 import re
@@ -30,6 +32,11 @@ import base64
 # Selenium driver and Actions as global
 driver = None
 action = None
+
+#Constants for Captcha Solver
+CAPTCHA_DIM = (180, 45)
+CHARACTER_DIM = (30, 32)
+#Above values were checked from various captchas
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -60,6 +67,86 @@ def passwordcall(driver):
 def captchacall(driver):
     captcha = driver.find_elements_by_xpath("//*[@id='captchaCheck']")[0]
     return captcha
+
+# Magical Captcha solver by Cherub begins from here ;)
+def download_captcha(num,username,driver):
+    """
+    Downloads and save a random captcha from VTOP website in the path provided
+    num = number of captcha to save
+    """
+    for _ in range(num):
+        base64_image = captchashow(driver)[23:]
+        image_name = "./captcha/"+username+"-captcha.png"
+        with open(image_name, "wb") as fh:
+            fh.write(base64.b64decode(base64_image))
+    
+def remove_pixel_noise(img):
+    """
+    this function removes the one pixel noise in the captcha
+    """
+    img_width = CAPTCHA_DIM[0]
+    img_height = CAPTCHA_DIM[1]
+
+    img_matrix = img.convert('L').load()
+    # Remove noise and make image binary
+    for y in range(1, img_height - 1):
+        for x in range(1, img_width - 1):
+            if img_matrix[x, y-1] == 255 and img_matrix[x, y] == 0 and img_matrix[x, y+1] == 255:
+                img_matrix[x, y] = 255
+            if img_matrix[x-1, y] == 255 and img_matrix[x, y] == 0 and img_matrix[x+1, y] == 255:
+                img_matrix[x, y] = 255
+            if img_matrix[x, y] != 255 and img_matrix[x, y] != 0:
+                img_matrix[x, y] = 255
+
+    return img_matrix
+
+def identify_chars(img,img_matrix):
+    """
+    This function identifies and returns the captcha
+    """
+    img_width = CAPTCHA_DIM[0]
+    img_height = CAPTCHA_DIM[1]
+
+    char_width = CHARACTER_DIM[0]
+    char_height = CHARACTER_DIM[1]
+
+    char_crop_threshold = {'upper': 12, 'lower': 44}
+
+    bitmaps = json.load(open("bitmaps.json"))
+    captcha =""
+
+    # loop through individual characters
+    for i in range(char_width, img_width + 1, char_width):
+
+        # crop with left, top, right, bottom coordinates
+        img_char_matrix = img.crop(
+            (i-char_width, char_crop_threshold['upper'], i, char_crop_threshold['lower'])).convert('L').load()
+
+        matches = {}
+
+        for character in bitmaps:
+            match_count = 0
+            black_count = 0
+
+            lib_char_matrix = bitmaps[character]
+
+            for y in range(0, char_height):
+                for x in range(0, char_width):
+                    if img_char_matrix[x, y] == lib_char_matrix[y][x] and lib_char_matrix[y][x] == 0:
+                        match_count += 1
+                    if lib_char_matrix[y][x] == 0:
+                        black_count += 1
+
+            perc = float(match_count)/float(black_count)
+            matches.update({perc: character[0].upper()})
+
+        try:
+            captcha += matches[max(matches.keys())]
+        except ValueError:
+            captcha += "0"
+
+    return captcha
+# Captha solver ends here
 
 
 """---------------------------------------------------------------
@@ -366,12 +453,13 @@ def index():
     login_button.click()
     loginnext_button = driver.find_elements_by_xpath("//*[@id='page-wrapper']/div/div[1]/div[1]/div[3]/div/button")[0]
     loginnext_button.click()
-    driver.implicitly_wait(1)
-    captchasrc = captchashow(driver)
-    session['timetable'] = 0
-    session['classes'] = 0
-    
-    return render_template('login.html',captcha=captchasrc)
+    try:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "captchaRefresh")))
+    finally:
+        session['timetable'] = 0
+        session['classes'] = 0
+
+        return render_template('login.html')
 
 
         
@@ -382,7 +470,14 @@ def login():
         global action
         username1 = request.form['username']
         password1 = request.form['password']
-        captcha1 = request.form['captcha']
+        
+        # Solve the captcha using the captcha solver
+        download_captcha(1,username1,driver)
+        img = Image.open('./captcha/'+username1+'-captcha.png')
+        img_matrix = remove_pixel_noise(img)
+        # Store the result of solved captcha in captcha1
+        captcha1 = identify_chars(img,img_matrix)
+        
         username = usernamecall(driver)
         password = passwordcall(driver)
         captcha = captchacall(driver)
