@@ -157,24 +157,6 @@ def identify_chars(img,img_matrix):
                 
 ------------------------------------------------------------------"""
 
-#API for fetching captcha
-@app.route('/captcha', methods=['GET', 'POST'])
-def captcha():
-    global driver
-    chrome_options = Options()  
-    chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(options=chrome_options)
-    driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
-    login_button = driver.find_element_by_link_text("Login to VTOP")
-    login_button.click()
-    driver.implicitly_wait(1)
-    loginnext_button = driver.find_elements_by_xpath("//*[@id='page-wrapper']/div/div[1]/div[1]/div[3]/div/button")[0]
-    loginnext_button.click()
-    driver.implicitly_wait(1)
-    captchasrc = captchashow(driver)
-
-    return jsonify({'Captcha': captchasrc})
-
 #API for login
 @app.route('/authenticate', methods=['GET'])
 def authenticate():
@@ -211,83 +193,103 @@ def authenticate():
             return jsonify({'Error': 'Invalid API Token.'})
     
     else:
+        global driver
         global action
-        username1 = request.args.get('username')
-        password1 = request.args.get('password')
-        captcha1 = request.args.get('captcha')
-        username = usernamecall(driver)
-        password = passwordcall(driver)
-        captcha = captchacall(driver)
-        action = ActionChains(driver) 
-        username.send_keys(username1)
-        password.send_keys(password1)
-        captcha.send_keys(captcha1)
-        loginfinal_button = driver.find_elements_by_xpath("//*[@id='captcha']")[0]
-        loginfinal_button.click()
-        driver.implicitly_wait(5)
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        profile = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")
-        hover = action.move_to_element(profile)
-        hover.perform()
-
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21112']/div/ul/li[1]")
-        item.click()
+        chrome_options = Options()  
+        chrome_options.add_argument("--headless")
+        driver = webdriver.Chrome(options=chrome_options)
+        driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
+        login_button = driver.find_element_by_link_text("Login to VTOP")
+        login_button.click()
+        driver.implicitly_wait(1)
+        loginnext_button = driver.find_elements_by_xpath("//*[@id='page-wrapper']/div/div[1]/div[1]/div[3]/div/button")[0]
+        loginnext_button.click()
         try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "exTab1")))
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "captchaRefresh")))
         finally:
-            with open("C:\\Users\\aprat\\Desktop\\"+username1+"-profile"+".html", "w") as f:
-                f.write(driver.page_source)
+            username1 = request.args.get('username')
+            password1 = request.args.get('password')
 
-        with open("C:\\Users\\aprat\\Desktop\\"+username1+"-profile"+".html") as fp:
-            soup = BeautifulSoup(fp, 'html.parser')
-            code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
-            tutorial_code = [i.getText() for i in code_soup]
-            code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
-            tutorial_proctor = [i.getText() for i in code_proctor]
-            holdname = tutorial_code[1].lower().split(" ")
-            tempname = []
-            for i in holdname:
-                tempname.append(i.capitalize())
-            finalname = (" ").join(tempname)
-            tutorial_code[1] = finalname
+            # Solve the captcha using the captcha solver
+            download_captcha(1,username1,driver)
+            img = Image.open('./captcha/'+username1+'-captcha.png')
+            img_matrix = remove_pixel_noise(img)
+            # Store the result of solved captcha in captcha1
 
-            # Generating an API Token
-            api_gen = tutorial_code[0]
-            api_token = api_gen.encode('ascii')
-            temptoken = base64.b64encode(api_token)
-            token = temptoken.decode('ascii')
+            captcha1 = identify_chars(img,img_matrix)
+            username = usernamecall(driver)
+            password = passwordcall(driver)
+            captcha = captchacall(driver)
+            action = ActionChains(driver) 
+            username.send_keys(username1)
+            password.send_keys(password1)
+            captcha.send_keys(captcha1)
+            loginfinal_button = driver.find_elements_by_xpath("//*[@id='captcha']")[0]
+            loginfinal_button.click()
+            driver.implicitly_wait(5)
+            nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
+            nav.click()
+            driver.implicitly_wait(3)
+            profile = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")
+            hover = action.move_to_element(profile)
+            hover.perform()
 
-            ref = db.reference('vitask')
-            tut_ref = ref.child(tutorial_code[0])
-            tut_ref.set({
-                tutorial_code[0]: {
-                    'Name': (tutorial_code[1]),
-                    'Branch': tutorial_code[18],
-                    'Program': tutorial_code[17],
-                    'RegNo': tutorial_code[14],
-                    'AppNo': tutorial_code[0],
-                    'School': tutorial_code[19],
-                    'Email': tutorial_code[29],
-                    'ProctorName': tutorial_proctor[93],
-                    'ProctorEmail': tutorial_proctor[98],
-                    'API': token
-                }
-            })
-            session['id'] = tutorial_code[0]
-            name = ref.child(session['id']).child(session['id']).child('Name').get()
-            school = ref.child(session['id']).child(session['id']).child('School').get()
-            branch = ref.child(session['id']).child(session['id']).child('Branch').get()
-            program = ref.child(session['id']).child(session['id']).child('Program').get()
-            regno = ref.child(session['id']).child(session['id']).child('RegNo').get()
-            appno = ref.child(session['id']).child(session['id']).child('AppNo').get()
-            email = ref.child(session['id']).child(session['id']).child('Email').get()
-            proctoremail = ref.child(session['id']).child(session['id']).child('ProctorEmail').get()
-            proctorname = ref.child(session['id']).child(session['id']).child('ProctorName').get()
-            api = ref.child(session['id']).child(session['id']).child('API').get()
+            item = driver.find_element_by_xpath("//*[@id='BtnBody21112']/div/ul/li[1]")
+            item.click()
+            try:
+                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "exTab1")))
+            finally:
+                with open("C:\\Users\\aprat\\Desktop\\"+username1+"-profile"+".html", "w") as f:
+                    f.write(driver.page_source)
 
-            return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
+            with open("C:\\Users\\aprat\\Desktop\\"+username1+"-profile"+".html") as fp:
+                soup = BeautifulSoup(fp, 'html.parser')
+                code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
+                tutorial_code = [i.getText() for i in code_soup]
+                code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
+                tutorial_proctor = [i.getText() for i in code_proctor]
+                holdname = tutorial_code[1].lower().split(" ")
+                tempname = []
+                for i in holdname:
+                    tempname.append(i.capitalize())
+                finalname = (" ").join(tempname)
+                tutorial_code[1] = finalname
+
+                # Generating an API Token
+                api_gen = tutorial_code[0]
+                api_token = api_gen.encode('ascii')
+                temptoken = base64.b64encode(api_token)
+                token = temptoken.decode('ascii')
+
+                ref = db.reference('vitask')
+                tut_ref = ref.child(tutorial_code[0])
+                tut_ref.set({
+                    tutorial_code[0]: {
+                        'Name': (tutorial_code[1]),
+                        'Branch': tutorial_code[18],
+                        'Program': tutorial_code[17],
+                        'RegNo': tutorial_code[14],
+                        'AppNo': tutorial_code[0],
+                        'School': tutorial_code[19],
+                        'Email': tutorial_code[29],
+                        'ProctorName': tutorial_proctor[93],
+                        'ProctorEmail': tutorial_proctor[98],
+                        'API': token
+                    }
+                })
+                session['id'] = tutorial_code[0]
+                name = ref.child(session['id']).child(session['id']).child('Name').get()
+                school = ref.child(session['id']).child(session['id']).child('School').get()
+                branch = ref.child(session['id']).child(session['id']).child('Branch').get()
+                program = ref.child(session['id']).child(session['id']).child('Program').get()
+                regno = ref.child(session['id']).child(session['id']).child('RegNo').get()
+                appno = ref.child(session['id']).child(session['id']).child('AppNo').get()
+                email = ref.child(session['id']).child(session['id']).child('Email').get()
+                proctoremail = ref.child(session['id']).child(session['id']).child('ProctorEmail').get()
+                proctorname = ref.child(session['id']).child(session['id']).child('ProctorName').get()
+                api = ref.child(session['id']).child(session['id']).child('API').get()
+
+                return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
     
 # Timetable API
 @app.route('/timetableapi')
