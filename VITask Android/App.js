@@ -1,25 +1,13 @@
-import React from 'react';
-import Inputs from './inputs.js'
-import ImagesExample from './ImagesExample.js'
-import { View, StyleSheet } from 'react-native'
+import React, { Component } from 'react';
+import { AppRegistry, View } from 'react-native';
+import Routes from './Routes.js';
 
-
-const App = () => {
-   return (
-      <View style={styles.container}>
-         <ImagesExample />
-         <Inputs />
-      </View>
-   )
+class App extends Component {
+   render() {
+      return (
+         <Routes />
+      )
+   }
 }
 export default App
-
-const styles = StyleSheet.create({
-   container: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100%',
-      backgroundColor: '#282828'
-   }
-})
+AppRegistry.registerComponent('App', () => App)

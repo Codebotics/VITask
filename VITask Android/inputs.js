@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { AsyncStorage, View, Text, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
 import Captcha from './captcha.js'
+import { Actions } from 'react-native-router-flux';
 
 class Inputs extends Component {
    state = {
@@ -27,10 +27,11 @@ class Inputs extends Component {
          .then((response) => response.json())
          .then((responseJson) => {
             console.log(responseJson);
-            this.setState({
-               data: responseJson
+            AsyncStorage.setItem('JSON', JSON.stringify(responseJson))
+            .then(() => { 
+            Actions.dashboard();
             });
-            alert('Name: ' + this.state.data.Name + ' Branch: ' + this.state.data.Branch)
+            
          })
          .catch((error) => {
             console.error(error);
@@ -79,6 +80,7 @@ class Inputs extends Component {
    }
 }
 export default Inputs
+
 
 const styles = StyleSheet.create({
    container: {
