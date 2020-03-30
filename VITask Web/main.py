@@ -157,7 +157,7 @@ def identify_chars(img,img_matrix):
                 
 ------------------------------------------------------------------"""
 
-#API for login
+# API for login, to login and generate an API token send a GET request => /authenticate?username=yourusername&password=yourpassword
 @app.route('/authenticate', methods=['GET'])
 def authenticate():
     ref = db.reference('vitask')
