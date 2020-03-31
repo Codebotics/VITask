@@ -420,6 +420,174 @@ def timetableapi():
             })
             return jsonify({'Timetable': days})
 
+# Academic History API
+@app.route('/acadhistoryapi')
+def acadhistoryapi():
+    ref = db.reference('vitask')
+    user_token = request.args.get('token')
+    if(user_token is not None):
+        # Decoding API token
+        temptoken = user_token.encode('ascii')
+        try:
+            appno = base64.b64decode(temptoken)
+        except:
+            return jsonify({'Error': 'Invalid API Token.'})
+        key = appno.decode('ascii')
+    
+        temp = ref.child("acadhistory-"+key).child(key).child("AcadHistory").get()
+        
+        if(temp is not None):
+            session['id'] = key
+            acadHistory = temp
+
+            return jsonify({'AcadHistory': acadHistory})
+        
+        else:
+            return jsonify({'Error': 'Invalid API Token.'})
+    else:
+        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
+        nav.click()
+        driver.implicitly_wait(3)
+        acadhistory = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
+        hover = action.move_to_element(acadhistory)
+        hover.perform()
+
+        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[4]")
+        item.click()
+        try:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
+        finally:
+            soup = BeautifulSoup(driver.page_source, 'lxml')
+            # Fetching the last row in academic history which contains the Curriculum Details
+            code_soup = soup.findAll("tr", {"class": "tableContent"})
+            
+            # Processing the data to get the required details
+            curriculumKeys = ['CreditsRegistered', 'CreditsEarned', 'CGPA', 'S', 'A', 'B', 'C', 'D', 'E', 'F', 'N']
+            temp = []
+            cgpaDetails = code_soup[len(code_soup)-1].getText()
+            for i in cgpaDetails:
+                if(i):
+                    temp.append(i)
+            temp = temp[1:len(temp)]
+            # Fetching data and Creating Dictionary
+            curriculumDetails = {}
+            m = 0
+            s = ""
+            for j in temp:
+                if(j!='\n'):
+                    s = s+j
+                else:
+                    curriculumDetails[curriculumKeys[m]] = s
+                    m = m+1
+                    s = ""
+            # Fetching the table containing the complete academic history
+            code_soup = soup.findAll("tr", {"class": "tableContent"})
+            # Removing unneccessary Details
+            cour = []
+            for i in range (0,8):
+                code_soup.pop()
+            code_soup = code_soup[1:len(code_soup)]
+            for i in code_soup:
+                if(len(i)==23):
+                    cour.append(i.findAll('td'))
+            # Fetching Course Name and Grade from the cour array above and making the final Dictionary.
+            acadHistory = {}
+            for i in cour:
+                acadHistory[i[2].getText()] = i[5].getText()
+            
+            ref = db.reference('vitask')
+            tut_ref = ref.child("acadhistory-"+session['id'])
+            tut_ref.set({
+                session['id']: {
+                    'AcadHistory': acadHistory
+                }
+            })
+            return jsonify({'AcadHistory': acadHistory})
+
+
+# Marks API
+@app.route('/marksapi')
+def marksapi():
+    ref = db.reference('vitask')
+    user_token = request.args.get('token')
+    
+    if(user_token is not None):
+        # Decoding API token
+        temptoken = user_token.encode('ascii')
+        try:
+            appno = base64.b64decode(temptoken)
+        except:
+            return jsonify({'Error': 'Invalid API Token.'})
+        key = appno.decode('ascii')
+    
+        temp = ref.child("marks-"+key).child(key).child("Marks").get()
+        
+        if(temp is not None):
+            session['id'] = key
+            marksDict = temp
+
+            return jsonify({'Marks': marksDict})
+        
+        else:
+            return jsonify({'Error': 'Invalid API Token.'})
+    else:
+        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
+        nav.click()
+        driver.implicitly_wait(3)
+        marks = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
+        hover = action.move_to_element(marks)
+        hover.perform()
+        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[1]")
+        item.click()
+        try:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+            semlist.click()
+            driver.implicitly_wait(2)
+
+            hover = action.move_to_element(semlist)
+            hover.perform()
+            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[3]")
+            item.click()
+            try:
+                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
+            finally:
+                page_source = driver.page_source
+        finally:
+            soup = BeautifulSoup(page_source, 'lxml')
+            code_soup = soup.findAll('tbody')
+            code_soup2 = soup.findAll("tr", {"class": "tableContent"})
+            courses = []
+            temp = []
+            for i in code_soup2:
+                temp = i.findAll('td')
+                if(len(temp)==9):
+                    courses.append(temp[3].getText()+" "+temp[4].getText())
+                
+            code_soup = code_soup[1:len(code_soup)]
+            courseMarks = []
+            for i in code_soup:
+                courseMarks.append(i.findAll('tr'))
+            
+            k = []
+            m = 0
+            tempDict = {}
+            marksDict = {} 
+            for i in range (0,len(courseMarks)):
+                for j in range(1, len(courseMarks[i])):
+                    k = courseMarks[i][j].findAll('td')
+                    tempDict[k[1].getText()] = k[5].getText() 
+                marksDict[courses[m]] =  tempDict
+                m = m+1
+                tempDict = {}
+            ref = db.reference('vitask')
+            tut_ref = ref.child("marks-"+session['id'])
+            tut_ref.set({
+                session['id']: {
+                    'Marks': marksDict
+                }
+            })
+            return jsonify({'Marks': marksDict})
 
     
 """---------------------------------------------------------------
