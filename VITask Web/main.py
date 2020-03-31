@@ -655,7 +655,6 @@ def timetable():
                     p = []
 
             ref = db.reference('vitask')
-            users_ref = ref.child('users')
             tut_ref = ref.child("timetable-"+session['id'])
             tut_ref.set({
                 session['id']: {
