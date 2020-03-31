@@ -23,7 +23,8 @@ Python 3.2 or higher
     
 ### Before you run main.py
 
-* Authorize Firebase by saving firebase.json in a suitable location and then executing `set GOOGLE_APPLICATION_CREDENTIALS=path_to_your_firebase.json\firebase.json` in cmd.
+* For Windows users, Authorize Firebase by saving firebase.json in a suitable location and then executing `set GOOGLE_APPLICATION_CREDENTIALS=path_to_your_firebase.json\firebase.json` in cmd.
+* For Linux Users, Authorize Firebase by saving firebase.json in a suitable location and then executing `export GOOGLE_APPLICATION_CREDENTIALS=path_to_your_firebase.json\firebase.json` in terminal.
     
 ### Running main.py
 
