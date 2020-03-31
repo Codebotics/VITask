@@ -152,6 +152,7 @@ def identify_chars(img,img_matrix):
     return captcha
 # Captha solver ends here
 
+
 # Following are utility functions designed to download stuff. 
 # these functions are used to download chrome_driver.
 def reporthook(blocknum, blocksize, totalsize):
@@ -214,6 +215,7 @@ def check_and_chromedriver(chrome_driver):
         with zipfile.ZipFile(os.path.join("files", "chromedriver.zip"), "r") as zip_ref:
             zip_ref.extractall("./files")
         print("Complete.")
+
 
 """---------------------------------------------------------------
                     VITask API code begins from here
@@ -807,24 +809,7 @@ def home():
 # Login path for VITask Web app
 @app.route('/login', methods=['GET', 'POST'])
 def index():
-    global driver
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_driver = r'files/chromedriver.exe'
-    check_and_chromedriver(chrome_driver)
-    driver = webdriver.Chrome(chrome_driver,options=chrome_options)
-    driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
-    login_button = driver.find_element_by_link_text("Login to VTOP")
-    login_button.click()
-    loginnext_button = driver.find_elements_by_xpath("//*[@id='page-wrapper']/div/div[1]/div[1]/div[3]/div/button")[0]
-    loginnext_button.click()
-    try:
-        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "captchaRefresh")))
-    finally:
-        session['timetable'] = 0
-        session['classes'] = 0
-
-        return render_template('login.html')
+    return render_template('login.html')
 
 
 
@@ -832,71 +817,99 @@ def index():
 @app.route('/signin', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        global driver
         global action
-        username1 = request.form['username']
-        password1 = request.form['password']
-
-        # Solve the captcha using the captcha solver
-        download_captcha(1,username1,driver)
-        img = Image.open('./captcha/'+username1+'-captcha.png')
-        img_matrix = remove_pixel_noise(img)
-        # Store the result of solved captcha in captcha1
-        captcha1 = identify_chars(img,img_matrix)
-
-        username = usernamecall(driver)
-        password = passwordcall(driver)
-        captcha = captchacall(driver)
-        action = ActionChains(driver)
-        username.send_keys(username1)
-        password.send_keys(password1)
-        captcha.send_keys(captcha1)
-        loginfinal_button = driver.find_elements_by_xpath("//*[@id='captcha']")[0]
-        loginfinal_button.click()
-        driver.implicitly_wait(5)
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        profile = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")
-        hover = action.move_to_element(profile)
-        hover.perform()
-
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21112']/div/ul/li[1]")
-        item.click()
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_driver = r'files/chromedriver.exe'
+        check_and_chromedriver(chrome_driver)
+        driver = webdriver.Chrome(chrome_driver,options=chrome_options)
+        driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
+        login_button = driver.find_element_by_link_text("Login to VTOP")
+        login_button.click()
+        loginnext_button = driver.find_elements_by_xpath("//*[@id='page-wrapper']/div/div[1]/div[1]/div[3]/div/button")[0]
+        loginnext_button.click()
         try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "exTab1")))
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "captchaRefresh")))
         finally:
-            page_source = driver.page_source
-            soup = BeautifulSoup(page_source, 'lxml')
-            code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
-            tutorial_code = [i.getText() for i in code_soup]
-            code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
-            tutorial_proctor = [i.getText() for i in code_proctor]
-            holdname = tutorial_code[1].lower().split(" ")
-            tempname = []
-            for i in holdname:
-                tempname.append(i.capitalize())
-            finalname = (" ").join(tempname)
-            tutorial_code[1] = finalname
-            ref = db.reference('vitask')
-            tut_ref = ref.child(tutorial_code[0])
-            tut_ref.set({
-                tutorial_code[0]: {
-                    'Name': (tutorial_code[1]),
-                    'Branch': tutorial_code[18],
-                    'Program': tutorial_code[17],
-                    'RegNo': tutorial_code[14],
-                    'AppNo': tutorial_code[0],
-                    'School': tutorial_code[19],
-                    'Email': tutorial_code[29],
-                    'ProctorName': tutorial_proctor[93],
-                    'ProctorEmail': tutorial_proctor[98]
-                }
-            })
-            session['id'] = tutorial_code[0]
-            session['name'] = tutorial_code[1]
-            session['reg'] = tutorial_code[14]
+            session['timetable'] = 0
+            session['classes'] = 0
+            session['moodle'] = 0
+        
+            username1 = request.form['username']
+            password1 = request.form['password']
 
-        return redirect(url_for('profile'))
+            # Solve the captcha using the captcha solver
+            download_captcha(1,username1,driver)
+            img = Image.open('./captcha/'+username1+'-captcha.png')
+            img_matrix = remove_pixel_noise(img)
+            # Store the result of solved captcha in captcha1
+            captcha1 = identify_chars(img,img_matrix)
+
+            username = usernamecall(driver)
+            password = passwordcall(driver)
+            captcha = captchacall(driver)
+            action = ActionChains(driver)
+            username.send_keys(username1)
+            password.send_keys(password1)
+            captcha.send_keys(captcha1)
+            loginfinal_button = driver.find_elements_by_xpath("//*[@id='captcha']")[0]
+            loginfinal_button.click()
+            try:
+                element = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='button-panel']/aside/section/div/div[1]/a")))
+            finally:
+                nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
+                nav.click()
+                driver.implicitly_wait(3)
+                profile = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")
+                hover = action.move_to_element(profile)
+                hover.perform()
+
+                item = driver.find_element_by_xpath("//*[@id='BtnBody21112']/div/ul/li[1]")
+                item.click()
+                try:
+                    element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "exTab1")))
+                finally:
+                    page_source = driver.page_source
+                    soup = BeautifulSoup(page_source, 'lxml')
+                    code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
+                    tutorial_code = [i.getText() for i in code_soup]
+                    code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
+                    tutorial_proctor = [i.getText() for i in code_proctor]
+                    holdname = tutorial_code[1].lower().split(" ")
+                    tempname = []
+                    for i in holdname:
+                        tempname.append(i.capitalize())
+                    finalname = (" ").join(tempname)
+                    tutorial_code[1] = finalname
+
+                    # Generating an API Token
+                    api_gen = tutorial_code[0]
+                    api_token = api_gen.encode('ascii')
+                    temptoken = base64.b64encode(api_token)
+                    token = temptoken.decode('ascii')
+
+                    ref = db.reference('vitask')
+                    tut_ref = ref.child(tutorial_code[0])
+                    tut_ref.set({
+                        tutorial_code[0]: {
+                            'Name': (tutorial_code[1]),
+                            'Branch': tutorial_code[18],
+                            'Program': tutorial_code[17],
+                            'RegNo': tutorial_code[14],
+                            'AppNo': tutorial_code[0],
+                            'School': tutorial_code[19],
+                            'Email': tutorial_code[29],
+                            'ProctorName': tutorial_proctor[93],
+                            'ProctorEmail': tutorial_proctor[98],
+                            'API': token
+                        }
+                    })
+                    session['id'] = tutorial_code[0]
+                    session['name'] = tutorial_code[1]
+                    session['reg'] = tutorial_code[14]
+
+                return redirect(url_for('profile'))
 
 
 
@@ -1094,7 +1107,7 @@ def classes():
             c=0
             q={}
             for i in attend:
-                q[i]=c
+                q[i] = c
                 c = c + 1
             ref = db.reference('vitask')
             users_ref = ref.child('users')
@@ -1107,6 +1120,207 @@ def classes():
             })
     return render_template('attendance.html',dicti = attend,q=q, name=session['name'])
 
+"""---------------------------------------------------------------
+
+            Code for Moodle Integration begins from here
+
+    “The only true wisdom is in knowing you know nothing.”― Socrates
+
+------------------------------------------------------------------"""
+
+
+# Moodle Login path for VITask Web app
+@app.route('/moodle', methods=['GET', 'POST'])
+def moodle():
+    ref = db.reference('vitask')
+    temp = ref.child("moodle-"+session['id']).child(session['id']).get()
+    if(session['moodle']==1 or temp is not None):
+        return redirect(url_for('assignments'))
+    else:
+        return render_template('moodle.html',name=session['name'])
+
+# Path for processing of details from /moodle
+@app.route('/moodlelogin', methods=['GET', 'POST'])
+def moodlelogin():
+    ref = db.reference('vitask')
+    temp = ref.child("moodle-"+session['id']).child(session['id']).get()
+    if(session['moodle']==1 or temp is not None):
+        return redirect(url_for('assignments'))
+    else:
+        global driver
+        global action
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_driver = r'files/chromedriver.exe'
+        check_and_chromedriver(chrome_driver)
+        driver = webdriver.Chrome(chrome_driver,options=chrome_options)
+        action = ActionChains(driver)
+        driver.get("https://moodlecc.vit.ac.in/login/index.php")
+        try:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "username")))
+        finally:
+            login_button = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/input[2]')[0]
+            username = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[2]/input')[0]
+            password = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[5]/input')[0]
+            moodle_username = request.form['username']
+            moodle_password = request.form['password']
+            username.send_keys(moodle_username)
+            password.send_keys(moodle_password)
+            login_button.click()
+
+            # Going to Dashboard to find all assignments.
+            try:
+                element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'region-main-box')))
+            finally:
+                Dashboard = driver.find_elements_by_xpath('/html/body/div[3]/div/div/div/aside/div/div[2]/ul/li/ul/li[1]/p/a/span')[0]
+                Dashboard.click()
+                try:
+                    # Wait till moodle loads assignments, timeout 20 seconds.
+                    element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'event-list-title-5e83b34ae83ad5e83b34ae83f21')))
+                finally:
+                    page_source = driver.page_source
+                    soup = BeautifulSoup(page_source, 'lxml')
+
+                    # To store all assignments.
+                    all_assignments = []
+
+                    # Magic. Do not touch. (Moodle parsing logic by Yash)
+
+                    for rows in soup.findAll('div', attrs = {'class':'row-fluid visible-desktop'}): 
+
+                        for i in rows.findAll('div',attrs = {'class':'span6'}):
+                            for j in i.findAll('div', attrs={'class' : 'd-inline-block event-name-container'}):
+                                assignment = {}
+                                assignment['topic'] = j.a.text
+                                assignment['course'] = j.div.text
+                            for k in i.findAll('div' , attrs = {'class' : 'row-fluid'}):
+                                for z in k.findAll('div' , attrs = {'class' : 'span5 text-truncate'}):
+                                    assignment['time'] = z.text.strip()
+                                    all_assignments.append(assignment)
+
+                    # Processing password before storing
+                    api_gen = moodle_password
+                    api_token = api_gen.encode('ascii')
+                    temptoken = base64.b64encode(api_token)
+                    token = temptoken.decode('ascii')
+
+                    session['moodle'] = 1
+
+                    ref = db.reference('vitask')
+                    tut_ref = ref.child("moodle-"+session['id'])
+                    tut_ref.set({
+                        session['id']: {
+                            'Username': moodle_username,
+                            'Password': token,
+                            'Assignments': all_assignments   
+                        }
+                    })
+                    assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+
+                    return render_template('assignments.html',name=session['name'],assignment=assignment)
+            
+# Assignments page for Moodle
+@app.route('/assignments', methods=['GET', 'POST'])
+def assignments():
+    ref = db.reference('vitask')
+    temp = ref.child("moodle-"+session['id']).child(session['id']).get()
+    if(session['moodle']==1 or temp is not None):
+        assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+        return render_template('assignments.html',name=session['name'],assignment=assignment)
+    else:
+        return redirect(url_for('moodle'))
+    
+# Assignments page for Moodle
+@app.route('/moodleresync', methods=['GET', 'POST'])
+def moodleresync():
+    global driver
+    global action
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_driver = r'files/chromedriver.exe'
+    check_and_chromedriver(chrome_driver)
+    driver = webdriver.Chrome(chrome_driver,options=chrome_options)
+    action = ActionChains(driver)
+    driver.get("https://moodlecc.vit.ac.in/login/index.php")
+    try:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "username")))
+    finally:
+        login_button = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/input[2]')[0]
+        username = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[2]/input')[0]
+        password = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[5]/input')[0]
+        ref = db.reference('vitask')
+        moodle_username = ref.child("moodle-"+session['id']).child(session['id']).child('Username').get()
+        pass_token = ref.child("moodle-"+session['id']).child(session['id']).child('Password').get()
+        
+        # Decoding Password
+        temptoken = pass_token.encode('ascii')
+        temp_pass = base64.b64decode(temptoken)
+        key = temp_pass.decode('ascii')
+        
+        
+        moodle_password = key
+        username.send_keys(moodle_username)
+        password.send_keys(moodle_password)
+        login_button.click()
+
+        # Going to Dashboard to find all assignments.
+        try:
+            element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'region-main-box')))
+        finally:
+            Dashboard = driver.find_elements_by_xpath('/html/body/div[3]/div/div/div/aside/div/div[2]/ul/li/ul/li[1]/p/a/span')[0]
+            Dashboard.click()
+            try:
+                # Wait till moodle loads assignments, timeout 20 seconds.
+                element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'event-list-title-5e83b34ae83ad5e83b34ae83f21')))
+            finally:
+                page_source = driver.page_source
+                soup = BeautifulSoup(page_source, 'lxml')
+
+                # To store all assignments.
+                all_assignments = []
+
+                # Magic. Do not touch. (Moodle parsing logic by Yash)
+
+                for rows in soup.findAll('div', attrs = {'class':'row-fluid visible-desktop'}): 
+
+                    for i in rows.findAll('div',attrs = {'class':'span6'}):
+                        for j in i.findAll('div', attrs={'class' : 'd-inline-block event-name-container'}):
+                            assignment = {}
+                            assignment['topic'] = j.a.text
+                            assignment['course'] = j.div.text
+                        for k in i.findAll('div' , attrs = {'class' : 'row-fluid'}):
+                            for z in k.findAll('div' , attrs = {'class' : 'span5 text-truncate'}):
+                                assignment['time'] = z.text.strip()
+                                all_assignments.append(assignment)
+
+                # Processing password before storing
+                api_gen = moodle_password
+                api_token = api_gen.encode('ascii')
+                temptoken = base64.b64encode(api_token)
+                token = temptoken.decode('ascii')
+
+                session['moodle'] = 1
+
+                ref = db.reference('vitask')
+                tut_ref = ref.child("moodle-"+session['id'])
+                tut_ref.set({
+                    session['id']: {
+                        'Username': moodle_username,
+                        'Password': token,
+                        'Assignments': all_assignments   
+                    }
+                })
+                assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+
+                return render_template('assignments.html',name=session['name'],assignment=assignment)
+            
+"""---------------------------------------------------------------
+
+            Code for Moodle Integration ends here
+
+------------------------------------------------------------------"""
+
+# Web Logout
 @app.route('/logout')
 def logout():
     global driver
@@ -1117,6 +1331,7 @@ def logout():
         session.pop('classes', 0)
         session.pop('name', None)
         session.pop('reg', None)
+        session.pop('moodle', 0)
         return render_template('home.html')
     else:
         session.pop('id', None)
@@ -1124,6 +1339,7 @@ def logout():
         session.pop('classes', 0)
         session.pop('name', None)
         session.pop('reg', None)
+        session.pop('moodle', 0)
         return render_template('home.html')
 
 
