@@ -28,6 +28,10 @@ import requests
 import json
 import time
 import base64
+import zipfile
+from urllib.request import urlretrieve
+import sys
+from sys import platform as _platform
 
 # Selenium driver and Actions as global
 driver = None
@@ -148,6 +152,68 @@ def identify_chars(img,img_matrix):
     return captcha
 # Captha solver ends here
 
+# Following are utility functions designed to download stuff. 
+# these functions are used to download chrome_driver.
+def reporthook(blocknum, blocksize, totalsize):
+    """
+    function copied from https://stackoverflow.com/questions/13881092/download-progressbar-for-python-3
+    """
+    global start_time
+    if blocknum==0:
+        start_time = time.time()
+        return
+    if totalsize > 0:
+        duration = time.time() - start_time
+        readsofar = blocknum * blocksize
+        if duration == 0:
+            duration+=0.001
+        speed = int(readsofar / (1024 * duration))
+        percent = readsofar * 1e2 / totalsize
+        s = '\rPercentage : %5.1f%% (%5.2f MB out of %5.2f MB, Download Speed %d KB/s, %d seconds passed )' % (
+            percent, readsofar / 1048576, totalsize / 1048576, speed, duration)
+        sys.stderr.write(s)
+        if readsofar >= totalsize:  # near the end
+            sys.stderr.write("\n")
+    else:  # total size is unknown
+        sys.stderr.write("read %d\n" % (readsofar,))
+
+
+def download_file(url, filename, folder):
+    """
+    Downloads file in the specific position if given folder
+    """
+    print("Downloading file : ", filename)
+    urlretrieve(url, os.path.join(folder, filename), reporthook)
+    print("Download Complete")
+    return True
+
+def check_and_chromedriver(chrome_driver):
+    """
+    This function checks and download chromedriver in the /files directory
+    """
+
+    if not os.path.exists(chrome_driver):   # Checking and downloading chrome driver
+        print("Chrome driver does not exist. Downloading it and saving in {files} folder")
+        # TODO Download chrome driver for platform specific
+        # check using sys.platform, win32, linux, darwin
+        os.mkdir('files')
+        chrome_driver_url = ""
+        if _platform == "linux" or _platform == "linux2":
+            # linux
+            chrome_driver_url = "https://chromedriver.storage.googleapis.com/79.0.3945.16/chromedriver_linux64.zip"
+        elif _platform == "darwin":
+            # MAC OS X
+            chrome_driver_url = "https://chromedriver.storage.googleapis.com/79.0.3945.16/chromedriver_mac64.zip"
+        elif _platform == "win32":
+            # Windows
+            chrome_driver_url = "https://chromedriver.storage.googleapis.com/79.0.3945.16/chromedriver_win32.zip"
+
+        download_file(chrome_driver_url, "chromedriver.zip",
+                    "files")
+        print("Extracting components")
+        with zipfile.ZipFile(os.path.join("files", "chromedriver.zip"), "r") as zip_ref:
+            zip_ref.extractall("./files")
+        print("Complete.")
 
 """---------------------------------------------------------------
                     VITask API code begins from here
@@ -197,7 +263,9 @@ def authenticate():
         global action
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        driver = webdriver.Chrome(options=chrome_options)
+        chrome_driver = r'files/chromedriver.exe'
+        check_and_chromedriver(chrome_driver)
+        driver = webdriver.Chrome(chrome_driver,options=chrome_options)
         driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
         login_button = driver.find_element_by_link_text("Login to VTOP")
         login_button.click()
@@ -742,7 +810,9 @@ def index():
     global driver
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(options=chrome_options)
+    chrome_driver = r'files/chromedriver.exe'
+    check_and_chromedriver(chrome_driver)
+    driver = webdriver.Chrome(chrome_driver,options=chrome_options)
     driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
     login_button = driver.find_element_by_link_text("Login to VTOP")
     login_button.click()
