@@ -17,7 +17,7 @@ You can check the preqrequistes in the `VITask Web/requirements.txt` file. You r
 1.Creating Virtual Environment and activating:
 * Open cmd
 * Change current directory to VITask Web. Using command `cd "VITask Web"`
-* Run this `py -3 -m venv venv' or 'python3 -m venv venv` or if you have `virtualenv` set up use command `virtulalenv venv`.
+* Run this `py -3 -m venv venv` or `python3 -m venv venv` or if you have `virtualenv` set up use command `virtulalenv venv`.
 * To activate virtual environment, run this `venv\Scripts\activate` or if you are using bash terminal `source venv/Scripts/activate`
 * Now install `requirements.txt`
     
