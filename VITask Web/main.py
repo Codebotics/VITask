@@ -1,7 +1,7 @@
 """---------------------------------------------------------------
                 VITask | A Dynamic VTOP API server
-                
-        "Any fool can write code that a computer can understand. 
+
+        "Any fool can write code that a computer can understand.
         Good programmers write code that humans can understand."
 ------------------------------------------------------------------"""
 
@@ -11,18 +11,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.chrome.options import Options 
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import firebase_admin
 from firebase_admin import db
 from PIL import Image
 from PIL import ImageFilter
-import pandas as pd 
+import pandas as pd
 import pickle
 import re
 import os
 import random
-import hashlib 
+import hashlib
 import bcrypt
 import requests
 import json
@@ -79,7 +79,7 @@ def download_captcha(num,username,driver):
         image_name = "./captcha/"+username+"-captcha.png"
         with open(image_name, "wb") as fh:
             fh.write(base64.b64decode(base64_image))
-    
+
 def remove_pixel_noise(img):
     """
     this function removes the one pixel noise in the captcha
@@ -151,10 +151,10 @@ def identify_chars(img,img_matrix):
 
 """---------------------------------------------------------------
                     VITask API code begins from here
-                    
-                Note: This code is the heart of VITask, 
+
+                Note: This code is the heart of VITask,
                 think twice before modifying anything ;)
-                
+
 ------------------------------------------------------------------"""
 
 # API for login, to login and generate an API token send a GET request => /authenticate?username=yourusername&password=yourpassword
@@ -162,7 +162,7 @@ def identify_chars(img,img_matrix):
 def authenticate():
     ref = db.reference('vitask')
     user_token = request.args.get('token')
-    
+
     if(user_token is not None):
         # Decoding API token
         temptoken = user_token.encode('ascii')
@@ -171,9 +171,9 @@ def authenticate():
         except:
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
-    
+
         temp = ref.child(key).child(key).get()
-        
+
         if(temp is not None):
             session['id'] = key
             name = ref.child(session['id']).child(session['id']).child('Name').get()
@@ -188,14 +188,14 @@ def authenticate():
             api = ref.child(session['id']).child(session['id']).child('API').get()
 
             return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
-        
+
         else:
             return jsonify({'Error': 'Invalid API Token.'})
-    
+
     else:
         global driver
         global action
-        chrome_options = Options()  
+        chrome_options = Options()
         chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(options=chrome_options)
         driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
@@ -220,7 +220,7 @@ def authenticate():
             username = usernamecall(driver)
             password = passwordcall(driver)
             captcha = captchacall(driver)
-            action = ActionChains(driver) 
+            action = ActionChains(driver)
             username.send_keys(username1)
             password.send_keys(password1)
             captcha.send_keys(captcha1)
@@ -287,13 +287,13 @@ def authenticate():
                 api = ref.child(session['id']).child(session['id']).child('API').get()
 
                 return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
-    
-# Timetable API
-@app.route('/timetableapi')
-def timetableapi():
+
+# Attendance API
+@app.route('/classesapi')
+def classesapi():
     ref = db.reference('vitask')
     user_token = request.args.get('token')
-    
+
     if(user_token is not None):
         # Decoding API token
         temptoken = user_token.encode('ascii')
@@ -302,15 +302,144 @@ def timetableapi():
         except:
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
-    
-        temp = ref.child("timetable-"+key).child(key).child("Timetable").get()
+
+        temp = ref.child(key).child(key).get()
+
+        #Checking if data is already there or not in firebase(if there then no need to acces Vtop again)
+        if(session['classes']==1 or temp is not None):
+            attend = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
+            q = ref.child("attendance-"+session['id']).child(session['id']).child('Track').get()
+
+            values = []
+            for i in attend.values():
+                values.append(i)
+
+            slots = []
+
+            for i in attend.keys():
+                slots.append(i)
+
+
+            ref = db.reference('vitask')
+            users_ref = ref.child('users')
+            tut_ref = ref.child("attendance-"+session['id'])
+            tut_ref.set({
+                session['id']: {
+                    'Attended': values,
+                    'Slots' : slots,
+                    'Track' : q
+                }
+            })
         
+            return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
+
+        else:
+            return jsonify({'Error': 'Invalid API Token.'})
+
+    else:
+      nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
+      nav.click()
+      driver.implicitly_wait(3)
+      tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
+      hover = action.move_to_element(tt)
+      hover.perform()
+      item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
+      item.click()
+      try:
+          element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+          semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+          semlist.click()
+          driver.implicitly_wait(2)
+
+          hover = action.move_to_element(semlist)
+          hover.perform()
+          item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+          item.click()
+          viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
+          viewbutton.click()
+          try:
+              newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
+          finally:
+              page_source = driver.page_source
+
+      finally:
+          soup = BeautifulSoup(page_source, 'lxml')
+          code_soup = soup.find_all('tr')
+          tutorial_code = [i.getText() for i in code_soup]
+          table = []
+          p=[]
+
+          for i in tutorial_code:
+              i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
+              i = i.split('\n')
+              if i not in table:
+                  table.append(i)
+
+          table.pop(0)
+
+          for i in range(0,len(table)):
+              p.append(table[i])
+      # print(p)
+          attend = {}
+          empty = []
+          for i in range(0,len(p)-1):
+              empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
+              attend[p[i][8]] = empty
+
+          c=0
+          q={}
+          for i in attend:
+              q[i]=c
+              c = c + 1
+
+          values = []
+          for i in attend.values():
+              values.append(i)
+
+          slots = []
+
+          for i in attend.keys():
+              slots.append(i)
+
+
+          ref = db.reference('vitask')
+          users_ref = ref.child('users')
+          tut_ref = ref.child("attendance-"+session['id'])
+          tut_ref.set({
+              session['id']: {
+                  'Attended': values,
+                  'Slots' : slots,
+                  'Track' : q
+              }
+          })
+      return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
+
+
+
+
+# Timetable API
+@app.route('/timetableapi')
+def timetableapi():
+    ref = db.reference('vitask')
+    user_token = request.args.get('token')
+
+    if(user_token is not None):
+        # Decoding API token
+        temptoken = user_token.encode('ascii')
+        try:
+            appno = base64.b64decode(temptoken)
+        except:
+            return jsonify({'Error': 'Invalid API Token.'})
+        key = appno.decode('ascii')
+
+        temp = ref.child("timetable-"+key).child(key).child("Timetable").get()
+
         if(temp is not None):
             session['id'] = key
             days = temp
 
             return jsonify({'Timetable': days})
-        
+
         else:
             return jsonify({'Error': 'Invalid API Token.'})
     else:
@@ -338,7 +467,7 @@ def timetableapi():
                 newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "timeTableStyle")))
             finally:
                 page_source = driver.page_source
-                
+
         finally:
             soup = BeautifulSoup(page_source, 'lxml')
             code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
@@ -421,7 +550,7 @@ def timetableapi():
             return jsonify({'Timetable': days})
 
 
-    
+
 """---------------------------------------------------------------
                     VITask API code ends here
 ------------------------------------------------------------------"""
@@ -430,7 +559,7 @@ def timetableapi():
 
 """---------------------------------------------------------------
             VITask Web Application code begins from here
-            
+
       “Make it work, make it right, make it fast.” – Kent Beck
 ------------------------------------------------------------------"""
 
@@ -443,7 +572,7 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def index():
     global driver
-    chrome_options = Options()  
+    chrome_options = Options()
     chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(options=chrome_options)
     driver.get("http://vtopcc.vit.ac.in:8080/vtop/initialProcess/openPage")
@@ -460,7 +589,7 @@ def index():
         return render_template('login.html')
 
 
-        
+
 # Web login route(internal don't use for anything on user side)
 @app.route('/signin', methods=['GET', 'POST'])
 def login():
@@ -468,18 +597,18 @@ def login():
         global action
         username1 = request.form['username']
         password1 = request.form['password']
-        
+
         # Solve the captcha using the captcha solver
         download_captcha(1,username1,driver)
         img = Image.open('./captcha/'+username1+'-captcha.png')
         img_matrix = remove_pixel_noise(img)
         # Store the result of solved captcha in captcha1
         captcha1 = identify_chars(img,img_matrix)
-        
+
         username = usernamecall(driver)
         password = passwordcall(driver)
         captcha = captchacall(driver)
-        action = ActionChains(driver) 
+        action = ActionChains(driver)
         username.send_keys(username1)
         password.send_keys(password1)
         captcha.send_keys(captcha1)
@@ -530,8 +659,8 @@ def login():
             session['reg'] = tutorial_code[14]
 
         return redirect(url_for('profile'))
-            
-    
+
+
 
 @app.route('/profile')
 def profile():
@@ -556,7 +685,7 @@ def timetable():
     if(session['timetable']==1 or temp is not None):
         days = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
         return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
-    else:    
+    else:
         nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
         nav.click()
         driver.implicitly_wait(3)
@@ -581,7 +710,7 @@ def timetable():
                 newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "timeTableStyle")))
             finally:
                 page_source = driver.page_source
-                
+
         finally:
             soup = BeautifulSoup(page_source, 'lxml')
             code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
@@ -663,9 +792,9 @@ def timetable():
             })
             session['timetable'] = 1
             return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
-            
-      
-# Attendance route  
+
+
+# Attendance route
 @app.route('/classes')
 def classes():
     ref = db.reference('vitask')
@@ -674,7 +803,7 @@ def classes():
         attend = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
         q = ref.child("attendance-"+session['id']).child(session['id']).child('Track').get()
         return render_template('attendance.html',name = session['name'],id = session['id'],dicti = attend,q = q)
-    else:      
+    else:
         nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
         nav.click()
         driver.implicitly_wait(3)
@@ -699,7 +828,7 @@ def classes():
                 newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
             finally:
                 page_source = driver.page_source
-                
+
         finally:
             soup = BeautifulSoup(page_source, 'lxml')
             code_soup = soup.find_all('tr')
@@ -711,23 +840,24 @@ def classes():
                 i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
                 i = i.split('\n')
                 if i not in table:
-                    table.append(i)    
+                    table.append(i)
 
-            for i in range(0,11):
-                p.append(table[i+1])
-            # print(p)
+            table.pop(0)
+
+            for i in range(0,len(table)):
+                p.append(table[i])
+            
+            
             attend = {}
             empty = []
             for i in range(0,len(p)-1):
                 empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
                 attend[p[i][8]] = empty
-
-            #modern problem requires modern solution
-            c=0 
+            c=0
             q={}
             for i in attend:
                 q[i]=c
-                c = c + 1 
+                c = c + 1
             ref = db.reference('vitask')
             users_ref = ref.child('users')
             tut_ref = ref.child("attendance-"+session['id'])
@@ -757,8 +887,8 @@ def logout():
         session.pop('name', None)
         session.pop('reg', None)
         return render_template('home.html')
-    
-    
+
+
 # Run Flask app
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=port, debug=True)
