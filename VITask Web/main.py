@@ -17,6 +17,10 @@ import firebase_admin
 from firebase_admin import db
 from PIL import Image
 from PIL import ImageFilter
+from datetime import timezone,datetime,timedelta
+import requests
+import urllib3
+import time
 import pandas as pd
 import pickle
 import re
@@ -32,6 +36,8 @@ import zipfile
 from urllib.request import urlretrieve
 import sys
 from sys import platform as _platform
+#For disabling warings this will save msecs..lol
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Selenium driver and Actions as global
 driver = None
@@ -151,6 +157,63 @@ def identify_chars(img,img_matrix):
 
     return captcha
 # Captha solver ends here
+
+# Functions for Moodle begin here
+MOODLE_LOGIN_URL = r"https://moodlecc.vit.ac.in/login/index.php"
+
+def get_timestamp():
+    """
+    Utility function to generate current timstamp
+    """
+    dt = datetime.now() - timedelta(15)
+    utc_time = dt.replace(tzinfo = timezone.utc) 
+    return int(utc_time.timestamp())
+
+def get_moodle_session(username, password):
+    """
+    This function logins in moodle and gets session Id 
+    return session object and sess_key
+    """
+    sess = requests.Session()
+    #Moodle passes anchor secretly idk why lol
+    payload = {
+        "username" : username,
+        "password" : password,
+        "anchor"   : ""
+    }
+
+    #Using verify = False is deadly but moodle's a bitch
+    login_text = sess.post(MOODLE_LOGIN_URL,data=payload, verify=False).text
+
+    #TODO : Check is password is correct or not
+    #For finding session key. This is where moodle sucks lol. Didn't use useragent check and cookies. F U
+    sess_key_index = login_text.find("sesskey")
+    sess_key = login_text[sess_key_index+10:sess_key_index+20]
+
+    return sess, sess_key
+
+def get_dashboard_json(sess, sess_key):
+    """
+    This function returns dashboard json data fields array
+    """
+    #TODO:Find a better method to format string
+    DASHBOARD_URL = "https://moodlecc.vit.ac.in/lib/ajax/service.php?sesskey="+sess_key+"&info=core_calendar_get_action_events_by_timesort"
+    
+    dashboard_payload = [
+        {
+            "index":0,
+            "methodname":"core_calendar_get_action_events_by_timesort",
+            "args":{
+                "limitnum":20,
+                "timesortfrom":get_timestamp()
+                }
+        }
+    ]
+
+    dashboard_text = sess.post(DASHBOARD_URL, data = json.dumps(dashboard_payload), verify= False).text
+    dashboard_json = json.loads(dashboard_text)
+    return dashboard_json[0]["data"]["events"]
+# Functions for Moodle end here
 
 
 # Following are utility functions designed to download stuff. 
@@ -1147,77 +1210,40 @@ def moodlelogin():
     if(session['moodle']==1 or temp is not None):
         return redirect(url_for('assignments'))
     else:
-        global driver
-        global action
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_driver = r'files/chromedriver.exe'
-        check_and_chromedriver(chrome_driver)
-        driver = webdriver.Chrome(chrome_driver,options=chrome_options)
-        action = ActionChains(driver)
-        driver.get("https://moodlecc.vit.ac.in/login/index.php")
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "username")))
-        finally:
-            login_button = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/input[2]')[0]
-            username = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[2]/input')[0]
-            password = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[5]/input')[0]
-            moodle_username = request.form['username']
-            moodle_password = request.form['password']
-            username.send_keys(moodle_username)
-            password.send_keys(moodle_password)
-            login_button.click()
+        moodle_username =  request.form['username']
+        moodle_password = request.form['password']
+        sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
+        due_items = get_dashboard_json(sess, sess_key)
 
-            # Going to Dashboard to find all assignments.
-            try:
-                element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'region-main-box')))
-            finally:
-                Dashboard = driver.find_elements_by_xpath('/html/body/div[3]/div/div/div/aside/div/div[2]/ul/li/ul/li[1]/p/a/span')[0]
-                Dashboard.click()
-                try:
-                    # Wait till moodle loads assignments, timeout 20 seconds.
-                    element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'event-list-title-5e83b34ae83ad5e83b34ae83f21')))
-                finally:
-                    page_source = driver.page_source
-                    soup = BeautifulSoup(page_source, 'lxml')
+        all_assignments = []
 
-                    # To store all assignments.
-                    all_assignments = []
+        for item in due_items:
+            temp={}
+            temp["course"] = item["course"]["fullname"]
+            temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+            temp["time"] = temp_time
+            all_assignments.append(temp)
+            
+        # Processing password before storing
+        api_gen = moodle_password
+        api_token = api_gen.encode('ascii')
+        temptoken = base64.b64encode(api_token)
+        token = temptoken.decode('ascii')
 
-                    # Magic. Do not touch. (Moodle parsing logic by Yash)
+        session['moodle'] = 1
 
-                    for rows in soup.findAll('div', attrs = {'class':'row-fluid visible-desktop'}): 
+        ref = db.reference('vitask')
+        tut_ref = ref.child("moodle-"+session['id'])
+        tut_ref.set({
+            session['id']: {
+                'Username': moodle_username,
+                'Password': token,
+                'Assignments': all_assignments   
+            }
+        })
+        assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
 
-                        for i in rows.findAll('div',attrs = {'class':'span6'}):
-                            for j in i.findAll('div', attrs={'class' : 'd-inline-block event-name-container'}):
-                                assignment = {}
-                                assignment['topic'] = j.a.text
-                                assignment['course'] = j.div.text
-                            for k in i.findAll('div' , attrs = {'class' : 'row-fluid'}):
-                                for z in k.findAll('div' , attrs = {'class' : 'span5 text-truncate'}):
-                                    assignment['time'] = z.text.strip()
-                                    all_assignments.append(assignment)
-
-                    # Processing password before storing
-                    api_gen = moodle_password
-                    api_token = api_gen.encode('ascii')
-                    temptoken = base64.b64encode(api_token)
-                    token = temptoken.decode('ascii')
-
-                    session['moodle'] = 1
-
-                    ref = db.reference('vitask')
-                    tut_ref = ref.child("moodle-"+session['id'])
-                    tut_ref.set({
-                        session['id']: {
-                            'Username': moodle_username,
-                            'Password': token,
-                            'Assignments': all_assignments   
-                        }
-                    })
-                    assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
-
-                    return render_template('assignments.html',name=session['name'],assignment=assignment)
+        return render_template('assignments.html',name=session['name'],assignment=assignment)
             
 # Assignments page for Moodle
 @app.route('/assignments', methods=['GET', 'POST'])
@@ -1233,21 +1259,7 @@ def assignments():
 # Assignments page for Moodle
 @app.route('/moodleresync', methods=['GET', 'POST'])
 def moodleresync():
-    global driver
-    global action
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_driver = r'files/chromedriver.exe'
-    check_and_chromedriver(chrome_driver)
-    driver = webdriver.Chrome(chrome_driver,options=chrome_options)
-    action = ActionChains(driver)
-    driver.get("https://moodlecc.vit.ac.in/login/index.php")
-    try:
-        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "username")))
-    finally:
-        login_button = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/input[2]')[0]
-        username = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[2]/input')[0]
-        password = driver.find_elements_by_xpath('/html/body/div[3]/div/section/div/div/div[1]/div[1]/form/div[1]/div[5]/input')[0]
+    
         ref = db.reference('vitask')
         moodle_username = ref.child("moodle-"+session['id']).child(session['id']).child('Username').get()
         pass_token = ref.child("moodle-"+session['id']).child(session['id']).child('Password').get()
@@ -1257,62 +1269,40 @@ def moodleresync():
         temp_pass = base64.b64decode(temptoken)
         key = temp_pass.decode('ascii')
         
-        
+
         moodle_password = key
-        username.send_keys(moodle_username)
-        password.send_keys(moodle_password)
-        login_button.click()
+        sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
+        due_items = get_dashboard_json(sess, sess_key)
 
-        # Going to Dashboard to find all assignments.
-        try:
-            element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'region-main-box')))
-        finally:
-            Dashboard = driver.find_elements_by_xpath('/html/body/div[3]/div/div/div/aside/div/div[2]/ul/li/ul/li[1]/p/a/span')[0]
-            Dashboard.click()
-            try:
-                # Wait till moodle loads assignments, timeout 20 seconds.
-                element = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.ID,'event-list-title-5e83b34ae83ad5e83b34ae83f21')))
-            finally:
-                page_source = driver.page_source
-                soup = BeautifulSoup(page_source, 'lxml')
+        all_assignments = []
 
-                # To store all assignments.
-                all_assignments = []
+        for item in due_items:
+            temp={}
+            temp["course"] = item["course"]["fullname"]
+            temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+            temp["time"] = temp_time
+            all_assignments.append(temp)
+        
+        # Processing password before storing
+        api_gen = moodle_password
+        api_token = api_gen.encode('ascii')
+        temptoken = base64.b64encode(api_token)
+        token = temptoken.decode('ascii')
 
-                # Magic. Do not touch. (Moodle parsing logic by Yash)
+        session['moodle'] = 1
 
-                for rows in soup.findAll('div', attrs = {'class':'row-fluid visible-desktop'}): 
+        ref = db.reference('vitask')
+        tut_ref = ref.child("moodle-"+session['id'])
+        tut_ref.set({
+            session['id']: {
+                'Username': moodle_username,
+                'Password': token,
+                'Assignments': all_assignments   
+            }
+        })
+        assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
 
-                    for i in rows.findAll('div',attrs = {'class':'span6'}):
-                        for j in i.findAll('div', attrs={'class' : 'd-inline-block event-name-container'}):
-                            assignment = {}
-                            assignment['topic'] = j.a.text
-                            assignment['course'] = j.div.text
-                        for k in i.findAll('div' , attrs = {'class' : 'row-fluid'}):
-                            for z in k.findAll('div' , attrs = {'class' : 'span5 text-truncate'}):
-                                assignment['time'] = z.text.strip()
-                                all_assignments.append(assignment)
-
-                # Processing password before storing
-                api_gen = moodle_password
-                api_token = api_gen.encode('ascii')
-                temptoken = base64.b64encode(api_token)
-                token = temptoken.decode('ascii')
-
-                session['moodle'] = 1
-
-                ref = db.reference('vitask')
-                tut_ref = ref.child("moodle-"+session['id'])
-                tut_ref.set({
-                    session['id']: {
-                        'Username': moodle_username,
-                        'Password': token,
-                        'Assignments': all_assignments   
-                    }
-                })
-                assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
-
-                return render_template('assignments.html',name=session['name'],assignment=assignment)
+        return render_template('assignments.html',name=session['name'],assignment=assignment)
             
 """---------------------------------------------------------------
 
