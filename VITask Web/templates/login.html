@@ -18,10 +18,24 @@
   <link href="{{ url_for('static', filename='assets/css/argon-dashboard.css') }}" rel="stylesheet" />
   <!-- jQuery CDN -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <style>
+    #loading {
+    cursor: wait;
+    }
+    #svgload{
+    width: 100px;
+    height: 100px;
+    margin: 20px;
+    display:inline-block;
+        }
+    </style>
+    
 </head>
 
 <body class="bg-dark">
   <div class="main-content">
+    
     <!-- Navbar -->
     <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
       <div class="container px-4">
@@ -72,6 +86,35 @@
           </div>
         </div>
       </div>
+        
+    <div id="loading">
+        <svg id="svgload" version="1.1" id="L6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+           <rect fill="none" stroke="#fff" stroke-width="4" x="25" y="25" width="50" height="50">
+          <animateTransform
+             attributeName="transform"
+             dur="0.5s"
+             from="0 50 50"
+             to="180 50 50"
+             type="rotate"
+             id="strokeBox"
+             attributeType="XML"
+             begin="rectBox.end"/>
+          </rect>
+           <rect x="27" y="27" fill="#fff" width="46" height="50">
+          <animate
+             attributeName="height"
+             dur="1.3s"
+             attributeType="XML"
+             from="50" 
+             to="0"
+             id="rectBox" 
+             fill="freeze"
+             begin="0s;strokeBox.end"/>
+          </rect>
+        </svg>
+    </div>
+        
       <div class="separator separator-bottom separator-skew zindex-100">
         <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <polygon class="fill-dark" points="2560 0 2560 100 0 100"></polygon>
@@ -79,7 +122,8 @@
       </div>
     </div>
     <!-- Page content -->
-    <div class="container mt--8 pb-5">
+    
+    <div class="container mt--8 pb-5" id="content">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7">
           <div class="card bg-secondary shadow border-0">
@@ -104,7 +148,7 @@
                 </div>
             
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary my-4">Sign in</button>
+                  <button type="submit" class="btn btn-primary my-4" onclick="loading();">Sign in</button>
                 </div>
               </form>
             </div>
@@ -143,12 +187,20 @@
     <div class="loader-wrapper">
       <span class="loader"><span class="loader-inner"></span></span>
     </div>
-    <!-- Loader -->
+   
     <script>
-        $("#cap").on("load",function(){
-          $(".loader-wrapper").fadeOut("slow");
+        $(document).ready(function() {
+            $("#loading").hide();
         });
     </script>
+    
+    <!-- Response Loader -->
+    <script type="text/javascript">// <![CDATA[
+        function loading(){
+            $("#loading").show();
+            $("#content").hide();       
+        }
+// ]]></script>
 
   <!--   Core   -->
   <script src="{{ url_for('static', filename='assets/js/plugins/jquery/dist/jquery.min.js') }}"></script>
