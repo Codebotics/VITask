@@ -470,82 +470,82 @@ def classesapi():
             return jsonify({'Error': 'Invalid API Token.'})
 
     else:
-      nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
-      nav.click()
-      driver.implicitly_wait(3)
-      tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
-      hover = action.move_to_element(tt)
-      hover.perform()
-      item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
-      item.click()
-      try:
-          element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-          semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-          semlist.click()
-          driver.implicitly_wait(2)
+        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
+        nav.click()
+        driver.implicitly_wait(3)
+        tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
+        hover = action.move_to_element(tt)
+        hover.perform()
+        item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
+        item.click()
+        try:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+            semlist.click()
+            driver.implicitly_wait(2)
 
-          hover = action.move_to_element(semlist)
-          hover.perform()
-          item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
-          item.click()
-          viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
-          viewbutton.click()
-          try:
-              newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
-          finally:
-              page_source = driver.page_source
+            hover = action.move_to_element(semlist)
+            hover.perform()
+            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+            item.click()
+            viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
+            viewbutton.click()
+            try:
+                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
+            finally:
+                page_source = driver.page_source
 
-      finally:
-          soup = BeautifulSoup(page_source, 'lxml')
-          code_soup = soup.find_all('tr')
-          tutorial_code = [i.getText() for i in code_soup]
-          table = []
-          p=[]
+        finally:
+            soup = BeautifulSoup(page_source, 'lxml')
+            code_soup = soup.find_all('tr')
+            tutorial_code = [i.getText() for i in code_soup]
+            table = []
+            p=[]
 
-          for i in tutorial_code:
-              i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
-              i = i.split('\n')
-              if i not in table:
-                  table.append(i)
+            for i in tutorial_code:
+                i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
+                i = i.split('\n')
+                if i not in table:
+                    table.append(i)
 
-          table.pop(0)
+            table.pop(0)
 
-          for i in range(0,len(table)):
-              p.append(table[i])
-      # print(p)
-          attend = {}
-          empty = []
-          for i in range(0,len(p)-1):
-              empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
-              attend[p[i][8]] = empty
+            for i in range(0,len(table)):
+                p.append(table[i])
+       
+            attend = {}
+            empty = []
+            for i in range(0,len(p)-1):
+                empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
+                attend[p[i][8]] = empty
 
-          c=0
-          q={}
-          for i in attend:
-              q[i]=c
-              c = c + 1
+            c=0
+            q={}
+            for i in attend:
+                q[i]=c
+                c = c + 1
 
-          values = []
-          for i in attend.values():
-              values.append(i)
+            values = []
+            for i in attend.values():
+                values.append(i)
 
-          slots = []
+            slots = []
 
-          for i in attend.keys():
-              slots.append(i)
+            for i in attend.keys():
+                slots.append(i)
 
 
-          ref = db.reference('vitask')
-          users_ref = ref.child('users')
-          tut_ref = ref.child("attendance-"+session['id'])
-          tut_ref.set({
+            ref = db.reference('vitask')
+            users_ref = ref.child('users')
+            tut_ref = ref.child("attendance-"+session['id'])
+            tut_ref.set({
               session['id']: {
                   'Attended': values,
                   'Slots' : slots,
                   'Track' : q
               }
           })
-      return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
+        return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
 
 
 
