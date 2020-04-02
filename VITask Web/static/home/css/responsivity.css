@@ -11,6 +11,7 @@ Responsiveness Fixes
 	#main_content {
 		text-align:left!important;
 		margin-right:15px;
+		width: fit-content;
 	}
 	
 	.social_icons_container {
@@ -92,6 +93,7 @@ Responsiveness Fixes
 		text-align:center!important;
 		margin:0 auto;
 		margin-top: -5.285rem;
+		width: fit-content;
 	}
 	
 	.social_icons_container {
