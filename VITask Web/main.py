@@ -850,6 +850,70 @@ def marksapi():
                 }
             })
             return jsonify({'Marks': marksDict})
+        
+# Moodle API
+@app.route('/moodleapi')
+def moodleapi():
+    ref = db.reference('vitask')
+    user_token = request.args.get('token')
+    if(user_token is not None):
+        # Decoding API token
+        temptoken = user_token.encode('ascii')
+        try:
+            appno = base64.b64decode(temptoken)
+        except:
+            return jsonify({'Error': 'Invalid API Token.'})
+        key = appno.decode('ascii')
+
+        temp = ref.child("moodle-"+key).child(key).child('Username').get()
+        
+        
+        if(temp is not None):
+            session['id'] = key
+            assignment = ref.child("moodle-"+key).child(key).child('Assignments').get()
+
+            return jsonify({'Assignments': assignment})
+        
+        else:
+            return jsonify({'Error': 'Invalid API Token.'})
+    else:
+        try:
+            test_var = session['id']
+        except:
+            return jsonify({'Error': 'Please authenticate first.'})
+        moodle_username =  request.args.get('username')
+        moodle_password = request.args.get('password')
+        sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
+        due_items = get_dashboard_json(sess, sess_key)
+
+        all_assignments = []
+
+        for item in due_items:
+            temp={}
+            temp["course"] = item["course"]["fullname"]
+            temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+            temp["time"] = temp_time
+            all_assignments.append(temp)
+
+        # Processing password before storing
+        api_gen = moodle_password
+        api_token = api_gen.encode('ascii')
+        temptoken = base64.b64encode(api_token)
+        token = temptoken.decode('ascii')
+
+
+        ref = db.reference('vitask')
+        tut_ref = ref.child("moodle-"+session['id'])
+        tut_ref.set({
+            session['id']: {
+                'Username': moodle_username,
+                'Password': token,
+                'Assignments': all_assignments   
+            }
+        })
+        assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+        return jsonify({'Assignments': assignment})
+        
 
 
 """---------------------------------------------------------------
