@@ -305,16 +305,101 @@
               </table>
             </div>
           </div>
+            <br>
+            
+        <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Your Curriculum Details</h3>
+            </div>
+            <div class="table-responsive">
+            <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">CGPA</th>
+                    <th scope="col">S</th>
+                    <th scope="col">A</th>
+                    <th scope="col">B</th>
+                    <th scope="col">C</th>
+                    <th scope="col">D</th>
+                    <th scope="col">E</th>
+                    <th scope="col">F</th>
+                    <th scope="col">N</th>
+                    <th scope="col">Credits Registered</th>
+                    <th scope="col">Credits Earned</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                       
+                        <div class="media-body">
+                          <span class="mb-0 text-sm text-success">{{ curriculumDetails["CGPA"] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-primary"></i>{{ curriculumDetails["S"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-info"></i>{{ curriculumDetails["A"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i>{{ curriculumDetails["B"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-secondary"></i>{{ curriculumDetails["C"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-warning"></i>{{ curriculumDetails["D"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-warning"></i>{{ curriculumDetails["E"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-danger"></i>{{ curriculumDetails["F"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-danger"></i>{{ curriculumDetails["N"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4 text-info">
+                        <i class="bg-info"></i>{{ curriculumDetails["CreditsEarned"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4 text-success">
+                        <i class="bg-success"></i>{{ curriculumDetails["CreditsRegistered"] }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            
         </div>
+
       </div>
-     <br>
-        
-   
-        
-        
-       
-        
-        
+    </div>
+        </div>
+    <br>
+
     </div>
   </div>
 

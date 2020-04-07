@@ -701,8 +701,9 @@ def acadhistoryapi():
         if(temp is not None):
             session['id'] = key
             acadHistory = temp
+            curriculumDetails = ref.child("acadhistory-"+key).child(key).child("CurriculumDetails").get()
 
-            return jsonify({'AcadHistory': acadHistory})
+            return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
         
         else:
             return jsonify({'Error': 'Invalid API Token.'})
@@ -761,10 +762,11 @@ def acadhistoryapi():
             tut_ref = ref.child("acadhistory-"+session['id'])
             tut_ref.set({
                 session['id']: {
-                    'AcadHistory': acadHistory
+                    'AcadHistory': acadHistory,
+                    'CurriculumDetails': curriculumDetails
                 }
             })
-            return jsonify({'AcadHistory': acadHistory})
+            return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
 
 
 # Marks API
@@ -1256,7 +1258,8 @@ def acadhistory():
     temp = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
     if(session['acadhistory']==1 or temp is not None):
         acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
-        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory)
+        curriculumDetails = ref.child("acadhistory-"+session['id']).child(session['id']).child('CurriculumDetails').get()
+        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
     
     else:
         nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
@@ -1313,12 +1316,13 @@ def acadhistory():
             tut_ref = ref.child("acadhistory-"+session['id'])
             tut_ref.set({
                 session['id']: {
-                    'AcadHistory': acadHistory
+                    'AcadHistory': acadHistory,
+                    'CurriculumDetails': curriculumDetails
                 }
             })
             session['acadhistory'] = 1
             acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
-            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory)
+            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
         
 # Marks route
 @app.route('/marks')
