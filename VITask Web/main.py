@@ -962,6 +962,7 @@ def login():
             session['timetable'] = 0
             session['classes'] = 0
             session['moodle'] = 0
+            session['acadhistory'] = 0
         
             username1 = request.form['username']
             password1 = request.form['password']
@@ -1247,6 +1248,77 @@ def classes():
             })
     return render_template('attendance.html',dicti = attend,q=q, name=session['name'])
 
+@app.route('/acadhistory')
+def acadhistory():
+    ref = db.reference('vitask')
+    temp = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+    if(session['acadhistory']==1 or temp is not None):
+        acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory)
+    
+    else:
+        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
+        nav.click()
+        driver.implicitly_wait(3)
+        acadhistory = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
+        hover = action.move_to_element(acadhistory)
+        hover.perform()
+
+        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[4]")
+        item.click()
+        try:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
+        finally:
+            soup = BeautifulSoup(driver.page_source, 'lxml')
+            # Fetching the last row in academic history which contains the Curriculum Details
+            code_soup = soup.findAll("tr", {"class": "tableContent"})
+            
+            # Processing the data to get the required details
+            curriculumKeys = ['CreditsRegistered', 'CreditsEarned', 'CGPA', 'S', 'A', 'B', 'C', 'D', 'E', 'F', 'N']
+            temp = []
+            cgpaDetails = code_soup[len(code_soup)-1].getText()
+            for i in cgpaDetails:
+                if(i):
+                    temp.append(i)
+            temp = temp[1:len(temp)]
+            # Fetching data and Creating Dictionary
+            curriculumDetails = {}
+            m = 0
+            s = ""
+            for j in temp:
+                if(j!='\n'):
+                    s = s+j
+                else:
+                    curriculumDetails[curriculumKeys[m]] = s
+                    m = m+1
+                    s = ""
+            # Fetching the table containing the complete academic history
+            code_soup = soup.findAll("tr", {"class": "tableContent"})
+            # Removing unneccessary Details
+            cour = []
+            for i in range (0,8):
+                code_soup.pop()
+            code_soup = code_soup[1:len(code_soup)]
+            for i in code_soup:
+                if(len(i)==23):
+                    cour.append(i.findAll('td'))
+            # Fetching Course Name and Grade from the cour array above and making the final Dictionary.
+            acadHistory = {}
+            for i in cour:
+                acadHistory[i[2].getText()] = i[5].getText()
+            
+            ref = db.reference('vitask')
+            tut_ref = ref.child("acadhistory-"+session['id'])
+            tut_ref.set({
+                session['id']: {
+                    'AcadHistory': acadHistory
+                }
+            })
+            session['acadhistory'] = 1
+            acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory)
+
+
 """---------------------------------------------------------------
 
             Code for Moodle Integration begins from here
@@ -1386,6 +1458,7 @@ def logout():
         session.pop('name', None)
         session.pop('reg', None)
         session.pop('moodle', 0)
+        session.pop('acadhistory', 0)
         return render_template('home.html')
     else:
         session.pop('id', None)
@@ -1394,6 +1467,7 @@ def logout():
         session.pop('name', None)
         session.pop('reg', None)
         session.pop('moodle', 0)
+        session.pop('acadhistory', 0)
         return render_template('home.html')
 
 
