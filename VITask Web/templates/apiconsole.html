@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    VITask | Timetable
+    VITask | API Console
   </title>
   <!-- Favicon -->
   <link href="{{ url_for('static', filename='assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
@@ -170,7 +170,7 @@
      <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('profile') }}">Dashboard</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('profile') }}">API Console</a>
         
         <!-- User -->
         <ul class="navbar-nav align-items-center d-none d-md-flex">
@@ -215,107 +215,110 @@
           <!-- Card stats -->
           <div class="row">
             <div class="col-xl-2 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0" id="Monstyle">
+              <div class="card card-stats mb-4 mb-xl-0" id="Loginstyle">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
-                      <span class="h2 font-weight-bold mb-0" id="Montext">Monday</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">VITask API</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Logintext">Login API</span>
                     </div>
                     <div class="col-auto">
-                      <div class="icon icon-shape bg-danger text-white rounded-circle shadow" onclick="Monday()">
-                        <i class="fa fa-fighter-jet"></i>
+                      <div class="icon icon-shape bg-danger text-white rounded-circle shadow" onclick="Login()">
+                        <i class="ni ni-tv-2 text-white"></i>
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Monday"]|length }} classes</span>
-                    <span class="text-nowrap"></span>
-                  </p>
+                  
                 </div>
               </div>
             </div>
            <div class="col-xl-2 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0" id="Tuestyle">
+              <div class="card card-stats mb-4 mb-xl-0" id="Gradesstyle">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
-                      <span class="h2 font-weight-bold mb-0" id="Tuetext">Tuesday</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">VITask API</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Gradestext">Grades API</span>
                     </div>
                     <div class="col-auto">
-                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow" onclick="Tuesday()">
-                        <i class="fa fa-bolt"></i>
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow" onclick="Grades()">
+                        <i class="ni ni-hat-3 text-white"></i>
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Tuesday"]|length }} classes</span>
-                    <span class="text-nowrap"></span>
-                  </p>
+                  
                 </div>
               </div>
             </div>
                <div class="col-xl-2 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0" id="Wedstyle">
+              <div class="card card-stats mb-4 mb-xl-0" id="Classesstyle">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
-                      <span class="h2 font-weight-bold mb-0" id="Wedtext">Wednesday</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">VITask API</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Classestext">Classes API</span>
                     </div>
                     <div class="col-auto">
-                      <div class="icon icon-shape bg-primary text-white rounded-circle shadow" onclick="Wednesday()">
-                        <i class="fa fa-bicycle"></i>
+                      <div class="icon icon-shape bg-primary text-white rounded-circle shadow" onclick="Classes()">
+                        <i class="ni ni-time-alarm text-white"></i>
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Wednesday"]|length }} classes</span>
-                    <span class="text-nowrap"></span>
-                  </p>
+                 
                 </div>
               </div>
             </div>
                <div class="col-xl-2 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0" id="Thustyle">
+              <div class="card card-stats mb-4 mb-xl-0" id="Marksstyle">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
-                      <span class="h2 font-weight-bold mb-0" id="Thutext">Thursday</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">VITask API</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Markstext">Marks API</span>
                     </div>
                     <div class="col-auto">
-                      <div class="icon icon-shape bg-success text-white rounded-circle shadow" onclick="Thursday()">
-                        <i class="fa fa-car"></i>
+                      <div class="icon icon-shape bg-success text-white rounded-circle shadow" onclick="Marks()">
+                        <i class="ni ni-paper-diploma text-white"></i>
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Thursday"]|length }} classes</span>
-                    <span class="text-nowrap"></span>
-                  </p>
+                  
                 </div>
               </div>
             </div>
                <div class="col-xl-2 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0" id="Fristyle">
+              <div class="card card-stats mb-4 mb-xl-0" id="Moodlestyle">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
-                      <span class="h2 font-weight-bold mb-0" id="Fritext">Friday</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">VITask API</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Moodletext">Moodle API</span>
                     </div>
                     <div class="col-auto">
-                      <div class="icon icon-shape bg-dark text-white rounded-circle shadow" onclick="Friday()">
-                        <i class="fa fa-paw"></i>
+                      <div class="icon icon-shape bg-dark text-white rounded-circle shadow" onclick="Moodle()">
+                        <i class="ni ni-books text-white"></i>
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Friday"]|length }} classes</span>
-                    <span class="text-nowrap"></span>
-                  </p>
+                  
+                </div>
+              </div>
+            </div>
+              <div class="col-xl-2 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0" id="Schedulestyle">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">VITask API</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Scheduletext">Schedule API</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-info text-white rounded-circle shadow" onclick="Schedule()">
+                        <i class="ni ni-calendar-grid-58 text-white"></i>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -333,7 +336,7 @@
       <!-- Dark table -->
       
         
-          <div class="row mt-5" id="Monday">
+         {# <!-- <div class="row mt-5" id="Monday">
         <div class="col">
           <div class="card bg-default shadow">
             <div class="card-header bg-transparent border-0">
@@ -769,7 +772,7 @@
        
         
         
-    </div>
+    </div>--> #}
   </div>
     <!-- Loader -->
     <script>

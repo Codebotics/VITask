@@ -1317,6 +1317,33 @@ def acadhistory():
             session['acadhistory'] = 1
             acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
             return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory)
+        
+"""---------------------------------------------------------------
+
+        Code for VITask API Dashboard and Console begins here
+
+ “The mind is furnished with ideas by experience alone”― John Locke
+
+------------------------------------------------------------------"""
+        
+# API Dashboard (by Harsh)
+@app.route('/apidashboard')
+def apidashboard():
+    ref = db.reference('vitask')
+    api = ref.child(session['id']).child(session['id']).child('API').get()
+    name = session['name']
+    return render_template('api.html',name=name,api=api)
+
+# API Console(Not ready yet)
+@app.route('/apiconsole', methods=['GET', 'POST'])
+def apiconsole():
+    return render_template('apiconsole.html',name = session['name'])
+
+"""---------------------------------------------------------------
+
+        Code for VITask API Dashboard and Console ends here
+
+------------------------------------------------------------------"""
 
 
 """---------------------------------------------------------------

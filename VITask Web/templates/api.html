@@ -4,21 +4,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>
-    VITask | Moodle Login
+    VITask | API Dashboard
   </title>
   <!-- Favicon -->
   <link href="{{ url_for('static', filename='assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <!-- Icons -->
-  <link href="{{ url_for('static', filename='assets/js/plugins/nucleo/css/nucleo.css') }}" rel="stylesheet" />
-  <link href="{{ url_for('static', filename='assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='assets/js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
   <!-- CSS Files -->
-  <link href="{{ url_for('static', filename='assets/css/argon-dashboard.css') }}" rel="stylesheet" />
-  <!-- jQuery CDN -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link href="{{ url_for('static', filename='assets/css/argon-dashboard.css')}}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='assets/css/loader.css')}}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='assets/css/card.css')}}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='assets/css/api.css')}}" rel="stylesheet" >
+  <link href="{{ url_for('static', filename='assets/css/buttons.css')}}" rel="stylesheet" >
     <style>
+
+
+        .previous {
+          background-color: #f1f1f1;
+          color: black;
+        }
+
+        .next {
+          background-color: #4CAF50;
+          color: white;
+        }
+
+        .round {
+          border-radius: 50%;
+        }
         /*Scrollbar */
         /* width */
         ::-webkit-scrollbar {
@@ -120,11 +138,11 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="{{ url_for('acadhistory') }}">
+            <a class="nav-link " href="#">
               <i class="ni ni-hat-3 text-blue"></i> Academic History
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item ">
             <a class="nav-link " href="{{ url_for('classes') }}">
               <i class="ni ni-time-alarm text-orange"></i> Attendance
             </a>
@@ -134,8 +152,8 @@
               <i class="ni ni-paper-diploma text-pink"></i> Marks
             </a>
           </li>
-         <li class="nav-item active">
-            <a class="nav-link active" href="{{ url_for('moodle') }}">
+         <li class="nav-item">
+            <a class="nav-link " href="{{ url_for('moodle') }}">
               <i class="ni ni-books text-yellow"></i> Moodle
             </a>
           </li>
@@ -151,8 +169,8 @@
         <h6 class="navbar-heading text-muted">VITask API</h6>
         <!-- Navigation -->
         <ul class="navbar-nav mb-md-3">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('apidashboard') }}">
+          <li class="nav-item active">
+            <a class="nav-link active" href="{{ url_for('apidashboard') }}">
               <i class="ni ni-spaceship"></i> API Dashboard
             </a>
           </li>
@@ -167,10 +185,10 @@
   </nav>
   <div class="main-content">
     <!-- Navbar -->
-     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+    <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('profile') }}">Dashboard</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('profile') }}">API Dashboard</a>
         
         <!-- User -->
         <ul class="navbar-nav align-items-center d-none d-md-flex">
@@ -208,67 +226,115 @@
       </div>
     </nav>
     <!-- End Navbar -->
-      
+                          
     <!-- Header -->
-    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="min-height: 600px; background-image: url({{ url_for('static', filename='assets/img/theme/1234.jfif') }}); background-size: cover; background-position: center top;">
+      <!-- Mask -->
+      <span class="mask bg-gradient-default opacity-4"></span>
+      <!-- Header container -->
       <div class="container-fluid">
-        <div class="header-body">
-          <!-- space for header -->
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-md-10 text-center-top">
+              <h1 class="display-2 text-white">Welcome to API Dashboard</h1>
+            <p class="text-white mt-0 mb-5">Channel your own Application with the API we provide you.</p> 
+          </div>
         </div>
       </div>
-    </div>
-    <!-- End of Header -->
-      
-    <div class="container-fluid mt--7">
-        <div class="row">
-            <div class="col-xl-8 order-xl-1">
-              <div class="card bg-secondary shadow">
-                <div class="card-header bg-white border-0">
-                  <div class="row align-items-center">
-                    <div class="col-12">
-                      <h3 class="mb-0"><img src="{{ url_for('static', filename='assets/img/theme/moodle.png') }}"></h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <form action="{{ url_for('moodlelogin') }}" method="post">
-                    <h6 class="heading-small text-muted mb-4">Integrate your Moodle in one-click!</h6>
-                    <div class="pl-lg-4">
-                      <div class="row">
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <label class="form-control-label" for="input-username">Registration Number</label>
-                            <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Your Registration Number" name="username">
-                          </div>
-                        </div>
-                        <div class="col-lg-6">
-                          <div class="form-group">
-                            <label class="form-control-label" for="input-email">Password</label>
-                            <input type="password" id="input-email" class="form-control form-control-alternative" placeholder="Your Password" name="password">
-                          </div>
-                        </div>
-                        <div class="col-lg-12">
-                          <button type="submit" class="btn btn-primary my-4">Authorize</button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
+    </div>  
+<!--Page Content-->
+
+    <div class="accordion">    
+<h1 class="accordion-1">Welcome to VITask API Dashboard</h1>
+ <div class ="vitask_dashboard">      
+
+  <li class="vitask_label">
+    <input type="checkbox" checked>
+    <i></i>
+    <h2 class="accordion-2">What is VITask?</h2>
+    <p class="accordion-4">VITask is a platform Build by Developers,For Developers.</p>
+  </li>
+  <li class="vitask_label">
+    <input type="checkbox" checked>
+    <i></i>
+    <h2 class="accordion-2">How API Dashboard Works ?</h2>
+    <p class="accordion-4">We offer a wide range of APIs to help you create your own VTOP application with ease.Now you can easily create your own Timetable or Marks app with a few lines of code!</p>
+  </li>
+  <li class="vitask_label">
+    <input type="checkbox" checked>
+    <i></i>
+    <h2 class="accordion-2">JSON API</h2>
+    <p class="accordion-4">Our JSON API ensures that you can develop cross-platform VTOP applications.</p>
+  </li>
+
         </div>
-    </div> 
-  </div>
+    
+        <br>
+
+<input type="text" id="myInput" class="form-control form-control-alternative" value="{{ api }}" readonly>
+     
+<br>
+
+<button class="vitask_button2" onclick="myFunction()" onmouseout="outFunc()" id="tester">
+  <span class="tooltiptext" id="myTooltip">Copy API Token</span>
+</button>
+
+
+
+     
+
+        </div>
+    </div>
+        
+    
+    
+<script>
+function myFunction() {
+  var copyText = document.getElementById("myInput");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  var tester = document.getElementById("tester");
+  var tooltip = document.getElementById("myTooltip");
+  tester.innerHTML = "Copied: " + copyText.value;
+}
+
+function outFunc() {
+  var tooltip = document.getElementById("myTooltip");
+  tester.innerHTML = "Copy API Token";
+}
+    
+
+</script>
+  
+
 
     
   <!--   Core   -->
-  <script src="{{ url_for('static', filename='assets/js/plugins/jquery/dist/jquery.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/plugins/jquery/dist/jquery.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
   <!--   Optional JS   -->
+  <script src="{{ url_for('static', filename='assets/js/plugins/chart.js/dist/Chart.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='assets/js/plugins/chart.js/dist/Chart.extension.js')}}"></script>
   <!--   Argon JS   -->
-  <script src="{{ url_for('static', filename='assets/js/argon-dashboard.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/argon-dashboard.min.js')}}"></script>
   <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
 
+        
+    
+    
+    
+    
+    
+    
+   
+    
+      
+    
+    
+    
+     
+    
+    
 </body>
 
 </html>
