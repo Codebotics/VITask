@@ -963,6 +963,7 @@ def login():
             session['classes'] = 0
             session['moodle'] = 0
             session['acadhistory'] = 0
+            session['marks'] = 0
         
             username1 = request.form['username']
             password1 = request.form['password']
@@ -1248,6 +1249,7 @@ def classes():
             })
     return render_template('attendance.html',dicti = attend,q=q, name=session['name'])
 
+# Academic History route
 @app.route('/acadhistory')
 def acadhistory():
     ref = db.reference('vitask')
@@ -1318,6 +1320,74 @@ def acadhistory():
             acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
             return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory)
 
+# Marks route
+@app.route('/marks')
+def marks():
+    ref = db.reference('vitask')
+    temp = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
+    if(session['marks']==1 or temp is not None):
+        marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
+        return render_template('marks.html',name = session['name'], marks = marks)
+    else:
+        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
+        nav.click()
+        driver.implicitly_wait(3)
+        marks = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
+        hover = action.move_to_element(marks)
+        hover.perform()
+        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[1]")
+        item.click()
+        try:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+            semlist.click()
+            driver.implicitly_wait(2)
+
+            hover = action.move_to_element(semlist)
+            hover.perform()
+            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[3]")
+            item.click()
+            try:
+                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
+            finally:
+                page_source = driver.page_source
+        finally:
+            soup = BeautifulSoup(page_source, 'lxml')
+            code_soup = soup.findAll('tbody')
+            code_soup2 = soup.findAll("tr", {"class": "tableContent"})
+            courses = []
+            temp = []
+            for i in code_soup2:
+                temp = i.findAll('td')
+                if(len(temp)==9):
+                    courses.append(temp[3].getText()+" "+temp[4].getText())
+                
+            code_soup = code_soup[1:len(code_soup)]
+            courseMarks = []
+            for i in code_soup:
+                courseMarks.append(i.findAll('tr'))
+            
+            k = []
+            m = 0
+            tempDict = {}
+            marksDict = {} 
+            for i in range (0,len(courseMarks)):
+                for j in range(1, len(courseMarks[i])):
+                    k = courseMarks[i][j].findAll('td')
+                    tempDict[k[1].getText()] = k[5].getText() 
+                marksDict[courses[m]] =  tempDict
+                m = m+1
+                tempDict = {}
+            ref = db.reference('vitask')
+            tut_ref = ref.child("marks-"+session['id'])
+            tut_ref.set({
+                session['id']: {
+                    'Marks': marksDict
+                }
+            })
+            session['marks'] = 1
+            marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
+            return render_template('marks.html',name = session['name'], marks = marks)
 
 """---------------------------------------------------------------
 

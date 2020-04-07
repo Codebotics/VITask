@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    VITask | Academic History
+    VITask | Marks
   </title>
   <!-- Favicon -->
   <link href="{{ url_for('static', filename='assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
@@ -120,7 +120,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{{ url_for('acadhistory') }}">
+            <a class="nav-link" href="{{ url_for('acadhistory') }}">
               <i class="ni ni-hat-3 text-blue active"></i> Academic History
             </a>
           </li>
@@ -130,7 +130,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="{{ url_for('marks') }}">
+            <a class="nav-link active" href="{{ url_for('marks') }}">
               <i class="ni ni-paper-diploma text-pink"></i> Marks
             </a>
           </li>
@@ -170,7 +170,7 @@
      <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('profile') }}">Academic History</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('profile') }}">Marks</a>
         
         <!-- User -->
         <ul class="navbar-nav align-items-center d-none d-md-flex">
@@ -218,104 +218,49 @@
     </div>
     <div class="container-fluid mt--7">
       <!-- Table -->
-      
+
       <!-- Dark table -->
       
         
-      <div class="row mt-5" id="Monday">
+    <div class="row mt-5" id="Monday">
+        <div class="col">
+            <div class="card bg-default shadow">
+                <div class="card-header bg-transparent border-0">
+                  <h3 class="text-white mb-0">Your Marks</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for i in marks %}
+    <div class="row">
         <div class="col">
           <div class="card bg-default shadow">
             <div class="card-header bg-transparent border-0">
-              <h3 class="text-white mb-0">Your Academic History</h3>
+              <h3 class="text-white mb-0">{{ i }}</h3>
             </div>
-          <div class="table-responsive">
+            {% for j in marks[i] %}
+            <div class="table-responsive">
               <table class="table align-items-center table-dark table-flush">
                 <thead class="thead-dark">
-                  <tr>
-                    <th scope="col">Course Name</th>
-                    <th scope="col">Grade</th>
-                    
+                  <tr style="font-size: 40px;">
+                    <th scope="col" style="text-align: left;">{{ j }}</th>
+                    <th scope="col" style="text-align: right;">{{ marks[i][j] }}</th>
                   </tr>
                 </thead>
-                <tbody>
-                
-                  {% for i in acadHistory %} 
-                  <tr>
-                    <th scope="row">
-                      <div class="media align-items-center">
-                       
-                        <div class="media-body">
-                          <span class="mb-0 text-sm">{{ i }}</span>
-                        </div>
-                      </div>
-                    </th>
-                    {% if acadHistory[i]=="S" %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-primary"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% elif acadHistory[i]=="A" %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-info"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% elif acadHistory[i]=="B" %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-success"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% elif acadHistory[i]=="C" %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-secondary"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% elif acadHistory[i]=="D" %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-warning"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% elif acadHistory[i]=="E" %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-warning"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% elif acadHistory[i]=="F" %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-danger"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% else %}
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-danger"></i>{{ acadHistory[i] }}
-                      </span>
-                    </td>
-                    {% endif %}
-                  </tr>
-                 {% endfor %}
-                  
+                <tbody class="list">
                 </tbody>
               </table>
             </div>
+            {% endfor %}
+            <br>
           </div>
         </div>
       </div>
-     <br>
+      {% endfor %}
         
-   
-        
-        
-       
-        
-        
-    </div>
+      
+</div>
   </div>
 
   <!--   Core   -->
@@ -329,3 +274,5 @@
 </body>
 
 </html>
+
+      
