@@ -2,3 +2,4 @@ venv/
 captcha/
 .vscode/
 files/
+credential.txt
