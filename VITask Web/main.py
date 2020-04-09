@@ -107,7 +107,6 @@ def remove_pixel_noise(img):
                 img_matrix[x, y] = 255
             if img_matrix[x, y] != 255 and img_matrix[x, y] != 0:
                 img_matrix[x, y] = 255
-
     return img_matrix
 
 def identify_chars(img,img_matrix):
@@ -280,6 +279,188 @@ def check_and_chromedriver(chrome_driver):
         print("Complete.")
 
 
+""" ---------------------------------------------------------------
+
+        We keep our code DRY(Do not repeat yourselves). 
+        Thus we have implemented functions ;)
+
+---------------------------------------------------------------"""
+
+def ProfileFunc():
+    ref = db.reference('vitask')
+    name = ref.child(session['id']).child(session['id']).child('Name').get()
+    school = ref.child(session['id']).child(session['id']).child('School').get()
+    branch = ref.child(session['id']).child(session['id']).child('Branch').get()
+    program = ref.child(session['id']).child(session['id']).child('Program').get()
+    regno = ref.child(session['id']).child(session['id']).child('RegNo').get()
+    appno = ref.child(session['id']).child(session['id']).child('AppNo').get()
+    email = ref.child(session['id']).child(session['id']).child('Email').get()
+    proctoremail = ref.child(session['id']).child(session['id']).child('ProctorEmail').get()
+    proctorname = ref.child(session['id']).child(session['id']).child('ProctorName').get()
+    return (name, school, branch, program, regno, appno, email, proctoremail, proctorname)
+
+def TimeTable():
+    time_table={'A1':['Monday 8:00 8:50','Wednesday 8:55 9:45'],'B1':['Tuesday 8:00 8:50','Thursday 8:55 9:45'],'C1':['Wednesday 8:00 8:50','Friday 8:55 9:45'],
+    'D1':['Thursday 8:00 8:50','Monday 9:50 10:40'],'E1':['Friday 8:00 8:50','Tuesday 9:50 10:40'],'F1':['Monday 8:55 9:45','Wednesday 9:50 10:40'],
+    'G1':['Tuesday 8:55 9:45','Thursday 9:50 10:40'],
+
+    'TA1':['Friday 9:50 10:40'],'TB1':['Monday 10:45 11:35'],'TC1':['Tuesday 10:45 11:35'],'TD1':['Wednesday 10:45 11:35'],'TE1':['Thursday 10:45 11:35'],
+    'TF1':['Friday 10:45 11:35'],'TG1':['Monday 11:40 12:30'],
+
+    'TAA1':['Tuesday 11:40 12:30'],'TBB1':['Wednesday 11:40 12:30'],'TCC1':['Thursday 11:40 12:30'],'TDD1':['Friday 11:40 12:30'],
+
+    'L1':['Monday 8:00 8:50'],'L2':['Monday 8:50 9:40'],'L3':['Monday 9:50 10:40'],'L4':['Monday 10:40 11:30'],'L5':['Monday 11:40 12:30'],'L6':['Monday 12:30 1:20'],
+    'L7':['Tuesday 8:00 8:50'],'L8':['Tuesday 8:50 9:40'],'L9':['Tuesday 9:50 10:40'],'L10':['Tuesday 10:40 11:30'],'L11':['Tuesday 11:40 12:30'],'L12':['Tuesday 12:30 1:20'],
+    'L13':['Wednesday 8:00 8:50'],'L14':['Wednesday 8:50 9:40'],'L15':['Wednesday 9:50 10:40'],'L16':['Wednesday 10:40 11:30'],'L17':['Wednesday 11:40 12:30'],
+    'L18':['Wednesday 12:30 1:20'],
+    'L19':['Thursday 8:00 8:50'],'L20':['Thursday 8:50 9:40'],'L21':['Thursday 9:50 10:40'],'L22':['Thursday 10:40 11:30'],'L23':['Thursday 11:40 12:30'],
+    'L24':['Thursday 12:30 1:20'],
+    'L25':['Friday 8:00 8:50'],'L26':['Friday 8:50 9:40'],'L27':['Friday 9:50 10:40'],'L28':['Friday 10:40 11:30'],'L29':['Friday 11:40 12:30'],'L30':['Friday 12:30 1:20'],
+
+
+    'A2':['Monday 2:00 2:50','Wednesday 2:55 3:45'],'B2':['Tuesday 2:00 2:50','Thursday 2:55 3:45'],'C2':['Wednesday 2:00 2:50','Friday 2:55 3:45'],
+    'D2':['Thursday 2:00 2:50','Monday 3:50 4:40'],'E2':['Friday 2:00 2:50','Tuesday 3:50 4:40'],'F2':['Monday 2:55 3:45','Wednesday 3:50 4:40'],
+    'G2':['Tuesday 2:55 3:45','Thursday 3:50 4:40'],
+
+    'TA2':['Friday 3:50 4:40'],'TB2':['Monday 4:45 5:35'],'TC2':['Tuesday 4:45 5:35'],'TD2':['Wednesday 4:45 5:35'],'TE2':['Thursday 4:45 5:35'],'TF2':['Friday 4:45 5:35'],
+    'TG2':['Monday 5:40 6:30'],
+
+    'TAA2':['Tuesday 5:40 6:30'],'TBB2':['Wednesday 5:40 6:30'],'TCC2':['Thursday 5:40 6:30'],'TDD2':['Friday 5:40 6:30'],
+
+    'L31':['Monday 2:00 2:50'],'L32':['Monday 2:50 3:40'],'L33':['Monday 3:50 4:40'],'L34':['Monday 4:40 5:30'],'L35':['Monday 5:40 6:30'],'L36':['Monday 6:30 7:20'],
+    'L37':['Tuesday 2:00 2:50'],'L38':['Tuesday 2:50 3:40'],'L39':['Tuesday 3:50 4:40'],'L40':['Tuesday 4:40 5:30'],'L41':['Tuesday 5:40 6:30'],'L42':['Tuesday 6:30 7:20'],
+    'L43':['Wednesday 2:00 2:50'],'L44':['Wednesday 2:50 3:40'],'L45':['Wednesday 3:50 4:40'],'L46':['Wednesday 4:40 5:30'],'L47':['Wednesday 5:40 6:30'],
+    'L48':['Wednesday 6:30 7:20'],
+    'L49':['Thursday 2:00 2:50'],'L50':['Thursday 2:50 3:40'],'L51':['Thursday 3:50 4:40'],'L52':['Thursday 4:40 5:30'],'L53':['Thursday 5:40 6:30'],'L54':['Thursday 6:30 7:20'],
+    'L55':['Friday 2:00 2:50'],'L56':['Friday 2:50 3:40'],'L57':['Friday 3:50 4:40'],'L58':['Friday 4:40 5:30'],'L59':['Friday 5:40 6:30'],'L60':['Friday 6:30 7:20']}
+    return time_table
+
+def ScrapAcadHistoryFunc():
+    nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
+    nav.click()
+    driver.implicitly_wait(3)
+    acadhistory = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
+    hover = action.move_to_element(acadhistory)
+    hover.perform()
+
+    item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[4]")
+    item.click()
+    try:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
+    finally:
+        soup = BeautifulSoup(driver.page_source, 'lxml')
+        # Fetching the last row in academic history which contains the Curriculum Details
+        code_soup = soup.findAll("tr", {"class": "tableContent"})
+        
+        # Processing the data to get the required details
+        curriculumKeys = ['CreditsRegistered', 'CreditsEarned', 'CGPA', 'S', 'A', 'B', 'C', 'D', 'E', 'F', 'N']
+        temp = []
+        cgpaDetails = code_soup[len(code_soup)-1].getText()
+        for i in cgpaDetails:
+            if(i):
+                temp.append(i)
+        temp = temp[1:len(temp)]
+        # Fetching data and Creating Dictionary
+        curriculumDetails = {}
+        m = 0
+        s = ""
+        for j in temp:
+            if(j!='\n'):
+                s = s+j
+            else:
+                curriculumDetails[curriculumKeys[m]] = s
+                m = m+1
+                s = ""
+        # Fetching the table containing the complete academic history
+        code_soup = soup.findAll("tr", {"class": "tableContent"})
+        # Removing unneccessary Details
+        cour = []
+        for i in range (0,8):
+            code_soup.pop()
+        code_soup = code_soup[1:len(code_soup)]
+        for i in code_soup:
+            if(len(i)==23):
+                cour.append(i.findAll('td'))
+        # Fetching Course Name and Grade from the cour array above and making the final Dictionary.
+        acadHistory = {}
+        for i in cour:
+            acadHistory[i[2].getText()] = i[5].getText()
+        
+        ref = db.reference('vitask')
+        tut_ref = ref.child("acadhistory-"+session['id'])
+        tut_ref.set({
+            session['id']: {
+                'AcadHistory': acadHistory,
+                'CurriculumDetails': curriculumDetails
+            }
+        })
+        return (acadHistory, curriculumDetails)
+
+def ScrapMarksFunc():
+    nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
+    nav.click()
+    driver.implicitly_wait(3)
+    marks = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
+    hover = action.move_to_element(marks)
+    hover.perform()
+    item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[1]")
+    item.click()
+    try:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+        semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+        semlist.click()
+        driver.implicitly_wait(2)
+
+        hover = action.move_to_element(semlist)
+        hover.perform()
+        item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[3]")
+        item.click()
+        try:
+            newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
+        finally:
+            page_source = driver.page_source
+    finally:
+        soup = BeautifulSoup(page_source, 'lxml')
+        code_soup = soup.findAll('tbody')
+        code_soup2 = soup.findAll("tr", {"class": "tableContent"})
+        courses = []
+        temp = []
+        for i in code_soup2:
+            temp = i.findAll('td')
+            if(len(temp)==9):
+                courses.append(temp[3].getText()+" "+temp[4].getText())
+            
+        code_soup = code_soup[1:len(code_soup)]
+        courseMarks = []
+        for i in code_soup:
+            courseMarks.append(i.findAll('tr'))
+        
+        k = []
+        m = 0
+        tempDict = {}
+        marksDict = {} 
+        for i in range (0,len(courseMarks)):
+            for j in range(1, len(courseMarks[i])):
+                k = courseMarks[i][j].findAll('td')
+                tempDict[k[1].getText()] = k[5].getText() 
+            marksDict[courses[m]] =  tempDict
+            m = m+1
+            tempDict = {}
+        ref = db.reference('vitask')
+        tut_ref = ref.child("marks-"+session['id'])
+        tut_ref.set({
+            session['id']: {
+                'Marks': marksDict
+            }
+        })
+        return marksDict
+
+"""---------------------------------------------------------------
+                    Functions end here.
+---------------------------------------------------------------"""
+
+
+
 """---------------------------------------------------------------
                     VITask API code begins from here
 
@@ -307,15 +488,7 @@ def authenticate():
 
         if(temp is not None):
             session['id'] = key
-            name = ref.child(session['id']).child(session['id']).child('Name').get()
-            school = ref.child(session['id']).child(session['id']).child('School').get()
-            branch = ref.child(session['id']).child(session['id']).child('Branch').get()
-            program = ref.child(session['id']).child(session['id']).child('Program').get()
-            regno = ref.child(session['id']).child(session['id']).child('RegNo').get()
-            appno = ref.child(session['id']).child(session['id']).child('AppNo').get()
-            email = ref.child(session['id']).child(session['id']).child('Email').get()
-            proctoremail = ref.child(session['id']).child(session['id']).child('ProctorEmail').get()
-            proctorname = ref.child(session['id']).child(session['id']).child('ProctorName').get()
+            name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
             api = ref.child(session['id']).child(session['id']).child('API').get()
 
             return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
@@ -408,15 +581,7 @@ def authenticate():
                     }
                 })
                 session['id'] = tutorial_code[0]
-                name = ref.child(session['id']).child(session['id']).child('Name').get()
-                school = ref.child(session['id']).child(session['id']).child('School').get()
-                branch = ref.child(session['id']).child(session['id']).child('Branch').get()
-                program = ref.child(session['id']).child(session['id']).child('Program').get()
-                regno = ref.child(session['id']).child(session['id']).child('RegNo').get()
-                appno = ref.child(session['id']).child(session['id']).child('AppNo').get()
-                email = ref.child(session['id']).child(session['id']).child('Email').get()
-                proctoremail = ref.child(session['id']).child(session['id']).child('ProctorEmail').get()
-                proctorname = ref.child(session['id']).child(session['id']).child('ProctorName').get()
+                name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
                 api = ref.child(session['id']).child(session['id']).child('API').get()
 
                 return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
@@ -451,7 +616,6 @@ def classesapi():
 
             for i in attend.keys():
                 slots.append(i)
-
 
             ref = db.reference('vitask')
             users_ref = ref.child('users')
@@ -534,7 +698,6 @@ def classesapi():
             for i in attend.keys():
                 slots.append(i)
 
-
             ref = db.reference('vitask')
             users_ref = ref.child('users')
             tut_ref = ref.child("attendance-"+session['id'])
@@ -546,9 +709,6 @@ def classesapi():
               }
           })
         return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
-
-
-
 
 # Timetable API
 @app.route('/timetableapi')
@@ -616,39 +776,8 @@ def timetableapi():
                 if i not in table:
                     table.append(i)
             slots = {}
-            time_table={'A1':['Monday 8:00 8:50','Wednesday 8:55 9:45'],'B1':['Tuesday 8:00 8:50','Thursday 8:55 9:45'],'C1':['Wednesday 8:00 8:50','Friday 8:55 9:45'],
-                    'D1':['Thursday 8:00 8:50','Monday 9:50 10:40'],'E1':['Friday 8:00 8:50','Tuesday 9:50 10:40'],'F1':['Monday 8:55 9:45','Wednesday 9:50 10:40'],
-                    'G1':['Tuesday 8:55 9:45','Thursday 9:50 10:40'],
-
-                    'TA1':['Friday 9:50 10:40'],'TB1':['Monday 10:45 11:35'],'TC1':['Tuesday 10:45 11:35'],'TD1':['Wednesday 10:45 11:35'],'TE1':['Thursday 10:45 11:35'],
-                    'TF1':['Friday 10:45 11:35'],'TG1':['Monday 11:40 12:30'],
-
-                    'TAA1':['Tuesday 11:40 12:30'],'TBB1':['Wednesday 11:40 12:30'],'TCC1':['Thursday 11:40 12:30'],'TDD1':['Friday 11:40 12:30'],
-
-                    'L1':['Monday 8:00 8:50'],'L2':['Monday 8:50 9:40'],'L3':['Monday 9:50 10:40'],'L4':['Monday 10:40 11:30'],'L5':['Monday 11:40 12:30'],'L6':['Monday 12:30 1:20'],
-                    'L7':['Tuesday 8:00 8:50'],'L8':['Tuesday 8:50 9:40'],'L9':['Tuesday 9:50 10:40'],'L10':['Tuesday 10:40 11:30'],'L11':['Tuesday 11:40 12:30'],'L12':['Tuesday 12:30 1:20'],
-                    'L13':['Wednesday 8:00 8:50'],'L14':['Wednesday 8:50 9:40'],'L15':['Wednesday 9:50 10:40'],'L16':['Wednesday 10:40 11:30'],'L17':['Wednesday 11:40 12:30'],
-                    'L18':['Wednesday 12:30 1:20'],
-                    'L19':['Thursday 8:00 8:50'],'L20':['Thursday 8:50 9:40'],'L21':['Thursday 9:50 10:40'],'L22':['Thursday 10:40 11:30'],'L23':['Thursday 11:40 12:30'],
-                    'L24':['Thursday 12:30 1:20'],
-                    'L25':['Friday 8:00 8:50'],'L26':['Friday 8:50 9:40'],'L27':['Friday 9:50 10:40'],'L28':['Friday 10:40 11:30'],'L29':['Friday 11:40 12:30'],'L30':['Friday 12:30 1:20'],
-
-
-                    'A2':['Monday 2:00 2:50','Wednesday 2:55 3:45'],'B2':['Tuesday 2:00 2:50','Thursday 2:55 3:45'],'C2':['Wednesday 2:00 2:50','Friday 2:55 3:45'],
-                    'D2':['Thursday 2:00 2:50','Monday 3:50 4:40'],'E2':['Friday 2:00 2:50','Tuesday 3:50 4:40'],'F2':['Monday 2:55 3:45','Wednesday 3:50 4:40'],
-                    'G2':['Tuesday 2:55 3:45','Thursday 3:50 4:40'],
-
-                    'TA2':['Friday 3:50 4:40'],'TB2':['Monday 4:45 5:35'],'TC2':['Tuesday 4:45 5:35'],'TD2':['Wednesday 4:45 5:35'],'TE2':['Thursday 4:45 5:35'],'TF2':['Friday 4:45 5:35'],
-                    'TG2':['Monday 5:40 6:30'],
-
-                    'TAA2':['Tuesday 5:40 6:30'],'TBB2':['Wednesday 5:40 6:30'],'TCC2':['Thursday 5:40 6:30'],'TDD2':['Friday 5:40 6:30'],
-
-                    'L31':['Monday 2:00 2:50'],'L32':['Monday 2:50 3:40'],'L33':['Monday 3:50 4:40'],'L34':['Monday 4:40 5:30'],'L35':['Monday 5:40 6:30'],'L36':['Monday 6:30 7:20'],
-                    'L37':['Tuesday 2:00 2:50'],'L38':['Tuesday 2:50 3:40'],'L39':['Tuesday 3:50 4:40'],'L40':['Tuesday 4:40 5:30'],'L41':['Tuesday 5:40 6:30'],'L42':['Tuesday 6:30 7:20'],
-                    'L43':['Wednesday 2:00 2:50'],'L44':['Wednesday 2:50 3:40'],'L45':['Wednesday 3:50 4:40'],'L46':['Wednesday 4:40 5:30'],'L47':['Wednesday 5:40 6:30'],
-                    'L48':['Wednesday 6:30 7:20'],
-                    'L49':['Thursday 2:00 2:50'],'L50':['Thursday 2:50 3:40'],'L51':['Thursday 3:50 4:40'],'L52':['Thursday 4:40 5:30'],'L53':['Thursday 5:40 6:30'],'L54':['Thursday 6:30 7:20'],
-                    'L55':['Friday 2:00 2:50'],'L56':['Friday 2:50 3:40'],'L57':['Friday 3:50 4:40'],'L58':['Friday 4:40 5:30'],'L59':['Friday 5:40 6:30'],'L60':['Friday 6:30 7:20']}
+            time_table = {}
+            time_table = TimeTable()
             for i in table:
                 p = []
                 arr = i.split("-")
@@ -708,66 +837,10 @@ def acadhistoryapi():
         else:
             return jsonify({'Error': 'Invalid API Token.'})
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        acadhistory = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
-        hover = action.move_to_element(acadhistory)
-        hover.perform()
-
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[4]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
-        finally:
-            soup = BeautifulSoup(driver.page_source, 'lxml')
-            # Fetching the last row in academic history which contains the Curriculum Details
-            code_soup = soup.findAll("tr", {"class": "tableContent"})
-            
-            # Processing the data to get the required details
-            curriculumKeys = ['CreditsRegistered', 'CreditsEarned', 'CGPA', 'S', 'A', 'B', 'C', 'D', 'E', 'F', 'N']
-            temp = []
-            cgpaDetails = code_soup[len(code_soup)-1].getText()
-            for i in cgpaDetails:
-                if(i):
-                    temp.append(i)
-            temp = temp[1:len(temp)]
-            # Fetching data and Creating Dictionary
-            curriculumDetails = {}
-            m = 0
-            s = ""
-            for j in temp:
-                if(j!='\n'):
-                    s = s+j
-                else:
-                    curriculumDetails[curriculumKeys[m]] = s
-                    m = m+1
-                    s = ""
-            # Fetching the table containing the complete academic history
-            code_soup = soup.findAll("tr", {"class": "tableContent"})
-            # Removing unneccessary Details
-            cour = []
-            for i in range (0,8):
-                code_soup.pop()
-            code_soup = code_soup[1:len(code_soup)]
-            for i in code_soup:
-                if(len(i)==23):
-                    cour.append(i.findAll('td'))
-            # Fetching Course Name and Grade from the cour array above and making the final Dictionary.
-            acadHistory = {}
-            for i in cour:
-                acadHistory[i[2].getText()] = i[5].getText()
-            
-            ref = db.reference('vitask')
-            tut_ref = ref.child("acadhistory-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'AcadHistory': acadHistory,
-                    'CurriculumDetails': curriculumDetails
-                }
-            })
-            return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
-
+        acadHistory = {}
+        curriculumDetails = {}
+        acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
+        return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
 
 # Marks API
 @app.route('/marksapi')
@@ -795,63 +868,9 @@ def marksapi():
         else:
             return jsonify({'Error': 'Invalid API Token.'})
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        marks = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
-        hover = action.move_to_element(marks)
-        hover.perform()
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[1]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-            semlist.click()
-            driver.implicitly_wait(2)
-
-            hover = action.move_to_element(semlist)
-            hover.perform()
-            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[3]")
-            item.click()
-            try:
-                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
-            finally:
-                page_source = driver.page_source
-        finally:
-            soup = BeautifulSoup(page_source, 'lxml')
-            code_soup = soup.findAll('tbody')
-            code_soup2 = soup.findAll("tr", {"class": "tableContent"})
-            courses = []
-            temp = []
-            for i in code_soup2:
-                temp = i.findAll('td')
-                if(len(temp)==9):
-                    courses.append(temp[3].getText()+" "+temp[4].getText())
-                
-            code_soup = code_soup[1:len(code_soup)]
-            courseMarks = []
-            for i in code_soup:
-                courseMarks.append(i.findAll('tr'))
-            
-            k = []
-            m = 0
-            tempDict = {}
-            marksDict = {} 
-            for i in range (0,len(courseMarks)):
-                for j in range(1, len(courseMarks[i])):
-                    k = courseMarks[i][j].findAll('td')
-                    tempDict[k[1].getText()] = k[5].getText() 
-                marksDict[courses[m]] =  tempDict
-                m = m+1
-                tempDict = {}
-            ref = db.reference('vitask')
-            tut_ref = ref.child("marks-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'Marks': marksDict
-                }
-            })
-            return jsonify({'Marks': marksDict})
+        marksDict = {}
+        marksDict = ScrapMarksFunc()
+        return jsonify({'Marks': marksDict})
         
 # Moodle API
 @app.route('/moodleapi')
@@ -917,11 +936,9 @@ def moodleapi():
         return jsonify({'Assignments': assignment})
         
 
-
 """---------------------------------------------------------------
                     VITask API code ends here
 ------------------------------------------------------------------"""
-
 
 
 """---------------------------------------------------------------
@@ -939,8 +956,6 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def index():
     return render_template('login.html')
-
-
 
 # Web login route(internal don't use for anything on user side)
 @app.route('/signin', methods=['GET', 'POST'])
@@ -1042,22 +1057,11 @@ def login():
 
                 return redirect(url_for('profile'))
 
-
-
+# Profile route
 @app.route('/profile')
 def profile():
-    ref = db.reference('vitask')
-    name = ref.child(session['id']).child(session['id']).child('Name').get()
-    school = ref.child(session['id']).child(session['id']).child('School').get()
-    branch = ref.child(session['id']).child(session['id']).child('Branch').get()
-    program = ref.child(session['id']).child(session['id']).child('Program').get()
-    regno = ref.child(session['id']).child(session['id']).child('RegNo').get()
-    appno = ref.child(session['id']).child(session['id']).child('AppNo').get()
-    email = ref.child(session['id']).child(session['id']).child('Email').get()
-    proctoremail = ref.child(session['id']).child(session['id']).child('ProctorEmail').get()
-    proctorname = ref.child(session['id']).child(session['id']).child('ProctorName').get()
-    return render_template('profile.html',name=name,school=school,branch=branch,program=program,regno=regno,email=email,proctoremail=proctoremail,proctorname=proctorname,appno=session['id'])
-
+    name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
+    return render_template('profile.html',name=name,school=school,branch=branch,program=program,regno=regno,email=email,proctoremail=proctoremail,proctorname=proctorname,appno=appno)
 
 # Timetable route
 @app.route('/timetable')
@@ -1108,39 +1112,8 @@ def timetable():
                 if i not in table:
                     table.append(i)
             slots = {}
-            time_table={'A1':['Monday 8:00 8:50','Wednesday 8:55 9:45'],'B1':['Tuesday 8:00 8:50','Thursday 8:55 9:45'],'C1':['Wednesday 8:00 8:50','Friday 8:55 9:45'],
-                    'D1':['Thursday 8:00 8:50','Monday 9:50 10:40'],'E1':['Friday 8:00 8:50','Tuesday 9:50 10:40'],'F1':['Monday 8:55 9:45','Wednesday 9:50 10:40'],
-                    'G1':['Tuesday 8:55 9:45','Thursday 9:50 10:40'],
-
-                    'TA1':['Friday 9:50 10:40'],'TB1':['Monday 10:45 11:35'],'TC1':['Tuesday 10:45 11:35'],'TD1':['Wednesday 10:45 11:35'],'TE1':['Thursday 10:45 11:35'],
-                    'TF1':['Friday 10:45 11:35'],'TG1':['Monday 11:40 12:30'],
-
-                    'TAA1':['Tuesday 11:40 12:30'],'TBB1':['Wednesday 11:40 12:30'],'TCC1':['Thursday 11:40 12:30'],'TDD1':['Friday 11:40 12:30'],
-
-                    'L1':['Monday 8:00 8:50'],'L2':['Monday 8:50 9:40'],'L3':['Monday 9:50 10:40'],'L4':['Monday 10:40 11:30'],'L5':['Monday 11:40 12:30'],'L6':['Monday 12:30 1:20'],
-                    'L7':['Tuesday 8:00 8:50'],'L8':['Tuesday 8:50 9:40'],'L9':['Tuesday 9:50 10:40'],'L10':['Tuesday 10:40 11:30'],'L11':['Tuesday 11:40 12:30'],'L12':['Tuesday 12:30 1:20'],
-                    'L13':['Wednesday 8:00 8:50'],'L14':['Wednesday 8:50 9:40'],'L15':['Wednesday 9:50 10:40'],'L16':['Wednesday 10:40 11:30'],'L17':['Wednesday 11:40 12:30'],
-                    'L18':['Wednesday 12:30 1:20'],
-                    'L19':['Thursday 8:00 8:50'],'L20':['Thursday 8:50 9:40'],'L21':['Thursday 9:50 10:40'],'L22':['Thursday 10:40 11:30'],'L23':['Thursday 11:40 12:30'],
-                    'L24':['Thursday 12:30 1:20'],
-                    'L25':['Friday 8:00 8:50'],'L26':['Friday 8:50 9:40'],'L27':['Friday 9:50 10:40'],'L28':['Friday 10:40 11:30'],'L29':['Friday 11:40 12:30'],'L30':['Friday 12:30 1:20'],
-
-
-                    'A2':['Monday 2:00 2:50','Wednesday 2:55 3:45'],'B2':['Tuesday 2:00 2:50','Thursday 2:55 3:45'],'C2':['Wednesday 2:00 2:50','Friday 2:55 3:45'],
-                    'D2':['Thursday 2:00 2:50','Monday 3:50 4:40'],'E2':['Friday 2:00 2:50','Tuesday 3:50 4:40'],'F2':['Monday 2:55 3:45','Wednesday 3:50 4:40'],
-                    'G2':['Tuesday 2:55 3:45','Thursday 3:50 4:40'],
-
-                    'TA2':['Friday 3:50 4:40'],'TB2':['Monday 4:45 5:35'],'TC2':['Tuesday 4:45 5:35'],'TD2':['Wednesday 4:45 5:35'],'TE2':['Thursday 4:45 5:35'],'TF2':['Friday 4:45 5:35'],
-                    'TG2':['Monday 5:40 6:30'],
-
-                    'TAA2':['Tuesday 5:40 6:30'],'TBB2':['Wednesday 5:40 6:30'],'TCC2':['Thursday 5:40 6:30'],'TDD2':['Friday 5:40 6:30'],
-
-                    'L31':['Monday 2:00 2:50'],'L32':['Monday 2:50 3:40'],'L33':['Monday 3:50 4:40'],'L34':['Monday 4:40 5:30'],'L35':['Monday 5:40 6:30'],'L36':['Monday 6:30 7:20'],
-                    'L37':['Tuesday 2:00 2:50'],'L38':['Tuesday 2:50 3:40'],'L39':['Tuesday 3:50 4:40'],'L40':['Tuesday 4:40 5:30'],'L41':['Tuesday 5:40 6:30'],'L42':['Tuesday 6:30 7:20'],
-                    'L43':['Wednesday 2:00 2:50'],'L44':['Wednesday 2:50 3:40'],'L45':['Wednesday 3:50 4:40'],'L46':['Wednesday 4:40 5:30'],'L47':['Wednesday 5:40 6:30'],
-                    'L48':['Wednesday 6:30 7:20'],
-                    'L49':['Thursday 2:00 2:50'],'L50':['Thursday 2:50 3:40'],'L51':['Thursday 3:50 4:40'],'L52':['Thursday 4:40 5:30'],'L53':['Thursday 5:40 6:30'],'L54':['Thursday 6:30 7:20'],
-                    'L55':['Friday 2:00 2:50'],'L56':['Friday 2:50 3:40'],'L57':['Friday 3:50 4:40'],'L58':['Friday 4:40 5:30'],'L59':['Friday 5:40 6:30'],'L60':['Friday 6:30 7:20']}
+            time_table = {}
+            time_table = TimeTable()
             for i in table:
                 p = []
                 arr = i.split("-")
@@ -1174,7 +1147,6 @@ def timetable():
             })
             session['timetable'] = 1
             return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
-
 
 # Attendance route
 @app.route('/classes')
@@ -1259,70 +1231,13 @@ def acadhistory():
     if(session['acadhistory']==1 or temp is not None):
         acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
         curriculumDetails = ref.child("acadhistory-"+session['id']).child(session['id']).child('CurriculumDetails').get()
-        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
-    
+        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)    
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        acadhistory = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
-        hover = action.move_to_element(acadhistory)
-        hover.perform()
-
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[4]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
-        finally:
-            soup = BeautifulSoup(driver.page_source, 'lxml')
-            # Fetching the last row in academic history which contains the Curriculum Details
-            code_soup = soup.findAll("tr", {"class": "tableContent"})
-            
-            # Processing the data to get the required details
-            curriculumKeys = ['CreditsRegistered', 'CreditsEarned', 'CGPA', 'S', 'A', 'B', 'C', 'D', 'E', 'F', 'N']
-            temp = []
-            cgpaDetails = code_soup[len(code_soup)-1].getText()
-            for i in cgpaDetails:
-                if(i):
-                    temp.append(i)
-            temp = temp[1:len(temp)]
-            # Fetching data and Creating Dictionary
-            curriculumDetails = {}
-            m = 0
-            s = ""
-            for j in temp:
-                if(j!='\n'):
-                    s = s+j
-                else:
-                    curriculumDetails[curriculumKeys[m]] = s
-                    m = m+1
-                    s = ""
-            # Fetching the table containing the complete academic history
-            code_soup = soup.findAll("tr", {"class": "tableContent"})
-            # Removing unneccessary Details
-            cour = []
-            for i in range (0,8):
-                code_soup.pop()
-            code_soup = code_soup[1:len(code_soup)]
-            for i in code_soup:
-                if(len(i)==23):
-                    cour.append(i.findAll('td'))
-            # Fetching Course Name and Grade from the cour array above and making the final Dictionary.
-            acadHistory = {}
-            for i in cour:
-                acadHistory[i[2].getText()] = i[5].getText()
-            
-            ref = db.reference('vitask')
-            tut_ref = ref.child("acadhistory-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'AcadHistory': acadHistory,
-                    'CurriculumDetails': curriculumDetails
-                }
-            })
-            session['acadhistory'] = 1
-            acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
-            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
+        acadHistory = {}
+        curriculumDetails = {}
+        acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
+        session['acadhistory'] = 1
+        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
         
 # Marks route
 @app.route('/marks')
@@ -1333,65 +1248,10 @@ def marks():
         marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
         return render_template('marks.html',name = session['name'], marks = marks)
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        marks = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
-        hover = action.move_to_element(marks)
-        hover.perform()
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[1]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-            semlist.click()
-            driver.implicitly_wait(2)
-
-            hover = action.move_to_element(semlist)
-            hover.perform()
-            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[3]")
-            item.click()
-            try:
-                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
-            finally:
-                page_source = driver.page_source
-        finally:
-            soup = BeautifulSoup(page_source, 'lxml')
-            code_soup = soup.findAll('tbody')
-            code_soup2 = soup.findAll("tr", {"class": "tableContent"})
-            courses = []
-            temp = []
-            for i in code_soup2:
-                temp = i.findAll('td')
-                if(len(temp)==9):
-                    courses.append(temp[3].getText()+" "+temp[4].getText())
-                
-            code_soup = code_soup[1:len(code_soup)]
-            courseMarks = []
-            for i in code_soup:
-                courseMarks.append(i.findAll('tr'))
-            
-            k = []
-            m = 0
-            tempDict = {}
-            marksDict = {} 
-            for i in range (0,len(courseMarks)):
-                for j in range(1, len(courseMarks[i])):
-                    k = courseMarks[i][j].findAll('td')
-                    tempDict[k[1].getText()] = k[5].getText() 
-                marksDict[courses[m]] =  tempDict
-                m = m+1
-                tempDict = {}
-            ref = db.reference('vitask')
-            tut_ref = ref.child("marks-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'Marks': marksDict
-                }
-            })
-            session['marks'] = 1
-            marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
-            return render_template('marks.html',name = session['name'], marks = marks)
+        marksDict = {}
+        marksDict = ScrapMarksFunc()
+        session['marks'] = 1
+        return render_template('marks.html',name = session['name'], marks = marksDict)
         
 """---------------------------------------------------------------
 
@@ -1400,6 +1260,7 @@ def marks():
  “The mind is furnished with ideas by experience alone”― John Locke
 
 ------------------------------------------------------------------"""
+
         
 # API Dashboard (by Harsh)
 @app.route('/apidashboard')
