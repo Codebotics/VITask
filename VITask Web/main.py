@@ -955,7 +955,14 @@ def home():
 # Login path for VITask Web app
 @app.route('/login', methods=['GET', 'POST'])
 def index():
-    return render_template('login.html')
+    try:
+        if(session['loggedin']==1):
+            return redirect(url_for('profile'))
+        else:
+            return render_template('login.html')
+    except:
+        session['loggedin'] = 0
+        return render_template('login.html')
 
 # Web login route(internal don't use for anything on user side)
 @app.route('/signin', methods=['GET', 'POST'])
@@ -981,6 +988,7 @@ def login():
             session['moodle'] = 0
             session['acadhistory'] = 0
             session['marks'] = 0
+            session['loggedin'] = 0
         
             username1 = request.form['username']
             password1 = request.form['password']
@@ -1054,204 +1062,220 @@ def login():
                     session['id'] = tutorial_code[0]
                     session['name'] = tutorial_code[1]
                     session['reg'] = tutorial_code[14]
+                    session['loggedin'] = 1
 
                 return redirect(url_for('profile'))
 
 # Profile route
 @app.route('/profile')
 def profile():
-    name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
-    return render_template('profile.html',name=name,school=school,branch=branch,program=program,regno=regno,email=email,proctoremail=proctoremail,proctorname=proctorname,appno=appno)
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
+        return render_template('profile.html',name=name,school=school,branch=branch,program=program,regno=regno,email=email,proctoremail=proctoremail,proctorname=proctorname,appno=appno)
 
 # Timetable route
 @app.route('/timetable')
 def timetable():
-    ref = db.reference('vitask')
-    temp = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
-    if(session['timetable']==1 or temp is not None):
-        days = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
-        return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
-        hover = action.move_to_element(tt)
-        hover.perform()
-
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[8]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-            semlist.click()
-            hover = action.move_to_element(semlist)
+        ref = db.reference('vitask')
+        temp = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
+        if(session['timetable']==1 or temp is not None):
+            days = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
+            return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
+        else:
+            nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
+            nav.click()
+            driver.implicitly_wait(3)
+            tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
+            hover = action.move_to_element(tt)
             hover.perform()
 
-            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+            item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[8]")
             item.click()
-            viewbutton = driver.find_element_by_xpath("//*[@id='studentTimeTable']/div[2]/div/button")
-            viewbutton.click()
             try:
-                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "timeTableStyle")))
+                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+                semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+                semlist.click()
+                hover = action.move_to_element(semlist)
+                hover.perform()
+
+                item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+                item.click()
+                viewbutton = driver.find_element_by_xpath("//*[@id='studentTimeTable']/div[2]/div/button")
+                viewbutton.click()
+                try:
+                    newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "timeTableStyle")))
+                finally:
+                    page_source = driver.page_source
+
             finally:
-                page_source = driver.page_source
-
-        finally:
-            soup = BeautifulSoup(page_source, 'lxml')
-            code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
-            list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
-            list_code = [i.getText() for i in list_soup]
-            courses = {}
-            for i in list_code:
-                arr = i.split("-")
-                courses[arr[0].strip()] = arr[1].strip()
-            tutorial_code = [i.getText() for i in code_soup]
-            table = []
-            for i in tutorial_code:
-                if i not in table:
-                    table.append(i)
-            slots = {}
-            time_table = {}
-            time_table = TimeTable()
-            for i in table:
-                p = []
-                arr = i.split("-")
-                p = [arr[1],arr[3],arr[4],courses[arr[1]],time_table[arr[0]]]
-                slots[arr[0]] = p
-
-            days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[]}
-            p = []
-            for i in slots:
-                for j in slots[i][4]:
-                    arr = j.split(" ")
-                    p = [slots[i][0],slots[i][1],slots[i][2],slots[i][3],arr[1],arr[2]]
-                    if(arr[0]=="Monday"):
-                        days["Monday"].append(p)
-                    elif(arr[0]=="Tuesday"):
-                        days["Tuesday"].append(p)
-                    elif(arr[0]=="Wednesday"):
-                        days["Wednesday"].append(p)
-                    elif(arr[0]=="Thursday"):
-                        days["Thursday"].append(p)
-                    elif(arr[0]=="Friday"):
-                        days["Friday"].append(p)
+                soup = BeautifulSoup(page_source, 'lxml')
+                code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
+                list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
+                list_code = [i.getText() for i in list_soup]
+                courses = {}
+                for i in list_code:
+                    arr = i.split("-")
+                    courses[arr[0].strip()] = arr[1].strip()
+                tutorial_code = [i.getText() for i in code_soup]
+                table = []
+                for i in tutorial_code:
+                    if i not in table:
+                        table.append(i)
+                slots = {}
+                time_table = {}
+                time_table = TimeTable()
+                for i in table:
                     p = []
+                    arr = i.split("-")
+                    p = [arr[1],arr[3],arr[4],courses[arr[1]],time_table[arr[0]]]
+                    slots[arr[0]] = p
 
-            ref = db.reference('vitask')
-            tut_ref = ref.child("timetable-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'Timetable': days
-                }
-            })
-            session['timetable'] = 1
-            return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
+                days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[]}
+                p = []
+                for i in slots:
+                    for j in slots[i][4]:
+                        arr = j.split(" ")
+                        p = [slots[i][0],slots[i][1],slots[i][2],slots[i][3],arr[1],arr[2]]
+                        if(arr[0]=="Monday"):
+                            days["Monday"].append(p)
+                        elif(arr[0]=="Tuesday"):
+                            days["Tuesday"].append(p)
+                        elif(arr[0]=="Wednesday"):
+                            days["Wednesday"].append(p)
+                        elif(arr[0]=="Thursday"):
+                            days["Thursday"].append(p)
+                        elif(arr[0]=="Friday"):
+                            days["Friday"].append(p)
+                        p = []
+
+                ref = db.reference('vitask')
+                tut_ref = ref.child("timetable-"+session['id'])
+                tut_ref.set({
+                    session['id']: {
+                        'Timetable': days
+                    }
+                })
+                session['timetable'] = 1
+                return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
 
 # Attendance route
 @app.route('/classes')
 def classes():
-    ref = db.reference('vitask')
-    temp = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
-    if(session['classes']==1 or temp is not None):
-        attend = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
-        q = ref.child("attendance-"+session['id']).child(session['id']).child('Track').get()
-        return render_template('attendance.html',name = session['name'],id = session['id'],dicti = attend,q = q)
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
-        hover = action.move_to_element(tt)
-        hover.perform()
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-            semlist.click()
-            driver.implicitly_wait(2)
-
-            hover = action.move_to_element(semlist)
+        ref = db.reference('vitask')
+        temp = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
+        if(session['classes']==1 or temp is not None):
+            attend = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
+            q = ref.child("attendance-"+session['id']).child(session['id']).child('Track').get()
+            return render_template('attendance.html',name = session['name'],id = session['id'],dicti = attend,q = q)
+        else:
+            nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
+            nav.click()
+            driver.implicitly_wait(3)
+            tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
+            hover = action.move_to_element(tt)
             hover.perform()
-            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+            item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
             item.click()
-            viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
-            viewbutton.click()
             try:
-                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
+                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+                semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+                semlist.click()
+                driver.implicitly_wait(2)
+
+                hover = action.move_to_element(semlist)
+                hover.perform()
+                item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+                item.click()
+                viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
+                viewbutton.click()
+                try:
+                    newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
+                finally:
+                    page_source = driver.page_source
+
             finally:
-                page_source = driver.page_source
+                soup = BeautifulSoup(page_source, 'lxml')
+                code_soup = soup.find_all('tr')
+                tutorial_code = [i.getText() for i in code_soup]
+                table = []
+                p=[]
 
-        finally:
-            soup = BeautifulSoup(page_source, 'lxml')
-            code_soup = soup.find_all('tr')
-            tutorial_code = [i.getText() for i in code_soup]
-            table = []
-            p=[]
+                for i in tutorial_code:
+                    i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
+                    i = i.split('\n')
+                    if i not in table:
+                        table.append(i)
 
-            for i in tutorial_code:
-                i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
-                i = i.split('\n')
-                if i not in table:
-                    table.append(i)
+                table.pop(0)
 
-            table.pop(0)
+                for i in range(0,len(table)):
+                    p.append(table[i])
 
-            for i in range(0,len(table)):
-                p.append(table[i])
-            
-            
-            attend = {}
-            empty = []
-            for i in range(0,len(p)-1):
-                empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
-                attend[p[i][8]] = empty
-            c=0
-            q={}
-            for i in attend:
-                q[i] = c
-                c = c + 1
-            ref = db.reference('vitask')
-            users_ref = ref.child('users')
-            tut_ref = ref.child("attendance-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'Attendance': attend,
-                    'Track': q
-                }
-            })
-    return render_template('attendance.html',dicti = attend,q=q, name=session['name'])
+
+                attend = {}
+                empty = []
+                for i in range(0,len(p)-1):
+                    empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
+                    attend[p[i][8]] = empty
+                c=0
+                q={}
+                for i in attend:
+                    q[i] = c
+                    c = c + 1
+                ref = db.reference('vitask')
+                users_ref = ref.child('users')
+                tut_ref = ref.child("attendance-"+session['id'])
+                tut_ref.set({
+                    session['id']: {
+                        'Attendance': attend,
+                        'Track': q
+                    }
+                })
+        return render_template('attendance.html',dicti = attend,q=q, name=session['name'])
 
 # Academic History route
 @app.route('/acadhistory')
 def acadhistory():
-    ref = db.reference('vitask')
-    temp = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
-    if(session['acadhistory']==1 or temp is not None):
-        acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
-        curriculumDetails = ref.child("acadhistory-"+session['id']).child(session['id']).child('CurriculumDetails').get()
-        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)    
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
     else:
-        acadHistory = {}
-        curriculumDetails = {}
-        acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
-        session['acadhistory'] = 1
-        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
+        ref = db.reference('vitask')
+        temp = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+        if(session['acadhistory']==1 or temp is not None):
+            acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+            curriculumDetails = ref.child("acadhistory-"+session['id']).child(session['id']).child('CurriculumDetails').get()
+            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)    
+        else:
+            acadHistory = {}
+            curriculumDetails = {}
+            acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
+            session['acadhistory'] = 1
+            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
         
 # Marks route
 @app.route('/marks')
 def marks():
-    ref = db.reference('vitask')
-    temp = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
-    if(session['marks']==1 or temp is not None):
-        marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
-        return render_template('marks.html',name = session['name'], marks = marks)
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
     else:
-        marksDict = {}
-        marksDict = ScrapMarksFunc()
-        session['marks'] = 1
-        return render_template('marks.html',name = session['name'], marks = marksDict)
+        ref = db.reference('vitask')
+        temp = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
+        if(session['marks']==1 or temp is not None):
+            marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
+            return render_template('marks.html',name = session['name'], marks = marks)
+        else:
+            marksDict = {}
+            marksDict = ScrapMarksFunc()
+            session['marks'] = 1
+            return render_template('marks.html',name = session['name'], marks = marksDict)
         
 """---------------------------------------------------------------
 
@@ -1265,15 +1289,21 @@ def marks():
 # API Dashboard (by Harsh)
 @app.route('/apidashboard')
 def apidashboard():
-    ref = db.reference('vitask')
-    api = ref.child(session['id']).child(session['id']).child('API').get()
-    name = session['name']
-    return render_template('api.html',name=name,api=api)
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        ref = db.reference('vitask')
+        api = ref.child(session['id']).child(session['id']).child('API').get()
+        name = session['name']
+        return render_template('api.html',name=name,api=api)
 
 # API Console(Not ready yet)
 @app.route('/apiconsole', methods=['GET', 'POST'])
 def apiconsole():
-    return render_template('apiconsole.html',name = session['name'])
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        return render_template('apiconsole.html',name = session['name'])
 
 """---------------------------------------------------------------
 
@@ -1294,71 +1324,82 @@ def apiconsole():
 # Moodle Login path for VITask Web app
 @app.route('/moodle', methods=['GET', 'POST'])
 def moodle():
-    ref = db.reference('vitask')
-    temp = ref.child("moodle-"+session['id']).child(session['id']).get()
-    if(session['moodle']==1 or temp is not None):
-        return redirect(url_for('assignments'))
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
     else:
-        return render_template('moodle.html',name=session['name'])
+        ref = db.reference('vitask')
+        temp = ref.child("moodle-"+session['id']).child(session['id']).get()
+        if(session['moodle']==1 or temp is not None):
+            return redirect(url_for('assignments'))
+        else:
+            return render_template('moodle.html',name=session['name'])
 
 # Path for processing of details from /moodle
 @app.route('/moodlelogin', methods=['GET', 'POST'])
 def moodlelogin():
-    ref = db.reference('vitask')
-    temp = ref.child("moodle-"+session['id']).child(session['id']).get()
-    if(session['moodle']==1 or temp is not None):
-        return redirect(url_for('assignments'))
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
     else:
-        moodle_username =  request.form['username']
-        moodle_password = request.form['password']
-        sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
-        due_items = get_dashboard_json(sess, sess_key)
-
-        all_assignments = []
-
-        for item in due_items:
-            temp={}
-            temp["course"] = item["course"]["fullname"]
-            temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
-            temp["time"] = temp_time
-            all_assignments.append(temp)
-            
-        # Processing password before storing
-        api_gen = moodle_password
-        api_token = api_gen.encode('ascii')
-        temptoken = base64.b64encode(api_token)
-        token = temptoken.decode('ascii')
-
-        session['moodle'] = 1
-
         ref = db.reference('vitask')
-        tut_ref = ref.child("moodle-"+session['id'])
-        tut_ref.set({
-            session['id']: {
-                'Username': moodle_username,
-                'Password': token,
-                'Assignments': all_assignments   
-            }
-        })
-        assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+        temp = ref.child("moodle-"+session['id']).child(session['id']).get()
+        if(session['moodle']==1 or temp is not None):
+            return redirect(url_for('assignments'))
+        else:
+            moodle_username =  request.form['username']
+            moodle_password = request.form['password']
+            sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
+            due_items = get_dashboard_json(sess, sess_key)
 
-        return render_template('assignments.html',name=session['name'],assignment=assignment)
+            all_assignments = []
+
+            for item in due_items:
+                temp={}
+                temp["course"] = item["course"]["fullname"]
+                temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+                temp["time"] = temp_time
+                all_assignments.append(temp)
+
+            # Processing password before storing
+            api_gen = moodle_password
+            api_token = api_gen.encode('ascii')
+            temptoken = base64.b64encode(api_token)
+            token = temptoken.decode('ascii')
+
+            session['moodle'] = 1
+
+            ref = db.reference('vitask')
+            tut_ref = ref.child("moodle-"+session['id'])
+            tut_ref.set({
+                session['id']: {
+                    'Username': moodle_username,
+                    'Password': token,
+                    'Assignments': all_assignments   
+                }
+            })
+            assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+
+            return render_template('assignments.html',name=session['name'],assignment=assignment)
             
 # Assignments page for Moodle
 @app.route('/assignments', methods=['GET', 'POST'])
 def assignments():
-    ref = db.reference('vitask')
-    temp = ref.child("moodle-"+session['id']).child(session['id']).get()
-    if(session['moodle']==1 or temp is not None):
-        assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
-        return render_template('assignments.html',name=session['name'],assignment=assignment)
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
     else:
-        return redirect(url_for('moodle'))
+        ref = db.reference('vitask')
+        temp = ref.child("moodle-"+session['id']).child(session['id']).get()
+        if(session['moodle']==1 or temp is not None):
+            assignment = ref.child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+            return render_template('assignments.html',name=session['name'],assignment=assignment)
+        else:
+            return redirect(url_for('moodle'))
     
 # Assignments page for Moodle
 @app.route('/moodleresync', methods=['GET', 'POST'])
 def moodleresync():
-    
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
         ref = db.reference('vitask')
         moodle_username = ref.child("moodle-"+session['id']).child(session['id']).child('Username').get()
         pass_token = ref.child("moodle-"+session['id']).child(session['id']).child('Password').get()
@@ -1423,6 +1464,7 @@ def logout():
         session.pop('moodle', 0)
         session.pop('acadhistory', 0)
         session.pop('marks', 0)
+        session.pop('loggedin',0)
         return render_template('home.html')
     else:
         session.pop('id', None)
@@ -1433,6 +1475,7 @@ def logout():
         session.pop('moodle', 0)
         session.pop('acadhistory', 0)
         session.pop('marks', 0)
+        session.pop('loggedin',0)
         return render_template('home.html')
 
 
