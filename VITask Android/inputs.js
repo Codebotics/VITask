@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { AsyncStorage, View, Text, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
-import Captcha from './captcha.js'
 import { Actions } from 'react-native-router-flux';
 
 class Inputs extends Component {
@@ -16,11 +15,8 @@ class Inputs extends Component {
    handlePassword = (text) => {
       this.setState({ password: text })
    }
-   handleCaptcha = (text) => {
-      this.setState({ captcha: text })
-   }
-   login = (regno, pass, captcha) => {
-         var url =  `http://10.0.2.2:5000/authenticate?username=`+regno+`&password=`+pass+`&captcha=`+captcha;
+   login = (regno, pass) => {
+         var url =  `http://10.0.2.2:5000/authenticate?username=`+regno+`&password=`+pass;
          fetch(url, {
             method: 'GET'
          })
@@ -40,40 +36,32 @@ class Inputs extends Component {
    render() {
       return (
          <View style = {styles.container}>
-            <TextInput style = {styles.input}
-               underlineColorAndroid = "transparent"
-               placeholder = "Registration Number"
-               placeholderTextColor = "#ffffff"
-               autoCapitalize = "none"
-               textAlign = "center"
-               onChangeText = {this.handleRegno}/>
+            <View>
+               <TextInput style = {styles.input}
+                  underlineColorAndroid = "transparent"
+                  placeholder = "Registration Number"
+                  placeholderTextColor = "#ffffff"
+                  autoCapitalize = "none"
+                  textAlign = "left"
+                  onChangeText = {this.handleRegno}/>
+            </View>
             
             <TextInput style = {styles.input}
                underlineColorAndroid = "transparent"
                placeholder = "Password"
                placeholderTextColor = "#ffffff"
                autoCapitalize = "none"
-               textAlign = "center"
+               textAlign = "left"
                secureTextEntry= {true}
                password = {true}
                onChangeText = {this.handlePassword}/>
-
-            <Captcha />
-
-            <TextInput style = {styles.input}
-               underlineColorAndroid = "transparent"
-               placeholder = "Captcha"
-               placeholderTextColor = "#ffffff"
-               autoCapitalize = "none"
-               textAlign = "center"
-               onChangeText = {this.handleCaptcha}/>
             
             <TouchableOpacity
                style = {styles.submitButton}
                onPress = {
-                  () => this.login(this.state.regno, this.state.password, this.state.captcha)
+                  () => this.login(this.state.regno, this.state.password)
                }>
-               <Text style = {styles.submitButtonText}> Login </Text>
+               <Text style = {styles.submitButtonText}> LOGIN </Text>
             </TouchableOpacity>
          </View>
       )
@@ -84,28 +72,48 @@ export default Inputs
 
 const styles = StyleSheet.create({
    container: {
-      paddingTop: 23
+      paddingTop: -20,
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
    },
    input: {
       margin: 15,
       height: 40,
       width: 300,
-      borderColor: '#ffffff',
-      borderWidth: 1,
+      borderColor: 'rgba(255, 65, 108,0.99)',
+      borderWidth: 2,
       borderRadius: 5,
-      backgroundColor: '#f54254',
-      color: '#ffffff'
+      backgroundColor: 'rgba(255, 65, 108,0.99)',
+      color: '#ffffff',
+      fontWeight: 'bold',
+      paddingLeft: 20,
+      shadowColor: '#000000',
+      shadowOffset: { width: 20, height: 20 },
+      shadowOpacity: 0.9,
+      shadowRadius: 20,  
+      elevation: 5
    },
    submitButton: {
-      backgroundColor: '#f54254',
+      backgroundColor: 'rgba(32,40,48,0.9)',
       padding: 10,
       margin: 15,
-      height: 40,
+      height: 45,
+      width: 100,
       borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'rgba(32,40,48,0.9)',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      shadowColor: '#000000',
+      shadowOffset: { width: 20, height: 20 },
+      shadowOpacity: 0.9,
+      shadowRadius: 20,  
+      elevation: 10
    },
    submitButtonText:{
-      color: 'white'
+      color: 'white',
+      fontWeight: "bold"
    }
 })

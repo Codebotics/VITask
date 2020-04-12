@@ -10,7 +10,10 @@ export default ImagesExample
 
 const styles = StyleSheet.create({
     img: {
-       width: 100,
-       height: 100
+       width: '80%',
+       justifyContent: "center",
+       alignItems: 'center',
+       flex: 1,
+       resizeMode: 'contain'
     }
 })
