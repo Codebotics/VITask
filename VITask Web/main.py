@@ -358,6 +358,7 @@ def ScrapProfileFunc():
         
 
 def TimeTable():
+    #Obsolete
     time_table={'A1':['Monday 8:00 8:50','Wednesday 8:55 9:45'],'B1':['Tuesday 8:00 8:50','Thursday 8:55 9:45'],'C1':['Wednesday 8:00 8:50','Friday 8:55 9:45'],
     'D1':['Thursday 8:00 8:50','Monday 9:50 10:40'],'E1':['Friday 8:00 8:50','Tuesday 9:50 10:40'],'F1':['Monday 8:55 9:45','Wednesday 9:50 10:40'],
     'G1':['Tuesday 8:55 9:45','Thursday 9:50 10:40'],
@@ -394,6 +395,7 @@ def TimeTable():
     return time_table
 
 def ScrapTimetableFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
     nav.click()
     driver.implicitly_wait(3)
@@ -471,6 +473,7 @@ def ScrapTimetableFunc():
         return days
     
 def ScrapAttendanceFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
     nav.click()
     driver.implicitly_wait(3)
@@ -538,6 +541,7 @@ def ScrapAttendanceFunc():
         return (attend, q)
 
 def ScrapAcadHistoryFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
     nav.click()
     driver.implicitly_wait(3)

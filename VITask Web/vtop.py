@@ -9,11 +9,16 @@ from bs4 import BeautifulSoup
 from collections import namedtuple
 from utility import solve_captcha,TimeTable
 
+#TODO: Make Constants file for storing all the constant URLs
+#TODO: Make Firebase Sync functions
+#TODO: Check whether user is Logged in or not before proceeding
+
 
 VTOP_BASE_URL = r"http://vtopcc.vit.ac.in:8080/vtop/"
 VTOP_LOGIN = r"http://vtopcc.vit.ac.in:8080/vtop/vtopLogin"
 ATTENDANCE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewStudentAttendance"
 TIMETABLE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewTimeTable"
+ACADHISTORY = r"http://vtopcc.vit.ac.in:8080/vtop/examinations/examGradeView/StudentGradeHistory"
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
 }
@@ -140,6 +145,7 @@ def get_timetable(sess, username, semesterID="CH2019205"):
     timetable_html = timetable_sess.text
 
     # This code is copied from main.py, I may change some of the code, Thanks to whoever contributed
+    # I didnot named the variables. Please kill me!
 
     soup = BeautifulSoup(timetable_html, 'lxml')
     code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
@@ -182,3 +188,88 @@ def get_timetable(sess, username, semesterID="CH2019205"):
 
     #TODO: Sync with Firebase
     return days
+
+def get_acadhistory(sess,username):
+    """
+    Get Academic History of Student or Grade History, as VTOP likes to call it
+    Format is {
+        subjects : {
+            subjectName : grade
+            ...
+        },
+        summary:{
+            "CreditsRegistered" : Num,
+            "CreditsEarned" : Num,
+            "CGPA" : str,
+            "S" : Num
+            "A" : Num,
+            ...
+        }
+    }
+    """
+
+    # TODO: Check if still login or not
+
+    #Finally some change in Payload. VTOP Grow UP you sucker
+    payload = {
+        "verifyMenu" : "true",        # IDK, what is this
+        "winImage" : "undefined",
+        "authorizedID": username,
+        "nocache" : "@(new Date().getTime())"   # WTF does it even mean?
+    }
+    acad_sess = sess.post(ACADHISTORY, data=payload, headers=headers, verify=False)
+    # Check for 200 CODE
+    if acad_sess.status_code !=200:
+        raise ValueError("Could not fetch Academic History")
+    acad_html = acad_sess.text
+
+    # This sucks I dont want to see my acad history, kill me pls!
+    # This code is copied from main.py, I may change some of the code, Thanks to whoever contributed
+    # Special thanks to this guys, he included comments yay!
+
+    soup = BeautifulSoup(acad_html, 'lxml')
+    # Fetching the last row in academic history which contains the Curriculum Details
+    code_soup = soup.findAll("tr", {"class": "tableContent"})
+    
+    # Processing the data to get the required details
+    curriculumKeys = ['CreditsRegistered', 'CreditsEarned', 'CGPA', 'S', 'A', 'B', 'C', 'D', 'E', 'F', 'N']
+    temp = []
+    cgpaDetails = code_soup[len(code_soup)-1].getText()
+    for i in cgpaDetails:
+        if(i):
+            temp.append(i)
+    temp = temp[1:len(temp)]
+    # Fetching data and Creating Dictionary
+    curriculumDetails = {}
+    m = 0
+    s = ""
+    for j in temp:
+        if(j!='\n'):
+            s = s+j
+        else:
+            curriculumDetails[curriculumKeys[m]] = s
+            m = m+1
+            s = ""
+    # Fetching the table containing the complete academic history
+    code_soup = soup.findAll("tr", {"class": "tableContent"})
+    # Removing unneccessary Details
+    cour = []
+    for i in range (0,8):
+        code_soup.pop()
+    code_soup = code_soup[1:len(code_soup)]
+    for i in code_soup:
+        if(len(i)==23):
+            cour.append(i.findAll('td'))
+    # Fetching Course Name and Grade from the cour array above and making the final Dictionary.
+    acadHistory = {}
+    for i in cour:
+        acadHistory[i[2].getText()] = i[5].getText()
+    
+    #TODO: Sync with Firebase
+
+    grades = {
+        "subjects" : acadHistory,
+        "summary" : curriculumDetails
+    }
+    print(grades)
+    return grades
