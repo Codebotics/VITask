@@ -7,12 +7,13 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 from collections import namedtuple
-from utility import solve_captcha
+from utility import solve_captcha,TimeTable
 
 
 VTOP_BASE_URL = r"http://vtopcc.vit.ac.in:8080/vtop/"
 VTOP_LOGIN = r"http://vtopcc.vit.ac.in:8080/vtop/vtopLogin"
 ATTENDANCE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewStudentAttendance"
+TIMETABLE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewTimeTable"
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
 }
@@ -51,7 +52,8 @@ def get_attandance(sess,username, semesterID="CH2019205"):
             "faculty" : "AMIT KUMAR TYAGI"  // Faculty details
             "courseName" : "Operating Systems" 
             "code" : "CSE2005" 
-            "type" : "Embedded Theory"
+            "type" : "Embedded Theory",
+            "updatedOn" : "Wed Apr 15 04:27:10 2020"  // Time at which attendance was fetched
         }
     }
     """
@@ -99,7 +101,8 @@ def get_attandance(sess,username, semesterID="CH2019205"):
             "faculty" : p[i][11],
             "attended" : int(p[i][20]),
             "total" : int(p[i][21]),
-            "percentage" : int(p[i][22])
+            "percentage" : int(p[i][22]),
+            "updatedOn" : datetime.datetime.now().strftime("%c")
         }
         print(empty)
         attend[p[i][8]] = empty
@@ -107,3 +110,75 @@ def get_attandance(sess,username, semesterID="CH2019205"):
     # TODO: Sync with Firebase
 
     return attend
+
+def get_timetable(sess, username, semesterID="CH2019205"):
+    """
+    Return Timetable 
+    format of timetablel : {
+        "Monday": [
+            {
+                "slot" : "A1",
+                "courseName" : "Computer Communication",
+                "code" : "ECE4008",
+                "class" : "AB1 408",
+                startTime: "8:00",
+                endTime:"8:50"
+            }
+        ]
+    }
+    """
+    # TODO: Check if still login or not
+    payload = {
+        "semesterSubId" : semesterID,        # Filled for Winsem
+        "authorizedID" : username,
+        "x" : datetime.datetime.now(datetime.timezone.utc).strftime("%c GMT")   # GMT time
+    }
+    timetable_sess = sess.post(TIMETABLE, data=payload, headers=headers, verify=False)
+    # Check for 200 CODE
+    if timetable_sess.status_code !=200:
+        raise ValueError("Could not fetch TimeTable")
+    timetable_html = timetable_sess.text
+
+    # This code is copied from main.py, I may change some of the code, Thanks to whoever contributed
+
+    soup = BeautifulSoup(timetable_html, 'lxml')
+    code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
+    list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
+    list_code = [i.getText() for i in list_soup]
+    courses = {}
+    for i in list_code:
+        arr = i.split("-")
+        courses[arr[0].strip()] = arr[1].strip()
+    tutorial_code = [i.getText() for i in code_soup]
+    table = []
+    for i in tutorial_code:
+        if i not in table:
+            table.append(i)
+    slots = {}
+    time_table = {}
+    time_table = TimeTable()
+    for i in table:
+        p = []
+        arr = i.split("-")
+        p = [arr[1],arr[3],arr[4],courses[arr[1]],time_table[arr[0]]]
+        slots[arr[0]] = p
+
+    days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[]}
+    p = []
+    for i in slots:
+        for j in slots[i][4]:
+            arr = j.split(" ")
+            p = {
+                "slot" : i,
+                "courseName": slots[i][3],
+                "code" : slots[i][0],
+                "class" : slots[i][1]+" " +slots[i][2],
+                "startTime": arr[1],
+                "endTime" : arr[2]
+            }
+            # Replaced Code with much shorter code
+            days[arr[0]].append(p)
+            p = []
+
+    #TODO: Sync with Firebase
+    return days

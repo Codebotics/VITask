@@ -36,6 +36,8 @@ import zipfile
 from urllib.request import urlretrieve
 import sys
 from sys import platform as _platform
+from vtop import generate_session
+from vtop import get_attandance
 #For disabling warings this will save msecs..lol
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

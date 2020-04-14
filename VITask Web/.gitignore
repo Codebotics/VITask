@@ -4,3 +4,4 @@ captcha/
 files/
 credential.txt
 captcha.png
+__pycache__
