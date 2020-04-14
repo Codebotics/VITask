@@ -297,7 +297,63 @@ def ProfileFunc():
     email = ref.child(session['id']).child(session['id']).child('Email').get()
     proctoremail = ref.child(session['id']).child(session['id']).child('ProctorEmail').get()
     proctorname = ref.child(session['id']).child(session['id']).child('ProctorName').get()
+    
     return (name, school, branch, program, regno, appno, email, proctoremail, proctorname)
+
+def ScrapProfileFunc():
+    nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
+    nav.click()
+    driver.implicitly_wait(3)
+    profile = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")
+    hover = action.move_to_element(profile)
+    hover.perform()
+
+    item = driver.find_element_by_xpath("//*[@id='BtnBody21112']/div/ul/li[1]")
+    item.click()
+    try:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "exTab1")))
+    finally:
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, 'lxml')
+        code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
+        tutorial_code = [i.getText() for i in code_soup]
+        code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
+        tutorial_proctor = [i.getText() for i in code_proctor]
+        holdname = tutorial_code[1].lower().split(" ")
+        tempname = []
+        for i in holdname:
+            tempname.append(i.capitalize())
+        finalname = (" ").join(tempname)
+        tutorial_code[1] = finalname
+
+        # Generating an API Token
+        api_gen = tutorial_code[0]
+        api_token = api_gen.encode('ascii')
+        temptoken = base64.b64encode(api_token)
+        token = temptoken.decode('ascii')
+
+        ref = db.reference('vitask')
+        tut_ref = ref.child(tutorial_code[0])
+        tut_ref.set({
+            tutorial_code[0]: {
+                'Name': (tutorial_code[1]),
+                'Branch': tutorial_code[18],
+                'Program': tutorial_code[17],
+                'RegNo': tutorial_code[14],
+                'AppNo': tutorial_code[0],
+                'School': tutorial_code[19],
+                'Email': tutorial_code[29],
+                'ProctorName': tutorial_proctor[93],
+                'ProctorEmail': tutorial_proctor[98],
+                'API': token
+            }
+        })
+        id = tutorial_code[0]
+        name = tutorial_code[1]
+        reg = tutorial_code[14]
+        
+        return (id,name,reg)
+        
 
 def TimeTable():
     time_table={'A1':['Monday 8:00 8:50','Wednesday 8:55 9:45'],'B1':['Tuesday 8:00 8:50','Thursday 8:55 9:45'],'C1':['Wednesday 8:00 8:50','Friday 8:55 9:45'],
@@ -334,6 +390,150 @@ def TimeTable():
     'L49':['Thursday 2:00 2:50'],'L50':['Thursday 2:50 3:40'],'L51':['Thursday 3:50 4:40'],'L52':['Thursday 4:40 5:30'],'L53':['Thursday 5:40 6:30'],'L54':['Thursday 6:30 7:20'],
     'L55':['Friday 2:00 2:50'],'L56':['Friday 2:50 3:40'],'L57':['Friday 3:50 4:40'],'L58':['Friday 4:40 5:30'],'L59':['Friday 5:40 6:30'],'L60':['Friday 6:30 7:20']}
     return time_table
+
+def ScrapTimetableFunc():
+    nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
+    nav.click()
+    driver.implicitly_wait(3)
+    tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
+    hover = action.move_to_element(tt)
+    hover.perform()
+
+    item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[8]")
+    item.click()
+    try:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+        semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+        semlist.click()
+        hover = action.move_to_element(semlist)
+        hover.perform()
+
+        item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+        item.click()
+        viewbutton = driver.find_element_by_xpath("//*[@id='studentTimeTable']/div[2]/div/button")
+        viewbutton.click()
+        try:
+            newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "timeTableStyle")))
+        finally:
+            page_source = driver.page_source
+
+    finally:
+        soup = BeautifulSoup(page_source, 'lxml')
+        code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
+        list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
+        list_code = [i.getText() for i in list_soup]
+        courses = {}
+        for i in list_code:
+            arr = i.split("-")
+            courses[arr[0].strip()] = arr[1].strip()
+        tutorial_code = [i.getText() for i in code_soup]
+        table = []
+        for i in tutorial_code:
+            if i not in table:
+                table.append(i)
+        slots = {}
+        time_table = {}
+        time_table = TimeTable()
+        for i in table:
+            p = []
+            arr = i.split("-")
+            p = [arr[1],arr[3],arr[4],courses[arr[1]],time_table[arr[0]]]
+            slots[arr[0]] = p
+
+        days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[]}
+        p = []
+        for i in slots:
+            for j in slots[i][4]:
+                arr = j.split(" ")
+                p = [slots[i][0],slots[i][1],slots[i][2],slots[i][3],arr[1],arr[2]]
+                if(arr[0]=="Monday"):
+                    days["Monday"].append(p)
+                elif(arr[0]=="Tuesday"):
+                    days["Tuesday"].append(p)
+                elif(arr[0]=="Wednesday"):
+                    days["Wednesday"].append(p)
+                elif(arr[0]=="Thursday"):
+                    days["Thursday"].append(p)
+                elif(arr[0]=="Friday"):
+                    days["Friday"].append(p)
+                p = []
+
+        ref = db.reference('vitask')
+        tut_ref = ref.child("timetable-"+session['id'])
+        tut_ref.set({
+            session['id']: {
+                'Timetable': days
+            }
+        })
+        
+        return days
+    
+def ScrapAttendanceFunc():
+    nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
+    nav.click()
+    driver.implicitly_wait(3)
+    tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
+    hover = action.move_to_element(tt)
+    hover.perform()
+    item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
+    item.click()
+    try:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
+        semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
+        semlist.click()
+        driver.implicitly_wait(2)
+
+        hover = action.move_to_element(semlist)
+        hover.perform()
+        item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
+        item.click()
+        viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
+        viewbutton.click()
+        try:
+            newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
+        finally:
+            page_source = driver.page_source
+
+    finally:
+        soup = BeautifulSoup(page_source, 'lxml')
+        code_soup = soup.find_all('tr')
+        tutorial_code = [i.getText() for i in code_soup]
+        table = []
+        p=[]
+
+        for i in tutorial_code:
+            i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
+            i = i.split('\n')
+            if i not in table:
+                table.append(i)
+
+        table.pop(0)
+
+        for i in range(0,len(table)):
+            p.append(table[i])
+
+
+        attend = {}
+        empty = []
+        for i in range(0,len(p)-1):
+            empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
+            attend[p[i][8]] = empty
+        c=0
+        q={}
+        for i in attend:
+            q[i] = c
+            c = c + 1
+        ref = db.reference('vitask')
+        users_ref = ref.child('users')
+        tut_ref = ref.child("attendance-"+session['id'])
+        tut_ref.set({
+            session['id']: {
+                'Attendance': attend,
+                'Track': q
+            }
+        })
+        
+        return (attend, q)
 
 def ScrapAcadHistoryFunc():
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
@@ -543,59 +743,53 @@ def authenticate():
             captcha.send_keys(captcha1)
             loginfinal_button = driver.find_elements_by_xpath("//*[@id='captcha']")[0]
             loginfinal_button.click()
-            driver.implicitly_wait(5)
-            nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
-            nav.click()
-            driver.implicitly_wait(3)
-            profile = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")
-            hover = action.move_to_element(profile)
-            hover.perform()
-
-            item = driver.find_element_by_xpath("//*[@id='BtnBody21112']/div/ul/li[1]")
-            item.click()
             try:
-                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "exTab1")))
+                element = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='button-panel']/aside/section/div/div[1]/a")))
             finally:
-                page_source = driver.page_source
-                soup = BeautifulSoup(page_source, 'lxml')
-                code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
-                tutorial_code = [i.getText() for i in code_soup]
-                code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
-                tutorial_proctor = [i.getText() for i in code_proctor]
-                holdname = tutorial_code[1].lower().split(" ")
-                tempname = []
-                for i in holdname:
-                    tempname.append(i.capitalize())
-                finalname = (" ").join(tempname)
-                tutorial_code[1] = finalname
+                # Profile Fetching
+                try:
+                    session['id'], session['name'], session['reg'] = ScrapProfileFunc()
+                    session['loggedin'] = 1
+                finally:
+                    # Timetable Fetching
+                    try:
+                        ref = db.reference('vitask')
+                        temp = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
+                        if(temp is None):
+                            days = {}
+                            days = ScrapTimetableFunc()
+                            session['timetable'] = 1
+                    finally:
+                        # Attendance Fetching
+                        try:
+                            attend = {}
+                            q = {}
+                            attend, q = ScrapAttendanceFunc()
+                            session['classes'] = 1
 
-                # Generating an API Token
-                api_gen = tutorial_code[0]
-                api_token = api_gen.encode('ascii')
-                temptoken = base64.b64encode(api_token)
-                token = temptoken.decode('ascii')
+                        finally:
+                            # Academic History Fetching
+                            try:
+                                ref = db.reference('vitask')
+                                temp = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+                                if(temp is None):
+                                    acadHistory = {}
+                                    curriculumDetails = {}
+                                    acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
+                                    session['acadhistory'] = 1
+                            finally:
+                                # Marks Fetching
+                                try:
+                                    marksDict = {}
+                                    marksDict = ScrapMarksFunc()
+                                    session['marks'] = 1
+                                finally:
+                                    driver.close() 
+                                    name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
+                                    api = ref.child(appno).child(appno).child('API').get()
+                                    session['id'] = appno
 
-                ref = db.reference('vitask')
-                tut_ref = ref.child(tutorial_code[0])
-                tut_ref.set({
-                    tutorial_code[0]: {
-                        'Name': (tutorial_code[1]),
-                        'Branch': tutorial_code[18],
-                        'Program': tutorial_code[17],
-                        'RegNo': tutorial_code[14],
-                        'AppNo': tutorial_code[0],
-                        'School': tutorial_code[19],
-                        'Email': tutorial_code[29],
-                        'ProctorName': tutorial_proctor[93],
-                        'ProctorEmail': tutorial_proctor[98],
-                        'API': token
-                    }
-                })
-                session['id'] = tutorial_code[0]
-                name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
-                api = ref.child(session['id']).child(session['id']).child('API').get()
-
-                return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
+                                    return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
 
 # Attendance API
 @app.route('/classesapi')
@@ -615,7 +809,7 @@ def classesapi():
         temp = ref.child(key).child(key).get()
 
         #Checking if data is already there or not in firebase(if there then no need to acces Vtop again)
-        if(session['classes']==1 or temp is not None):
+        if(temp is not None):
             attend = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
             q = ref.child("attendance-"+session['id']).child(session['id']).child('Track').get()
 
@@ -645,81 +839,8 @@ def classesapi():
             return jsonify({'Error': 'Invalid API Token.'})
 
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
-        hover = action.move_to_element(tt)
-        hover.perform()
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-            semlist.click()
-            driver.implicitly_wait(2)
-
-            hover = action.move_to_element(semlist)
-            hover.perform()
-            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
-            item.click()
-            viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
-            viewbutton.click()
-            try:
-                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
-            finally:
-                page_source = driver.page_source
-
-        finally:
-            soup = BeautifulSoup(page_source, 'lxml')
-            code_soup = soup.find_all('tr')
-            tutorial_code = [i.getText() for i in code_soup]
-            table = []
-            p=[]
-
-            for i in tutorial_code:
-                i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
-                i = i.split('\n')
-                if i not in table:
-                    table.append(i)
-
-            table.pop(0)
-
-            for i in range(0,len(table)):
-                p.append(table[i])
-       
-            attend = {}
-            empty = []
-            for i in range(0,len(p)-1):
-                empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
-                attend[p[i][8]] = empty
-
-            c=0
-            q={}
-            for i in attend:
-                q[i]=c
-                c = c + 1
-
-            values = []
-            for i in attend.values():
-                values.append(i)
-
-            slots = []
-
-            for i in attend.keys():
-                slots.append(i)
-
-            ref = db.reference('vitask')
-            users_ref = ref.child('users')
-            tut_ref = ref.child("attendance-"+session['id'])
-            tut_ref.set({
-              session['id']: {
-                  'Attended': values,
-                  'Slots' : slots,
-                  'Track' : q
-              }
-          })
-        return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
+        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
+    
 
 # Timetable API
 @app.route('/timetableapi')
@@ -747,80 +868,7 @@ def timetableapi():
         else:
             return jsonify({'Error': 'Invalid API Token.'})
     else:
-        nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
-        nav.click()
-        driver.implicitly_wait(3)
-        tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
-        hover = action.move_to_element(tt)
-        hover.perform()
-
-        item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[8]")
-        item.click()
-        try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-            semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-            semlist.click()
-            hover = action.move_to_element(semlist)
-            hover.perform()
-
-            item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
-            item.click()
-            viewbutton = driver.find_element_by_xpath("//*[@id='studentTimeTable']/div[2]/div/button")
-            viewbutton.click()
-            try:
-                newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "timeTableStyle")))
-            finally:
-                page_source = driver.page_source
-
-        finally:
-            soup = BeautifulSoup(page_source, 'lxml')
-            code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
-            list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
-            list_code = [i.getText() for i in list_soup]
-            courses = {}
-            for i in list_code:
-                arr = i.split("-")
-                courses[arr[0].strip()] = arr[1].strip()
-            tutorial_code = [i.getText() for i in code_soup]
-            table = []
-            for i in tutorial_code:
-                if i not in table:
-                    table.append(i)
-            slots = {}
-            time_table = {}
-            time_table = TimeTable()
-            for i in table:
-                p = []
-                arr = i.split("-")
-                p = [arr[1],arr[3],arr[4],courses[arr[1]],time_table[arr[0]]]
-                slots[arr[0]] = p
-
-            days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[]}
-            p = []
-            for i in slots:
-                for j in slots[i][4]:
-                    arr = j.split(" ")
-                    p = [slots[i][0],slots[i][1],slots[i][2],slots[i][3],arr[1],arr[2]]
-                    if(arr[0]=="Monday"):
-                        days["Monday"].append(p)
-                    elif(arr[0]=="Tuesday"):
-                        days["Tuesday"].append(p)
-                    elif(arr[0]=="Wednesday"):
-                        days["Wednesday"].append(p)
-                    elif(arr[0]=="Thursday"):
-                        days["Thursday"].append(p)
-                    elif(arr[0]=="Friday"):
-                        days["Friday"].append(p)
-                    p = []
-
-            ref = db.reference('vitask')
-            tut_ref = ref.child("timetable-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'Timetable': days
-                }
-            })
-            return jsonify({'Timetable': days})
+        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
 
 # Academic History API
 @app.route('/acadhistoryapi')
@@ -848,10 +896,7 @@ def acadhistoryapi():
         else:
             return jsonify({'Error': 'Invalid API Token.'})
     else:
-        acadHistory = {}
-        curriculumDetails = {}
-        acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
-        return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
+        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
 
 # Marks API
 @app.route('/marksapi')
@@ -879,9 +924,7 @@ def marksapi():
         else:
             return jsonify({'Error': 'Invalid API Token.'})
     else:
-        marksDict = {}
-        marksDict = ScrapMarksFunc()
-        return jsonify({'Marks': marksDict})
+        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
         
 # Moodle API
 @app.route('/moodleapi')
@@ -1023,60 +1066,48 @@ def login():
             try:
                 element = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='button-panel']/aside/section/div/div[1]/a")))
             finally:
-                nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
-                nav.click()
-                driver.implicitly_wait(3)
-                profile = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")
-                hover = action.move_to_element(profile)
-                hover.perform()
-
-                item = driver.find_element_by_xpath("//*[@id='BtnBody21112']/div/ul/li[1]")
-                item.click()
+                # Profile Fetching
                 try:
-                    element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "exTab1")))
-                finally:
-                    page_source = driver.page_source
-                    soup = BeautifulSoup(page_source, 'lxml')
-                    code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
-                    tutorial_code = [i.getText() for i in code_soup]
-                    code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
-                    tutorial_proctor = [i.getText() for i in code_proctor]
-                    holdname = tutorial_code[1].lower().split(" ")
-                    tempname = []
-                    for i in holdname:
-                        tempname.append(i.capitalize())
-                    finalname = (" ").join(tempname)
-                    tutorial_code[1] = finalname
-
-                    # Generating an API Token
-                    api_gen = tutorial_code[0]
-                    api_token = api_gen.encode('ascii')
-                    temptoken = base64.b64encode(api_token)
-                    token = temptoken.decode('ascii')
-
-                    ref = db.reference('vitask')
-                    tut_ref = ref.child(tutorial_code[0])
-                    tut_ref.set({
-                        tutorial_code[0]: {
-                            'Name': (tutorial_code[1]),
-                            'Branch': tutorial_code[18],
-                            'Program': tutorial_code[17],
-                            'RegNo': tutorial_code[14],
-                            'AppNo': tutorial_code[0],
-                            'School': tutorial_code[19],
-                            'Email': tutorial_code[29],
-                            'ProctorName': tutorial_proctor[93],
-                            'ProctorEmail': tutorial_proctor[98],
-                            'API': token
-                        }
-                    })
-                    session['id'] = tutorial_code[0]
-                    session['name'] = tutorial_code[1]
-                    session['reg'] = tutorial_code[14]
+                    session['id'], session['name'], session['reg'] = ScrapProfileFunc()
                     session['loggedin'] = 1
+                finally:
+                    # Timetable Fetching
+                    try:
+                        ref = db.reference('vitask')
+                        temp = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
+                        if(temp is None):
+                            days = {}
+                            days = ScrapTimetableFunc()
+                            session['timetable'] = 1
+                    finally:
+                        # Attendance Fetching
+                        try:
+                            attend = {}
+                            q = {}
+                            attend, q = ScrapAttendanceFunc()
+                            session['classes'] = 1
 
-                return redirect(url_for('profile'))
-
+                        finally:
+                            # Academic History Fetching
+                            try:
+                                ref = db.reference('vitask')
+                                temp = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+                                if(temp is None):
+                                    acadHistory = {}
+                                    curriculumDetails = {}
+                                    acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
+                                    session['acadhistory'] = 1
+                            finally:
+                                # Marks Fetching
+                                try:
+                                    marksDict = {}
+                                    marksDict = ScrapMarksFunc()
+                                    session['marks'] = 1
+                                finally:
+                                    driver.close() 
+                                    return redirect(url_for('profile'))
+                                
+                            
 # Profile route
 @app.route('/profile')
 def profile():
@@ -1094,85 +1125,9 @@ def timetable():
     else:
         ref = db.reference('vitask')
         temp = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
-        if(session['timetable']==1 or temp is not None):
-            days = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
-            return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
-        else:
-            nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
-            nav.click()
-            driver.implicitly_wait(3)
-            tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
-            hover = action.move_to_element(tt)
-            hover.perform()
+        days = ref.child("timetable-"+session['id']).child(session['id']).child('Timetable').get()
+        return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
 
-            item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[8]")
-            item.click()
-            try:
-                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-                semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-                semlist.click()
-                hover = action.move_to_element(semlist)
-                hover.perform()
-
-                item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
-                item.click()
-                viewbutton = driver.find_element_by_xpath("//*[@id='studentTimeTable']/div[2]/div/button")
-                viewbutton.click()
-                try:
-                    newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "timeTableStyle")))
-                finally:
-                    page_source = driver.page_source
-
-            finally:
-                soup = BeautifulSoup(page_source, 'lxml')
-                code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
-                list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
-                list_code = [i.getText() for i in list_soup]
-                courses = {}
-                for i in list_code:
-                    arr = i.split("-")
-                    courses[arr[0].strip()] = arr[1].strip()
-                tutorial_code = [i.getText() for i in code_soup]
-                table = []
-                for i in tutorial_code:
-                    if i not in table:
-                        table.append(i)
-                slots = {}
-                time_table = {}
-                time_table = TimeTable()
-                for i in table:
-                    p = []
-                    arr = i.split("-")
-                    p = [arr[1],arr[3],arr[4],courses[arr[1]],time_table[arr[0]]]
-                    slots[arr[0]] = p
-
-                days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[]}
-                p = []
-                for i in slots:
-                    for j in slots[i][4]:
-                        arr = j.split(" ")
-                        p = [slots[i][0],slots[i][1],slots[i][2],slots[i][3],arr[1],arr[2]]
-                        if(arr[0]=="Monday"):
-                            days["Monday"].append(p)
-                        elif(arr[0]=="Tuesday"):
-                            days["Tuesday"].append(p)
-                        elif(arr[0]=="Wednesday"):
-                            days["Wednesday"].append(p)
-                        elif(arr[0]=="Thursday"):
-                            days["Thursday"].append(p)
-                        elif(arr[0]=="Friday"):
-                            days["Friday"].append(p)
-                        p = []
-
-                ref = db.reference('vitask')
-                tut_ref = ref.child("timetable-"+session['id'])
-                tut_ref.set({
-                    session['id']: {
-                        'Timetable': days
-                    }
-                })
-                session['timetable'] = 1
-                return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
 
 # Attendance route
 @app.route('/classes')
@@ -1182,75 +1137,9 @@ def classes():
     else:
         ref = db.reference('vitask')
         temp = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
-        if(session['classes']==1 or temp is not None):
-            attend = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
-            q = ref.child("attendance-"+session['id']).child(session['id']).child('Track').get()
-            return render_template('attendance.html',name = session['name'],id = session['id'],dicti = attend,q = q)
-        else:
-            nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
-            nav.click()
-            driver.implicitly_wait(3)
-            tt = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")
-            hover = action.move_to_element(tt)
-            hover.perform()
-            item = driver.find_element_by_xpath("//*[@id='BtnBody21115']/div/ul/li[9]")
-            item.click()
-            try:
-                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-                semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-                semlist.click()
-                driver.implicitly_wait(2)
-
-                hover = action.move_to_element(semlist)
-                hover.perform()
-                item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[2]")
-                item.click()
-                viewbutton = driver.find_element_by_xpath("//*[@id='viewStudentAttendance']/div[2]/div/button")
-                viewbutton.click()
-                try:
-                    newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "getStudentDetails")))
-                finally:
-                    page_source = driver.page_source
-
-            finally:
-                soup = BeautifulSoup(page_source, 'lxml')
-                code_soup = soup.find_all('tr')
-                tutorial_code = [i.getText() for i in code_soup]
-                table = []
-                p=[]
-
-                for i in tutorial_code:
-                    i=i.strip('Sl.No\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tCode\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tTitle\nCourse\n\t\t\t\t\t\t\t\t\t\t\t\t\tType\nSlot\nFaculty\n\t\t\t\t\t\t\t\t\t\t\t\t\tName\nAttendance Type\nRegistration Date / Time\nAttendance Date\nAttended Classes\nTotal Classes\nAttendance Percentage\nStatus\nAttendance View')
-                    i = i.split('\n')
-                    if i not in table:
-                        table.append(i)
-
-                table.pop(0)
-
-                for i in range(0,len(table)):
-                    p.append(table[i])
-
-
-                attend = {}
-                empty = []
-                for i in range(0,len(p)-1):
-                    empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
-                    attend[p[i][8]] = empty
-                c=0
-                q={}
-                for i in attend:
-                    q[i] = c
-                    c = c + 1
-                ref = db.reference('vitask')
-                users_ref = ref.child('users')
-                tut_ref = ref.child("attendance-"+session['id'])
-                tut_ref.set({
-                    session['id']: {
-                        'Attendance': attend,
-                        'Track': q
-                    }
-                })
-        return render_template('attendance.html',dicti = attend,q=q, name=session['name'])
+        attend = ref.child("attendance-"+session['id']).child(session['id']).child('Attendance').get()
+        q = ref.child("attendance-"+session['id']).child(session['id']).child('Track').get()
+        return render_template('attendance.html',name = session['name'],id = session['id'],dicti = attend,q = q)
 
 # Academic History route
 @app.route('/acadhistory')
@@ -1260,17 +1149,10 @@ def acadhistory():
     else:
         ref = db.reference('vitask')
         temp = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
-        if(session['acadhistory']==1 or temp is not None):
-            acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
-            curriculumDetails = ref.child("acadhistory-"+session['id']).child(session['id']).child('CurriculumDetails').get()
-            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)    
-        else:
-            acadHistory = {}
-            curriculumDetails = {}
-            acadHistory, curriculumDetails = ScrapAcadHistoryFunc()
-            session['acadhistory'] = 1
-            return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)
-        
+        acadHistory = ref.child("acadhistory-"+session['id']).child(session['id']).child('AcadHistory').get()
+        curriculumDetails = ref.child("acadhistory-"+session['id']).child(session['id']).child('CurriculumDetails').get()
+        return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)    
+
 # Marks route
 @app.route('/marks')
 def marks():
@@ -1279,14 +1161,9 @@ def marks():
     else:
         ref = db.reference('vitask')
         temp = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
-        if(session['marks']==1 or temp is not None):
-            marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
-            return render_template('marks.html',name = session['name'], marks = marks)
-        else:
-            marksDict = {}
-            marksDict = ScrapMarksFunc()
-            session['marks'] = 1
-            return render_template('marks.html',name = session['name'], marks = marksDict)
+        marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
+        return render_template('marks.html',name = session['name'], marks = marks)
+
         
 """---------------------------------------------------------------
 
@@ -1464,30 +1341,17 @@ def moodleresync():
 # Web Logout
 @app.route('/logout')
 def logout():
-    global driver
-    if driver is not None:
-        driver.close()
-        session.pop('id', None)
-        session.pop('timetable', 0)
-        session.pop('classes', 0)
-        session.pop('name', None)
-        session.pop('reg', None)
-        session.pop('moodle', 0)
-        session.pop('acadhistory', 0)
-        session.pop('marks', 0)
-        session.pop('loggedin',0)
-        return render_template('home.html')
-    else:
-        session.pop('id', None)
-        session.pop('timetable', 0)
-        session.pop('classes', 0)
-        session.pop('name', None)
-        session.pop('reg', None)
-        session.pop('moodle', 0)
-        session.pop('acadhistory', 0)
-        session.pop('marks', 0)
-        session.pop('loggedin',0)
-        return render_template('home.html')
+    session.pop('id', None)
+    session.pop('timetable', 0)
+    session.pop('classes', 0)
+    session.pop('name', None)
+    session.pop('reg', None)
+    session.pop('moodle', 0)
+    session.pop('acadhistory', 0)
+    session.pop('marks', 0)
+    session.pop('loggedin',0)
+    return render_template('home.html')
+
 
 
 # Run Flask app
