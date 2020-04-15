@@ -807,7 +807,7 @@ def moodleresync():
                 'Assignments': all_assignments   
             }
         })
-        assignment = ref.child("moodle").child(session['id']).child('Assignments').get()
+        assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
 
         return render_template('assignments.html',name=session['name'],assignment=assignment)
             
