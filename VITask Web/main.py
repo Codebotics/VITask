@@ -799,7 +799,7 @@ def moodleresync():
 
         ref = db.reference('vitask')
         tut_ref = ref.child("moodle")
-        new_ref = ref.child("moodle-"+session['id'])
+        new_ref = tut_ref.child("moodle-"+session['id'])
         new_ref.set({
             session['id']: {
                 'Username': moodle_username,
