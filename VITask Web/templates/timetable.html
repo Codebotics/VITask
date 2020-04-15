@@ -358,41 +358,41 @@
                     <th scope="row">
                       <div class="media align-items-center">
                         <a href="#" class="avatar rounded-circle mr-3">
-                    {% if i[0][:3:1]=="MAT" %}
+                    {% if i['code'][:3:1]=="MAT" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
-                    {% elif i[0][:3:1]=="CSE" %}
+                    {% elif i['code'][:3:1]=="CSE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
-                    {% elif i[0][:3:1]=="EEE" %}
+                    {% elif i['code'][:3:1]=="EEE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
-                    {% elif i[0][:3:1]=="ECE" %}
+                    {% elif i['code'][:3:1]=="ECE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
-                    {% elif i[0][:3:1]=="ECM" %}
+                    {% elif i['code'][:3:1]=="ECM" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
-                    {% elif i[0][:3:1]=="MEC" %}
+                    {% elif i['code'][:3:1]=="MEC" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
-                    {% elif i[0][:3:1]=="CIV" %}
+                    {% elif i['code'][:3:1]=="CIV" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
-                    {% elif i[0][:3:1]=="STS" %}
+                    {% elif i['code'][:3:1]=="STS" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
                     {% endif %}
                           
                         </a>
                         <div class="media-body">
-                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                          <span class="mb-0 text-sm">{{ i['courseName'] }}</span>
                         </div>
                       </div>
                     </th>
                     <td>
-                      {{ i[0] }}
+                      {{ i['code'] }}
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                        <i class="bg-success"></i> {{ i['startTime'] }}-{{ i['endTime'] }}
                       </span>
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                        <i class="bg-primary"></i> {{ i['class'] }}
                       </span>
                     </td>
                     <td>
@@ -445,41 +445,41 @@
                     <th scope="row">
                       <div class="media align-items-center">
                         <a href="#" class="avatar rounded-circle mr-3">
-                    {% if i[0][:3:1]=="MAT" %}
+                    {% if i['code'][:3:1]=="MAT" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
-                    {% elif i[0][:3:1]=="CSE" %}
+                    {% elif i['code'][:3:1]=="CSE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
-                    {% elif i[0][:3:1]=="EEE" %}
+                    {% elif i['code'][:3:1]=="EEE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
-                    {% elif i[0][:3:1]=="ECE" %}
+                    {% elif i['code'][:3:1]=="ECE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
-                    {% elif i[0][:3:1]=="ECM" %}
+                    {% elif i['code'][:3:1]=="ECM" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
-                    {% elif i[0][:3:1]=="MEC" %}
+                    {% elif i['code'][:3:1]=="MEC" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
-                    {% elif i[0][:3:1]=="CIV" %}
+                    {% elif i['code'][:3:1]=="CIV" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
-                    {% elif i[0][:3:1]=="STS" %}
+                    {% elif i['code'][:3:1]=="STS" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
                     {% endif %}
                           
                         </a>
                         <div class="media-body">
-                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                          <span class="mb-0 text-sm">{{ i['courseName'] }}</span>
                         </div>
                       </div>
                     </th>
                     <td>
-                      {{ i[0] }}
+                      {{ i['code'] }}
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                        <i class="bg-success"></i> {{ i['startTime'] }}-{{ i['endTime'] }}
                       </span>
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                        <i class="bg-primary"></i> {{ i['class'] }}
                       </span>
                     </td>
                     <td>
@@ -532,41 +532,41 @@
                     <th scope="row">
                       <div class="media align-items-center">
                         <a href="#" class="avatar rounded-circle mr-3">
-                    {% if i[0][:3:1]=="MAT" %}
+                    {% if i['code'][:3:1]=="MAT" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
-                    {% elif i[0][:3:1]=="CSE" %}
+                    {% elif i['code'][:3:1]=="CSE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
-                    {% elif i[0][:3:1]=="EEE" %}
+                    {% elif i['code'][:3:1]=="EEE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
-                    {% elif i[0][:3:1]=="ECE" %}
+                    {% elif i['code'][:3:1]=="ECE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
-                    {% elif i[0][:3:1]=="ECM" %}
+                    {% elif i['code'][:3:1]=="ECM" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
-                    {% elif i[0][:3:1]=="MEC" %}
+                    {% elif i['code'][:3:1]=="MEC" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
-                    {% elif i[0][:3:1]=="CIV" %}
+                    {% elif i['code'][:3:1]=="CIV" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
-                    {% elif i[0][:3:1]=="STS" %}
+                    {% elif i['code'][:3:1]=="STS" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
                     {% endif %}
                           
                         </a>
                         <div class="media-body">
-                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                          <span class="mb-0 text-sm">{{ i['courseName'] }}</span>
                         </div>
                       </div>
                     </th>
                     <td>
-                      {{ i[0] }}
+                      {{ i['code'] }}
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                        <i class="bg-success"></i> {{ i['startTime'] }}-{{ i['endTime'] }}
                       </span>
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                        <i class="bg-primary"></i> {{ i['class'] }}
                       </span>
                     </td>
                     <td>
@@ -619,41 +619,41 @@
                     <th scope="row">
                       <div class="media align-items-center">
                         <a href="#" class="avatar rounded-circle mr-3">
-                    {% if i[0][:3:1]=="MAT" %}
+                    {% if i['code'][:3:1]=="MAT" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
-                    {% elif i[0][:3:1]=="CSE" %}
+                    {% elif i['code'][:3:1]=="CSE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
-                    {% elif i[0][:3:1]=="EEE" %}
+                    {% elif i['code'][:3:1]=="EEE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
-                    {% elif i[0][:3:1]=="ECE" %}
+                    {% elif i['code'][:3:1]=="ECE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
-                    {% elif i[0][:3:1]=="ECM" %}
+                    {% elif i['code'][:3:1]=="ECM" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
-                    {% elif i[0][:3:1]=="MEC" %}
+                    {% elif i['code'][:3:1]=="MEC" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
-                    {% elif i[0][:3:1]=="CIV" %}
+                    {% elif i['code'][:3:1]=="CIV" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
-                    {% elif i[0][:3:1]=="STS" %}
+                    {% elif i['code'][:3:1]=="STS" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
                     {% endif %}
                           
                         </a>
                         <div class="media-body">
-                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                          <span class="mb-0 text-sm">{{ i['courseName'] }}</span>
                         </div>
                       </div>
                     </th>
                     <td>
-                      {{ i[0] }}
+                      {{ i['code'] }}
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                        <i class="bg-success"></i> {{ i['startTime'] }}-{{ i['endTime'] }}
                       </span>
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                        <i class="bg-primary"></i> {{ i['class'] }}
                       </span>
                     </td>
                     <td>
@@ -704,41 +704,41 @@
                     <th scope="row">
                       <div class="media align-items-center">
                         <a href="#" class="avatar rounded-circle mr-3">
-                    {% if i[0][:3:1]=="MAT" %}
+                    {% if i['code'][:3:1]=="MAT" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
-                    {% elif i[0][:3:1]=="CSE" %}
+                    {% elif i['code'][:3:1]=="CSE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
-                    {% elif i[0][:3:1]=="EEE" %}
+                    {% elif i['code'][:3:1]=="EEE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
-                    {% elif i[0][:3:1]=="ECE" %}
+                    {% elif i['code'][:3:1]=="ECE" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
-                    {% elif i[0][:3:1]=="ECM" %}
+                    {% elif i['code'][:3:1]=="ECM" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
-                    {% elif i[0][:3:1]=="MEC" %}
+                    {% elif i['code'][:3:1]=="MEC" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
-                    {% elif i[0][:3:1]=="CIV" %}
+                    {% elif i['code'][:3:1]=="CIV" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
-                    {% elif i[0][:3:1]=="STS" %}
+                    {% elif i['code'][:3:1]=="STS" %}
                     <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
                     {% endif %}
                           
                         </a>
                         <div class="media-body">
-                          <span class="mb-0 text-sm">{{ i[3] }}</span>
+                          <span class="mb-0 text-sm">{{ i['courseName'] }}</span>
                         </div>
                       </div>
                     </th>
                     <td>
-                      {{ i[0] }}
+                      {{ i['code'] }}
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-success"></i> {{ i[4] }}-{{ i[5] }}
+                        <i class="bg-success"></i> {{ i['startTime'] }}-{{ i['endTime'] }}
                       </span>
                     </td>
                     <td>
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-primary"></i> {{ i[1] }}-{{ i[2] }}
+                        <i class="bg-primary"></i> {{ i['class'] }}
                       </span>
                     </td>
                     <td>

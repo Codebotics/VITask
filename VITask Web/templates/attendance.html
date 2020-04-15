@@ -241,8 +241,8 @@
   <div class="row h-100">
       
         {% for i in dicti %}
-                        {% set attended = dicti[i][1] | int%}
-                        {% set total = dicti[i][0] | int %}
+                        {% set attended = dicti[i]['attended'] | int %}
+                        {% set total = dicti[i]['total'] | int %}
                         {% set attendance = attended/total*100| int %}
                        
        <div class="col-md-4 my-auto">
@@ -275,8 +275,8 @@
                            	<hr class="color1" />
                  
                     
-	  	                <h5 class="card-title">{{dicti[i][2]}}</h5>
-                        <h5 class="card-title">{{dicti[i][3]}}</h5>
+	  	                <h5 class="card-title">{{dicti[i]['courseName']}}</h5>
+                        <h5 class="card-title">{{dicti[i]['type']}}</h5>
                
                    
                   

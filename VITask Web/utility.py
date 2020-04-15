@@ -13,7 +13,7 @@ CAPTCHA_DIM = (180, 45)
 CHARACTER_DIM = (30, 32)
 #Above values were checked from various captchas
 
-def save_captcha(captchasrc):
+def save_captcha(captchasrc,username):
     """
     Downloads and save a random captcha from VTOP website in the path provided
     Defaults to `/captcha`
@@ -21,7 +21,7 @@ def save_captcha(captchasrc):
     """
     base64_image = captchasrc[23:]
     # TODO: Change the name of file to a random name to prevent any collision
-    image_name = "captcha.png"
+    image_name = "./captcha/"+username+"-captcha.png"
     with open(image_name, "wb") as fh:
         fh.write(base64.b64decode(base64_image))
     
@@ -94,10 +94,10 @@ def identify_chars(img,img_matrix):
     return captcha
 
 
-def solve_captcha(captchasrc):
-    save_captcha(captchasrc)
+def solve_captcha(captchasrc,username):
+    save_captcha(captchasrc,username)
 
-    img = Image.open('captcha.png')
+    img = Image.open("./captcha/"+username+"-captcha.png")
     img_matrix = remove_pixel_noise(img)
     captcha = identify_chars(img,img_matrix)
     return captcha

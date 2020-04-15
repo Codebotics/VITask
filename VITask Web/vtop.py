@@ -8,6 +8,10 @@ import requests
 from bs4 import BeautifulSoup
 from collections import namedtuple
 from utility import solve_captcha,TimeTable
+import firebase_admin
+from firebase_admin import db
+import base64
+
 
 #TODO: Make Constants file for storing all the constant URLs
 #TODO: Make Firebase Sync functions
@@ -38,7 +42,7 @@ def generate_session(username, password):
     alt_text = login_html[alt_index+5:] 
     end_index = alt_text.find('"')
     captcha_src = alt_text[:end_index]
-    captcha = solve_captcha(captcha_src)
+    captcha = solve_captcha(captcha_src,username)
     payload = {
         "uname" : username,
         "passwd" : password,
@@ -47,7 +51,7 @@ def generate_session(username, password):
     sess.post("http://vtopcc.vit.ac.in:8080/vtop/doLogin", data=payload, headers=headers, verify=False)
     return sess
 
-def get_attandance(sess,username, semesterID="CH2019205"):
+def get_attandance(sess, username, id, semesterID="CH2019205"):
     """
     This function gets the attendance details, from the VTOP page. Returns a json object with 
     key : slot and value as attendance details
@@ -98,7 +102,6 @@ def get_attandance(sess,username, semesterID="CH2019205"):
 
     attend = {}
     empty = []
-    print(p)
     for i in range(0,len(p)-1):
         # empty = [p[i][21],p[i][20],p[i][5],p[i][7]]
         empty = {
@@ -111,14 +114,25 @@ def get_attandance(sess,username, semesterID="CH2019205"):
             "percentage" : int(p[i][22]),
             "updatedOn" : datetime.datetime.now().strftime("%c")
         }
-        print(empty)
         attend[p[i][8]] = empty
+        c=0
+        q={}
+        for i in attend:
+            q[i] = c
+            c = c + 1
     
-    # TODO: Sync with Firebase
+    ref = db.reference('vitask')
+    tut_ref = ref.child("attendance")
+    tut_ref.set({
+        id: {
+            'Attendance': attend,
+            'Track': q
+        }
+    })
 
-    return attend
+    return (attend, q)
 
-def get_timetable(sess, username, semesterID="CH2019205"):
+def get_timetable(sess, username, id, semesterID="CH2019205"):
     """
     Return Timetable 
     format of timetablel : {
@@ -187,11 +201,18 @@ def get_timetable(sess, username, semesterID="CH2019205"):
             # Replaced Code with much shorter code
             days[arr[0]].append(p)
             p = []
-
-    #TODO: Sync with Firebase
+            
+    ref = db.reference('vitask')
+    tut_ref = ref.child("timetable")
+    tut_ref.set({
+        id: {
+            'Timetable': days
+        }
+    })
+    
     return days
 
-def get_acadhistory(sess,username):
+def get_acadhistory(sess,username,id):
     """
     Get Academic History of Student or Grade History, as VTOP likes to call it
     Format is {
@@ -267,13 +288,21 @@ def get_acadhistory(sess,username):
     for i in cour:
         acadHistory[i[2].getText()] = i[5].getText()
     
-    #TODO: Sync with Firebase
 
     grades = {
         "subjects" : acadHistory,
         "summary" : curriculumDetails
     }
-    print(grades)
+    
+    ref = db.reference('vitask')
+    tut_ref = ref.child("acadhistory")
+    tut_ref.set({
+        id: {
+            'AcadHistory': acadHistory,
+            'CurriculumDetails': curriculumDetails
+        }
+    })
+    
     return grades
 
 def get_student_profile(sess,username):
@@ -324,14 +353,35 @@ def get_student_profile(sess,username):
             'name': tutorial_code[1],
             'branch': tutorial_code[18],
             'program': tutorial_code[17],
-            'regno': tutorial_code[14],
+            'regNo': tutorial_code[14],
             'appNo': tutorial_code[0],
             'school': tutorial_code[19],
             'email': tutorial_code[29],
             'proctorName': tutorial_proctor[93],
-            'ProctorEmail': tutorial_proctor[98],
+            'proctorEmail': tutorial_proctor[98],
         }
+    
+    # Generating an API Token
+    api_gen = tutorial_code[0]
+    api_token = api_gen.encode('ascii')
+    temptoken = base64.b64encode(api_token)
+    token = temptoken.decode('ascii')
 
-    #TODO: Sync with Firebase
+    ref = db.reference('vitask')
+    tut_ref = ref.child('profile')
+    tut_ref.set({
+        tutorial_code[0]: {
+            'Name': (tutorial_code[1]),
+            'Branch': tutorial_code[18],
+            'Program': tutorial_code[17],
+            'RegNo': tutorial_code[14],
+            'AppNo': tutorial_code[0],
+            'School': tutorial_code[19],
+            'Email': tutorial_code[29],
+            'ProctorName': tutorial_proctor[93],
+            'ProctorEmail': tutorial_proctor[98],
+            'API': token
+        }
+    })
 
     return profile

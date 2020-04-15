@@ -205,16 +205,10 @@
         function loading(){
             $("#loading").show();
             $("#content").hide(); 
-            $("#progress").html("Authenticating...").show().delay(10000).fadeOut( function() {
-                $("#progress").html("Fetching Profile...").fadeIn().delay(10000).fadeOut( function() {
-                    $("#progress").html("Fetching other pages...").fadeIn().delay(20000).fadeOut( function() {
-                        $("#progress").html("Finalizing...").fadeIn().delay(5000).fadeOut( function() {
-                            $("#progress").html("Almost done...").fadeIn()
-                        })
-                    })
+            $("#progress").html("Authenticating...").fadeIn().delay(3000).fadeOut( function() {
+                $("#progress").html("Almost done...").fadeIn();
                 })
-            })
-        }
+            }
 // ]]></script>
 
   <!--   Core   -->
