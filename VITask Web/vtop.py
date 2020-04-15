@@ -12,6 +12,7 @@ from utility import solve_captcha,TimeTable
 #TODO: Make Constants file for storing all the constant URLs
 #TODO: Make Firebase Sync functions
 #TODO: Check whether user is Logged in or not before proceeding
+#TODO: Add a function to get all the courses for user and there details
 
 
 VTOP_BASE_URL = r"http://vtopcc.vit.ac.in:8080/vtop/"
@@ -19,6 +20,7 @@ VTOP_LOGIN = r"http://vtopcc.vit.ac.in:8080/vtop/vtopLogin"
 ATTENDANCE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewStudentAttendance"
 TIMETABLE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewTimeTable"
 ACADHISTORY = r"http://vtopcc.vit.ac.in:8080/vtop/examinations/examGradeView/StudentGradeHistory"
+PROFILE = r"http://vtopcc.vit.ac.in:8080/vtop/studentsRecord/StudentProfileAllView"
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
 }
@@ -273,3 +275,63 @@ def get_acadhistory(sess,username):
     }
     print(grades)
     return grades
+
+def get_student_profile(sess,username):
+    """
+    Returns students personal details, maybe useful idk
+    format is {
+        "name: "Name-OF-Student",
+        "branch": "Elecronisdnvvjssvkjnvljdf",
+        "program" : "BTECH",
+        "regno" : "17GHJ9838",
+        "appNo" : "983y40983",
+        "school" : "School of sjdhjs oshdvojs",
+        "email" : "notgonnatypehere@fucku.com",
+        "proctorEmail" : "yeahkillhim@nah.com",
+        "proctorName' "Good Guy",
+    }
+    """
+    # TODO: Check if still login or not
+
+    # Weird Payload data returns yay,, i stil dont know what this is
+    payload = {
+        "verifyMenu" : "true",        
+        "winImage" : "undefined",
+        "authorizedID": username,
+        "nocache" : "@(new Date().getTime())"   
+    }
+    profile_sess = sess.post(PROFILE, data=payload, headers=headers, verify=False)
+    # Check for 200 CODE
+    if profile_sess.status_code !=200:
+        raise ValueError("Could not fetch Profile Details Properly")
+    profile_html = profile_sess.text
+
+    # This code is copied from main.py, I may change some of the code, Thanks to whoever contributed
+
+    soup = BeautifulSoup(profile_html, 'lxml')
+    code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
+    tutorial_code = [i.getText() for i in code_soup]
+    code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
+    tutorial_proctor = [i.getText() for i in code_proctor]
+    holdname = tutorial_code[1].lower().split(" ")
+    tempname = []
+    for i in holdname:
+        tempname.append(i.capitalize())
+    finalname = (" ").join(tempname)
+    tutorial_code[1] = finalname
+
+    profile = {
+            'name': tutorial_code[1],
+            'branch': tutorial_code[18],
+            'program': tutorial_code[17],
+            'regno': tutorial_code[14],
+            'appNo': tutorial_code[0],
+            'school': tutorial_code[19],
+            'email': tutorial_code[29],
+            'proctorName': tutorial_proctor[93],
+            'ProctorEmail': tutorial_proctor[98],
+        }
+
+    #TODO: Sync with Firebase
+
+    return profile

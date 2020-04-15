@@ -289,6 +289,7 @@ def check_and_chromedriver(chrome_driver):
 ---------------------------------------------------------------"""
 
 def ProfileFunc():
+    #obsolete
     ref = db.reference('vitask')
     name = ref.child(session['id']).child(session['id']).child('Name').get()
     school = ref.child(session['id']).child(session['id']).child('School').get()
@@ -303,6 +304,7 @@ def ProfileFunc():
     return (name, school, branch, program, regno, appno, email, proctoremail, proctorname)
 
 def ScrapProfileFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
     nav.click()
     driver.implicitly_wait(3)
