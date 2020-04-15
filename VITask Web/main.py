@@ -236,7 +236,7 @@ def authenticate():
 
         if(temp is not None):
             session['id'] = key
-            name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
+            name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
             api = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('API').get()
 
             return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
@@ -324,8 +324,8 @@ def classesapi():
 
         #Checking if data is already there or not in firebase(if there then no need to acces Vtop again)
         if(temp is not None):
-            attend = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Attendance').get()
-            q = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Track').get()
+            attend = ref.child("attendance").child('attendance-'+key).child(key).child('Attendance').get()
+            q = ref.child("attendance").child('attendance-'+key).child(key).child('Track').get()
 
             values = []
             for i in attend.values():
