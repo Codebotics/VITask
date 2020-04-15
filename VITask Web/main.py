@@ -490,7 +490,7 @@ def moodleapi():
                 'Assignments': all_assignments   
             }
         })
-        assignment = ref.child("moodle").child(session['id']).child('Assignments').get()
+        assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
         return jsonify({'Assignments': assignment})
         
 
@@ -734,7 +734,7 @@ def moodlelogin():
 
             ref = db.reference('vitask')
             tut_ref = ref.child("moodle")
-            new_ref = tut_ref.child("moodle"+session['id'])
+            new_ref = tut_ref.child("moodle-"+session['id'])
             new_ref.set({
                 session['id']: {
                     'Username': moodle_username,
