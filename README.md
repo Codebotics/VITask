@@ -85,7 +85,7 @@ The team behind VITask is very dedicated and talented, all of the the students a
 | Bitmoji | About|
 |:----:|:----| 
 | ![apratimshukla6](/resources/apratimshukla6.png)  | He is the real mind behind this project, watch out for his Python and Web Dev skills. He really does a good job as a leader and our root server. Check out [apratimshukla6](http://github.com/apratimshukla6)
-| ![yash-rajpal](/resources/mayanktolani19.png) | He knows about react-native and React. Ready to learn and collaborate, ask him how to scrape a website and he is ready. Likes to joke very much. Check out [yash-rajpal](http://github.com/yash-rajpal)|
+| ![yash-rajpal](/resources/yash-rajpal.png) | He knows about react-native and React. Ready to learn and collaborate, ask him how to scrape a website and he is ready. Likes to joke very much. Check out [yash-rajpal](http://github.com/yash-rajpal)|
 | ![mayanktolani19](/resources/mayanktolani19.png) | Problem with ReactNative? He is to the rescue. Loves good design and has a great sense of humour. He knows React, ElectronJS. Check out [mayanktolani19](http://github.com/mayanktolani19)|
 | ![uragirii](/resources/uragirii.png)| He joined pretty late in the project. Loves cats and coding. Knows how to scrape the shit out of any website. He loves a good UI and UX.  Also likes ML. Check out [Uragirii](http://github.com/uragirii)
 
