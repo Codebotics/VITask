@@ -36,6 +36,8 @@ import zipfile
 from urllib.request import urlretrieve
 import sys
 from sys import platform as _platform
+from vtop import generate_session
+from vtop import get_attandance
 #For disabling warings this will save msecs..lol
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -287,6 +289,7 @@ def check_and_chromedriver(chrome_driver):
 ---------------------------------------------------------------"""
 
 def ProfileFunc():
+    #obsolete
     ref = db.reference('vitask')
     name = ref.child(session['id']).child(session['id']).child('Name').get()
     school = ref.child(session['id']).child(session['id']).child('School').get()
@@ -301,6 +304,7 @@ def ProfileFunc():
     return (name, school, branch, program, regno, appno, email, proctoremail, proctorname)
 
 def ScrapProfileFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[1]/a")[0]
     nav.click()
     driver.implicitly_wait(3)
@@ -356,6 +360,7 @@ def ScrapProfileFunc():
         
 
 def TimeTable():
+    #Obsolete
     time_table={'A1':['Monday 8:00 8:50','Wednesday 8:55 9:45'],'B1':['Tuesday 8:00 8:50','Thursday 8:55 9:45'],'C1':['Wednesday 8:00 8:50','Friday 8:55 9:45'],
     'D1':['Thursday 8:00 8:50','Monday 9:50 10:40'],'E1':['Friday 8:00 8:50','Tuesday 9:50 10:40'],'F1':['Monday 8:55 9:45','Wednesday 9:50 10:40'],
     'G1':['Tuesday 8:55 9:45','Thursday 9:50 10:40'],
@@ -392,6 +397,7 @@ def TimeTable():
     return time_table
 
 def ScrapTimetableFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
     nav.click()
     driver.implicitly_wait(3)
@@ -469,6 +475,7 @@ def ScrapTimetableFunc():
         return days
     
 def ScrapAttendanceFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[4]/a")[0]
     nav.click()
     driver.implicitly_wait(3)
@@ -536,6 +543,7 @@ def ScrapAttendanceFunc():
         return (attend, q)
 
 def ScrapAcadHistoryFunc():
+    #Obsolete
     nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
     nav.click()
     driver.implicitly_wait(3)
