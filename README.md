@@ -80,7 +80,7 @@ As, we add more features, the list may grew. We will tick the features that have
 
 ## Our team
 
-The team behind VITask is very dedicated and talented, all of the the students are write beautiful code and work collaborately. Enjoy a short write down them:
+The team behind VITask is very dedicated and talented, all of the students write beautiful code and work collaborately. Enjoy a short write down them:
 
 | Bitmoji | About|
 |:----:|:----| 
