@@ -118,18 +118,17 @@ def get_dashboard_json(sess, sess_key):
 ---------------------------------------------------------------"""
 
 def ProfileFunc():
-    #obsolete
     ref = db.reference('vitask')
-    name = ref.child('profile').child(session['id']).child('Name').get()
-    school = ref.child('profile').child(session['id']).child('School').get()
-    branch = ref.child('profile').child(session['id']).child('Branch').get()
-    program = ref.child('profile').child(session['id']).child('Program').get()
-    regno = ref.child('profile').child(session['id']).child('RegNo').get()
-    appno = ref.child('profile').child(session['id']).child('AppNo').get()
-    email = ref.child('profile').child(session['id']).child('Email').get()
-    proctoremail = ref.child('profile').child(session['id']).child('ProctorEmail').get()
-    proctorname = ref.child('profile').child(session['id']).child('ProctorName').get()
-    api = ref.child('profile').child(session['id']).child('API').get()
+    name = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('Name').get()
+    school = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('School').get()
+    branch = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('Branch').get()
+    program = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('Program').get()
+    regno = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('RegNo').get()
+    appno = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('AppNo').get()
+    email = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('Email').get()
+    proctoremail = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('ProctorEmail').get()
+    proctorname = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('ProctorName').get()
+    api = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('API').get()
     
     return (name, school, branch, program, regno, appno, email, proctoremail, proctorname, api)
 
@@ -233,12 +232,12 @@ def authenticate():
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
 
-        temp = ref.child('profile').child(key).get()
+        temp = ref.child('profile').child('profile-'+key).child(key).get()
 
         if(temp is not None):
             session['id'] = key
             name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
-            api = ref.child('profile').child(session['id']).child('API').get()
+            api = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('API').get()
 
             return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
 
@@ -265,7 +264,7 @@ def authenticate():
                 # Timetable Fetching
                 try:
                     ref = db.reference('vitask')
-                    temp = ref.child("timetable").child(session['id']).child('Timetable').get()
+                    temp = ref.child("timetable").child('timetable-'+session['id']).child(session['id']).child('Timetable').get()
                     if(temp is None):
                         days = {}
                         days = get_timetable(sess, username, session['id'])
@@ -282,7 +281,7 @@ def authenticate():
                         # Academic History Fetching
                         try:
                             ref = db.reference('vitask')
-                            temp = ref.child("acadhistory").child(session['id']).child('AcadHistory').get()
+                            temp = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('AcadHistory').get()
                             if(temp is None):
                                 acadHistory = {}
                                 curriculumDetails = {}
@@ -321,12 +320,12 @@ def classesapi():
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
 
-        temp = ref.child(key).child(key).get()
+        temp = ref.child('attendance').child('attendance-'+key).child(key).get()
 
         #Checking if data is already there or not in firebase(if there then no need to acces Vtop again)
         if(temp is not None):
-            attend = ref.child("attendance").child(session['id']).child('Attendance').get()
-            q = ref.child("attendance").child(session['id']).child('Track').get()
+            attend = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Attendance').get()
+            q = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Track').get()
 
             values = []
             for i in attend.values():
@@ -337,17 +336,6 @@ def classesapi():
             for i in attend.keys():
                 slots.append(i)
 
-            ref = db.reference('vitask')
-            users_ref = ref.child('users')
-            tut_ref = ref.child("attendance-"+session['id'])
-            tut_ref.set({
-                session['id']: {
-                    'Attended': values,
-                    'Slots' : slots,
-                    'Track' : q
-                }
-            })
-        
             return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
 
         else:
@@ -372,7 +360,7 @@ def timetableapi():
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
 
-        temp = ref.child("timetable").child(key).child("Timetable").get()
+        temp = ref.child("timetable").child('timetable-'+key).child(key).child("Timetable").get()
 
         if(temp is not None):
             session['id'] = key
@@ -399,12 +387,12 @@ def acadhistoryapi():
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
     
-        temp = ref.child("acadhistory").child(key).child("AcadHistory").get()
+        temp = ref.child("acadhistory").child('acadhistory-'+key).child(key).child("AcadHistory").get()
         
         if(temp is not None):
             session['id'] = key
             acadHistory = temp
-            curriculumDetails = ref.child("acadhistory").child(key).child("CurriculumDetails").get()
+            curriculumDetails = ref.child("acadhistory").child('acadhistory-'+session['id']).child(key).child("CurriculumDetails").get()
 
             return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
         
@@ -455,12 +443,12 @@ def moodleapi():
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
 
-        temp = ref.child("moodle").child(key).child('Username').get()
+        temp = ref.child("moodle").child('moodle-'+key).child(key).child('Username').get()
         
         
         if(temp is not None):
             session['id'] = key
-            assignment = ref.child("moodle").child(key).child('Assignments').get()
+            assignment = ref.child("moodle").child('moodle-'+session['id']).child(key).child('Assignments').get()
 
             return jsonify({'Assignments': assignment})
         
@@ -494,6 +482,7 @@ def moodleapi():
 
         ref = db.reference('vitask')
         tut_ref = ref.child("moodle")
+        new_ref = tut_ref.child("moodle-"+session['id'])
         tut_ref.set({
             session['id']: {
                 'Username': moodle_username,
@@ -561,7 +550,7 @@ def login():
                 # Timetable Fetching
                 try:
                     ref = db.reference('vitask')
-                    temp = ref.child("timetable").child(session['id']).child('Timetable').get()
+                    temp = ref.child("timetable").child('timetable-'+session['id']).child(session['id']).child('Timetable').get()
                     if(temp is None):
                         days = {}
                         days = get_timetable(sess, username, session['id'])
@@ -578,7 +567,7 @@ def login():
                         # Academic History Fetching
                         try:
                             ref = db.reference('vitask')
-                            temp = ref.child("acadhistory").child(session['id']).child('AcadHistory').get()
+                            temp = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('AcadHistory').get()
                             if(temp is None):
                                 acadHistory = {}
                                 curriculumDetails = {}
@@ -614,7 +603,7 @@ def timetable():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        days = ref.child("timetable").child(session['id']).child('Timetable').get()
+        days = ref.child("timetable").child('timetable-'+session['id']).child(session['id']).child('Timetable').get()
         return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
 
 
@@ -625,8 +614,8 @@ def classes():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        attend = ref.child("attendance").child(session['id']).child('Attendance').get()
-        q = ref.child("attendance").child(session['id']).child('Track').get()
+        attend = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Attendance').get()
+        q = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Track').get()
         return render_template('attendance.html',name = session['name'],id = session['id'],dicti = attend,q = q)
 
 # Academic History route
@@ -636,8 +625,8 @@ def acadhistory():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        acadHistory = ref.child("acadhistory").child(session['id']).child('AcadHistory').get()
-        curriculumDetails = ref.child("acadhistory").child(session['id']).child('CurriculumDetails').get()
+        acadHistory = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('AcadHistory').get()
+        curriculumDetails = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('CurriculumDetails').get()
         return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)    
 
 # Marks route
@@ -669,7 +658,7 @@ def apidashboard():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        api = ref.child(session['id']).child(session['id']).child('API').get()
+        api = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('API').get()
         name = session['name']
         return render_template('api.html',name=name,api=api)
 
@@ -704,7 +693,7 @@ def moodle():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        temp = ref.child("moodle").child(session['id']).get()
+        temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
         if(session['moodle']==1 or temp is not None):
             return redirect(url_for('assignments'))
         else:
@@ -717,7 +706,7 @@ def moodlelogin():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        temp = ref.child("moodle").child(session['id']).get()
+        temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
         if(session['moodle']==1 or temp is not None):
             return redirect(url_for('assignments'))
         else:
@@ -745,6 +734,7 @@ def moodlelogin():
 
             ref = db.reference('vitask')
             tut_ref = ref.child("moodle")
+            new_ref = tut_ref.child("moodle"+session['id'])
             tut_ref.set({
                 session['id']: {
                     'Username': moodle_username,
@@ -752,7 +742,7 @@ def moodlelogin():
                     'Assignments': all_assignments   
                 }
             })
-            assignment = ref.child("moodle").child(session['id']).child('Assignments').get()
+            assignment = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Assignments').get()
 
             return render_template('assignments.html',name=session['name'],assignment=assignment)
             
@@ -763,9 +753,9 @@ def assignments():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        temp = ref.child("moodle").child(session['id']).get()
+        temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
         if(session['moodle']==1 or temp is not None):
-            assignment = ref.child("moodle").child(session['id']).child('Assignments').get()
+            assignment = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Assignments').get()
             return render_template('assignments.html',name=session['name'],assignment=assignment)
         else:
             return redirect(url_for('moodle'))
@@ -777,8 +767,8 @@ def moodleresync():
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        moodle_username = ref.child("moodle").child(session['id']).child('Username').get()
-        pass_token = ref.child("moodle").child(session['id']).child('Password').get()
+        moodle_username = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Username').get()
+        pass_token = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Password').get()
         
         # Decoding Password
         temptoken = pass_token.encode('ascii')
@@ -809,6 +799,7 @@ def moodleresync():
 
         ref = db.reference('vitask')
         tut_ref = ref.child("moodle")
+        new_ref = ref.child("moodle-"+session['id'])
         tut_ref.set({
             session['id']: {
                 'Username': moodle_username,

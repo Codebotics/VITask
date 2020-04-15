@@ -123,7 +123,8 @@ def get_attandance(sess, username, id, semesterID="CH2019205"):
     
     ref = db.reference('vitask')
     tut_ref = ref.child("attendance")
-    tut_ref.set({
+    new_ref = tut_ref.child('attendance-'+id)
+    new_ref.set({
         id: {
             'Attendance': attend,
             'Track': q
@@ -204,7 +205,8 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
             
     ref = db.reference('vitask')
     tut_ref = ref.child("timetable")
-    tut_ref.set({
+    new_ref = tut_ref.child('timetable-'+id)
+    new_ref.set({
         id: {
             'Timetable': days
         }
@@ -296,7 +298,8 @@ def get_acadhistory(sess,username,id):
     
     ref = db.reference('vitask')
     tut_ref = ref.child("acadhistory")
-    tut_ref.set({
+    new_ref = tut_ref.child('acadhistory-'+id)
+    new_ref.set({
         id: {
             'AcadHistory': acadHistory,
             'CurriculumDetails': curriculumDetails
@@ -369,7 +372,8 @@ def get_student_profile(sess,username):
 
     ref = db.reference('vitask')
     tut_ref = ref.child('profile')
-    tut_ref.set({
+    new_ref = tut_ref.child('profile-'+tutorial_code[0])
+    new_ref.set({
         tutorial_code[0]: {
             'Name': (tutorial_code[1]),
             'Branch': tutorial_code[18],
