@@ -483,7 +483,7 @@ def moodleapi():
         ref = db.reference('vitask')
         tut_ref = ref.child("moodle")
         new_ref = tut_ref.child("moodle-"+session['id'])
-        tut_ref.set({
+        new_ref.set({
             session['id']: {
                 'Username': moodle_username,
                 'Password': token,
@@ -735,7 +735,7 @@ def moodlelogin():
             ref = db.reference('vitask')
             tut_ref = ref.child("moodle")
             new_ref = tut_ref.child("moodle"+session['id'])
-            tut_ref.set({
+            new_ref.set({
                 session['id']: {
                     'Username': moodle_username,
                     'Password': token,
@@ -800,7 +800,7 @@ def moodleresync():
         ref = db.reference('vitask')
         tut_ref = ref.child("moodle")
         new_ref = ref.child("moodle-"+session['id'])
-        tut_ref.set({
+        new_ref.set({
             session['id']: {
                 'Username': moodle_username,
                 'Password': token,
