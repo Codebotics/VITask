@@ -8,26 +8,31 @@ let mainWindow;
 let addWindow;
 
 app.on('ready',function(){
+    createMainWindow();
+});
+
+function createMainWindow()
+{
     mainWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true
         }
     });
-    mainWindow.maximize();
+    /*mainWindow.maximize();*/
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
         slashes: true
     }));
     //Quit app when closed
     mainWindow.on('closed',function(){
-        app.quit();
+        mainWindow = null;
     });
     //Build Menu from template
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     //Insert Menu
     Menu.setApplicationMenu(mainMenu);
-});
+}
 
 
 
@@ -51,6 +56,38 @@ function createAddWindow(){
         addWindow = null;
     });
 };
+
+function createDashboard(){
+    dashWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+    /*dashWindow.maximize();*/
+    dashWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'dashboard.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+    dashWindow.on('closed',function(){
+        app.quit();
+    });
+    
+};
+
+
+//catch login:new
+ipcMain.on('login:new',function(e,item){
+    console.log(item);
+    createDashboard();
+    dashWindow.webContents.send('login:new',item);
+});
+
+//catch page:change
+ipcMain.on('page:change',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('page:change',item);
+});
 
 //catch item:add
 ipcMain.on('item:add',function(e,item){
