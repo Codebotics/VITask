@@ -25,6 +25,7 @@ ATTENDANCE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewStudentAttendance"
 TIMETABLE = r"http://vtopcc.vit.ac.in:8080/vtop/processViewTimeTable"
 ACADHISTORY = r"http://vtopcc.vit.ac.in:8080/vtop/examinations/examGradeView/StudentGradeHistory"
 PROFILE = r"http://vtopcc.vit.ac.in:8080/vtop/studentsRecord/StudentProfileAllView"
+MARKS = r"http://vtopcc.vit.ac.in:8080/vtop/examinations/doStudentMarkView"
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
 }
@@ -389,3 +390,54 @@ def get_student_profile(sess,username):
     })
 
     return profile
+
+def get_marks(sess, username, id, semesterID="CH2019205"):
+    # TODO: Check if still login or not
+
+    payload = {
+        "semesterSubId" : semesterID,        # Filled for Winsem
+        "authorizedID" : username 
+    }
+    marks_sess = sess.post(MARKS, data=payload, headers=headers, verify=False)
+    # Check for 200 CODE
+    if marks_sess.status_code !=200:
+        raise ValueError("Could not fetch Marks Details Properly")
+    marks_html = marks_sess.text
+    
+    # Thanks to Mayank for the parsing logic,I have modified it accordingly for the new version
+    soup = BeautifulSoup(marks_html, 'lxml')
+    code_soup = soup.findAll("table", {"class": "customTable-level1"})
+    code_soup2 = soup.findAll("tr", {"class": "tableContent"})
+    
+    courses = []
+    temp = []
+    for i in range(0,len(code_soup2),2):
+        temp = code_soup2[i].findAll("td")
+        courses.append(temp[3].getText()+" "+temp[4].getText())
+        temp = []
+        
+    temp = []
+    hold = []
+    temp_dict = {}
+    hold_array = []
+    for i in code_soup:
+        temp = i.findAll("tr", {"class": "tableContent-level1"})
+        for j in temp:
+            hold = j.findAll("td")
+            temp_dict[hold[1].getText()] = hold[5].getText()
+        hold_array.append(temp_dict)
+        temp_dict = {}
+        
+    marksDict = {}
+    for i in range(0,len(courses)):
+        marksDict[courses[i]] = hold_array[i]
+        
+    ref = db.reference('vitask')
+    tut_ref = ref.child('marks')
+    new_ref = tut_ref.child('marks-'+id)
+    new_ref.set({
+        id: {
+            'Marks': marksDict
+        }
+    })
+    return marksDict

@@ -35,6 +35,7 @@ from vtop import get_attandance
 from vtop import get_student_profile
 from vtop import get_acadhistory
 from vtop import get_timetable
+from vtop import get_marks
 #For disabling warings this will save msecs..lol
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -132,65 +133,6 @@ def ProfileFunc():
     
     return (name, school, branch, program, regno, appno, email, proctoremail, proctorname, api)
 
-
-"""def ScrapMarksFunc():
-    nav = driver.find_elements_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")[0]
-    nav.click()
-    driver.implicitly_wait(3)
-    marks = driver.find_element_by_xpath("//*[@id='button-panel']/aside/section/div/div[6]/a")
-    hover = action.move_to_element(marks)
-    hover.perform()
-    item = driver.find_element_by_xpath("//*[@id='BtnBody21117']/div/ul/li[1]")
-    item.click()
-    try:
-        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "semesterSubId")))
-        semlist = driver.find_element_by_xpath("//*[@id='semesterSubId']")
-        semlist.click()
-        driver.implicitly_wait(2)
-
-        hover = action.move_to_element(semlist)
-        hover.perform()
-        item = driver.find_element_by_xpath("//*[@id='semesterSubId']/option[3]")
-        item.click()
-        try:
-            newelement = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fixedTableContainer")))
-        finally:
-            page_source = driver.page_source
-    finally:
-        soup = BeautifulSoup(page_source, 'lxml')
-        code_soup = soup.findAll('tbody')
-        code_soup2 = soup.findAll("tr", {"class": "tableContent"})
-        courses = []
-        temp = []
-        for i in code_soup2:
-            temp = i.findAll('td')
-            if(len(temp)==9):
-                courses.append(temp[3].getText()+" "+temp[4].getText())
-            
-        code_soup = code_soup[1:len(code_soup)]
-        courseMarks = []
-        for i in code_soup:
-            courseMarks.append(i.findAll('tr'))
-        
-        k = []
-        m = 0
-        tempDict = {}
-        marksDict = {} 
-        for i in range (0,len(courseMarks)):
-            for j in range(1, len(courseMarks[i])):
-                k = courseMarks[i][j].findAll('td')
-                tempDict[k[1].getText()] = k[5].getText() 
-            marksDict[courses[m]] =  tempDict
-            m = m+1
-            tempDict = {}
-        ref = db.reference('vitask')
-        tut_ref = ref.child("marks-"+session['id'])
-        tut_ref.set({
-            session['id']: {
-                'Marks': marksDict
-            }
-        })
-        return marksDict"""
 
 """---------------------------------------------------------------
                     Functions end here.
@@ -290,18 +232,14 @@ def authenticate():
                                 curriculumDetails = grades['CurriculumDetails']
                                 session['acadhistory'] = 1
                         finally:
-                            return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
-                        
                             # Marks Fetching
-                            """try:
+                            try:
                                 marksDict = {}
-                                marksDict = ScrapMarksFunc()
+                                marksDict = get_marks(sess, username, session['id'])
                                 session['marks'] = 1
                             finally:
-                                driver.close() 
-                                name, school, branch, program, regno, appno, email, proctoremail, proctorname = ProfileFunc()
-                                api = ref.child(appno).child(appno).child('API').get()
-                                session['id'] = appno"""
+                                return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
+                                
 
                                 
 
@@ -401,7 +339,7 @@ def acadhistoryapi():
     else:
         return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
 
-"""# Marks API
+# Marks API
 @app.route('/marksapi')
 def marksapi():
     ref = db.reference('vitask')
@@ -416,7 +354,7 @@ def marksapi():
             return jsonify({'Error': 'Invalid API Token.'})
         key = appno.decode('ascii')
     
-        temp = ref.child("marks-"+key).child(key).child("Marks").get()
+        temp = ref.child("marks").child('marks-'+key).child(key).child("Marks").get()
         
         if(temp is not None):
             session['id'] = key
@@ -427,7 +365,7 @@ def marksapi():
         else:
             return jsonify({'Error': 'Invalid API Token.'})
     else:
-        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})"""
+        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
         
 # Moodle API
 @app.route('/moodleapi')
@@ -576,14 +514,13 @@ def login():
                                 curriculumDetails = grades['CurriculumDetails']
                                 session['acadhistory'] = 1
                         finally:
-                            return redirect(url_for('profile'))
-                            """# Marks Fetching
+                            # Marks Fetching
                             try:
                                 marksDict = {}
-                                marksDict = ScrapMarksFunc()
+                                marksDict = get_marks(sess, username, session['id'])
                                 session['marks'] = 1
                             finally:
-                                driver.close() """
+                                return redirect(url_for('profile'))
                                 
                                 
                             
@@ -632,14 +569,12 @@ def acadhistory():
 # Marks route
 @app.route('/marks')
 def marks():
-    return render_template('404.html'), 404
-    """if(session['loggedin']==0):
+    if(session['loggedin']==0):
         return redirect(url_for('index'))
     else:
         ref = db.reference('vitask')
-        temp = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
-        marks = ref.child("marks-"+session['id']).child(session['id']).child('Marks').get()
-        return render_template('marks.html',name = session['name'], marks = marks)"""
+        marks = ref.child("marks").child('marks-'+session['id']).child(session['id']).child('Marks').get()
+        return render_template('marks.html',name = session['name'], marks = marks)
 
         
 """---------------------------------------------------------------

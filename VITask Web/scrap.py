@@ -9,15 +9,33 @@ import re
 import os
 import firebase_admin
 from firebase_admin import db
-import flask
 
 
-app = flask.Flask(__name__)
+with open("C:\\Users\\aprat\\Documents\\GitHub\\VITask\\VITask Web\\test.html", encoding="utf8") as fp:
+    soup = BeautifulSoup(fp, 'lxml')
+    code_soup = soup.findAll('tbody')
+    code_soup2 = soup.findAll("tr", {"class": "tableContent"})
+    courses = []
+    temp = []
+    for i in code_soup2:
+        temp = i.findAll('td')
+        if(len(temp)==9):
+            courses.append(temp[3].getText()+" "+temp[4].getText())
 
-with open("C:\\Users\\aprat\\Desktop\\"+"18blc1085-profile"+".html") as fp:
-    soup = BeautifulSoup(fp, 'html.parser')
-    code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
-    tutorial_code = [i.getText() for i in code_soup]
-    code_proctor = soup.find_all('td', {'style': lambda s: 'background-color: #d4d3d3;' in s})
-    tutorial_proctor = [i.getText() for i in code_proctor]
-    print(tutorial_code[14])
+    code_soup = code_soup[1:len(code_soup)]
+    courseMarks = []
+    for i in code_soup:
+        courseMarks.append(i.findAll('tr'))
+
+    k = []
+    m = 0
+    tempDict = {}
+    marksDict = {} 
+    for i in range (0,len(courseMarks)):
+        for j in range(1, len(courseMarks[i])):
+            k = courseMarks[i][j].findAll('td')
+            tempDict[k[1].getText()] = k[5].getText() 
+        marksDict[courses[m]] =  tempDict
+        m = m+1
+        tempDict = {}
+    print(marksDict)
