@@ -1,9 +1,4 @@
-"""---------------------------------------------------------------
-                VITask | A Dynamic VTOP API server
-
-        "Any fool can write code that a computer can understand.
-        Good programmers write code that humans can understand."
-------------------------------------------------------------------"""
+# -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from bs4 import BeautifulSoup
@@ -42,11 +37,11 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Initialize Flask app
 app = Flask(__name__)
+application = app
 
 # Set the port for Flask app
 port = int(os.environ.get('PORT', 5000))
 
-# Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'canada$God7972#'
 
 # Initialize Firebase app
@@ -57,18 +52,11 @@ firebase_admin.initialize_app(options={'databaseURL': 'https://vitask.firebaseio
 MOODLE_LOGIN_URL = r"https://moodlecc.vit.ac.in/login/index.php"
 
 def get_timestamp():
-    """
-    Utility function to generate current timstamp
-    """
     dt = datetime.now() - timedelta(15)
     utc_time = dt.replace(tzinfo = timezone.utc) 
     return int(utc_time.timestamp())
 
 def get_moodle_session(username, password):
-    """
-    This function logins in moodle and gets session Id 
-    return session object and sess_key
-    """
     sess = requests.Session()
     #Moodle passes anchor secretly idk why lol
     payload = {
@@ -88,9 +76,6 @@ def get_moodle_session(username, password):
     return sess, sess_key
 
 def get_dashboard_json(sess, sess_key):
-    """
-    This function returns dashboard json data fields array
-    """
     #TODO:Find a better method to format string
     DASHBOARD_URL = "https://moodlecc.vit.ac.in/lib/ajax/service.php?sesskey="+sess_key+"&info=core_calendar_get_action_events_by_timesort"
     
@@ -187,7 +172,7 @@ def authenticate():
             return jsonify({'Error': 'Invalid API Token.'})
 
     else:
-        username = request.args.get('username').upper()
+        username = request.args.get('username')
         password = request.args.get('password')
         try:
             sess = generate_session(username, password)
@@ -767,7 +752,7 @@ def logout():
     return render_template('home.html')
 
 
-
 # Run Flask app
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=port, debug=True)
+	app.run(port=port)
+
