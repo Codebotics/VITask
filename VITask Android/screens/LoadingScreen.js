@@ -24,7 +24,7 @@ export class LoadingScreen extends Component {
             }}>
             <Image
             style={{width:90,height:90}}
-            source = {require("../assets/favicon.png")} 
+            source = {require("../favicon.png")} 
             />  
             </View>
         )
