@@ -49,8 +49,12 @@ def generate_session(username, password):
         "passwd" : password,
         "captchaCheck" : captcha
     }
-    sess.post("http://vtopcc.vit.ac.in:8080/vtop/doLogin", data=payload, headers=headers, verify=False)
-    return sess
+    post_login_html = sess.post("http://vtopcc.vit.ac.in:8080/vtop/doLogin", data=payload, headers=headers, verify=False).text
+    
+    if "Invalid User Id / Password" in post_login_html:
+        raise ValueError("Invalid Password / Username")
+    else:
+        return sess
 
 def get_attandance(sess, username, id, semesterID="CH2019205"):
     """

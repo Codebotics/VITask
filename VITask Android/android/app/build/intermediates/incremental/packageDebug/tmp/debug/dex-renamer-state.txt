@@ -1,7 +1,4 @@
-#Wed Mar 25 01:55:45 IST 2020
-base.0=C\:\\Users\\aprat\\Desktop\\MyReactNative\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
-path.1=classes.dex
-renamed.1=classes2.dex
+#Tue Apr 14 17:44:50 IST 2020
+base.0=D\:\\Codes\\React-native\\VITask\\android\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
-base.1=C\:\\Users\\aprat\\Desktop\\MyReactNative\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\1
