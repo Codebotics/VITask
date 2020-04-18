@@ -18,7 +18,9 @@
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-unimodules": "~0.7.0",
     "react-native-web": "~0.11.7",
-    "react-navigation": "^4.3.5"
+    "react-navigation": "^4.3.5",
+    "react-native-progress": "^4.1.2",
+    "react-native-vector-icons": "^6.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
