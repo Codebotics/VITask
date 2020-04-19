@@ -83,10 +83,22 @@ ipcMain.on('login:new',function(e,item){
     dashWindow.webContents.send('login:new',item);
 });
 
+//catch resync:new
+ipcMain.on('resync:new',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('resync:new',item);
+});
+
 //catch page:change
 ipcMain.on('page:change',function(e,item){
     console.log(item);
     dashWindow.webContents.send('page:change',item);
+});
+
+//catch resync:details
+ipcMain.on('resync:details',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('resync:details',item);
 });
 
 //catch item:add

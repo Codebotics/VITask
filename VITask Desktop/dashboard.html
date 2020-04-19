@@ -17,10 +17,88 @@
   <link href="dashboard/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="dashboard/assets/demo/demo.css" rel="stylesheet" />
+    <style>
+    #loading {
+    cursor: wait;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    }
+    #svgload{
+    width: 120px; 
+    }
+    </style>
 </head>
 
 <body class="">
-  <div class="wrapper ">
+        <div id="loading">
+                <svg id="svgload" version="1.1" id="preloader" x="0px" y="0px" width="240px" height="120px" viewBox="0 0 240 120">
+
+                    <style type="text/css" >
+                        <![CDATA[
+
+                            #plug,
+                            #socket { fill:#ffffff }
+
+                            #loop-normal { fill: none; stroke: #ffffff; stroke-width: 12 }
+                            #loop-offset { display: none }
+
+                        ]]>
+                    </style>
+
+                    <path id="loop-normal" class="st1" d="M120.5,60.5L146.48,87.02c14.64,14.64,38.39,14.65,53.03,0s14.64-38.39,0-53.03s-38.39-14.65-53.03,0L120.5,60.5
+                    L94.52,87.02c-14.64,14.64-38.39,14.64-53.03,0c-14.64-14.64-14.64-38.39,0-53.03c14.65-14.64,38.39-14.65,53.03,0z">
+                        <animate attributeName="stroke-dasharray" attributeType="XML"
+                            from="500, 50"  to="450 50"
+                            begin="0s" dur="2s"
+                            repeatCount="indefinite"/>
+                        <animate attributeName="stroke-dashoffset" attributeType="XML"
+                            from="-40"  to="-540"
+                            begin="0s" dur="2s"
+                            repeatCount="indefinite"/>  
+                    </path>
+
+                    <path id="loop-offset" d="M146.48,87.02c14.64,14.64,38.39,14.65,53.03,0s14.64-38.39,0-53.03s-38.39-14.65-53.03,0L120.5,60.5
+                    L94.52,87.02c-14.64,14.64-38.39,14.64-53.03,0c-14.64-14.64-14.64-38.39,0-53.03c14.65-14.64,38.39-14.65,53.03,0L120.5,60.5
+                    L146.48,87.02z"/>
+
+                    <path id="socket" d="M7.5,0c0,8.28-6.72,15-15,15l0-30C0.78-15,7.5-8.28,7.5,0z"/>  
+
+                    <path id="plug" d="M0,9l15,0l0-5H0v-8.5l15,0l0-5H0V-15c-8.29,0-15,6.71-15,15c0,8.28,6.71,15,15,15V9z"/>
+
+                    <animateMotion
+                        xlink:href="#plug"
+                        dur="2s"
+                        rotate="auto"
+                        repeatCount="indefinite"
+                        calcMode="linear"
+                        keyTimes="0;1"    
+                        keySplines="0.42, 0, 0.58, 1">
+                        <mpath xlink:href="#loop-normal"/>
+                    </animateMotion>
+
+                    <animateMotion             
+                        xlink:href="#socket"
+                        dur="2s"
+                        rotate="auto"
+                        repeatCount="indefinite"
+                        calcMode="linear"
+                        keyTimes="0;1"
+                        keySplines="0.42, 0, 0.58, 1">
+                        <mpath xlink:href="#loop-offset"/>
+                    </animateMotion>  
+                </svg>
+
+                <br>
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 col-md-6">
+                      <p class="text-lead text-white" id="progress" style="font-weight: 600;"></p>
+                    </div>
+                </div>
+            </div>
+  <div class="wrapper " id="wrapper">
     <div class="sidebar" data-color="danger" data-background-color="white" data-image="dashboard/assets/img/sidebar-1.jpg">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
@@ -68,6 +146,19 @@
               <p>Timetable</p>
             </a>
           </li>
+          <hr class="bg-white">
+          <li class="nav-item " id="resyncnav">
+            <a class="nav-link" onclick="resync();">
+              <i class="material-icons">refresh</i>
+              <p>Resync</p>
+            </a>
+          </li>
+          <li class="nav-item " id="logoutnav">
+            <a class="nav-link" onclick="logout();">
+              <i class="material-icons">exit_to_app</i>
+              <p>Logout</p>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -84,32 +175,7 @@
             <span class="navbar-toggler-icon icon-bar"></span>
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
-          <div class="collapse navbar-collapse justify-content-end">
-            <form class="navbar-form">
-              <div class="input-group no-border">
-              
-                
-              </div>
-            </form>
-            <ul class="navbar-nav">
-              
-             
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons">person</i>
-                  <p class="d-lg-none d-md-block">
-                    Account
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="#">Profile</a>
-                  <a class="dropdown-item" href="#">Settings</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Log out</a>
-                </div>
-              </li>
-            </ul>
-          </div>
+          
         </div>
       </nav>
       <!-- End Navbar -->
@@ -140,12 +206,15 @@
     <script>
             const electron =  require('electron');
             const Store = require('electron-store');
+            const request = require('request');
             window.$ = window.jQuery = require('jquery');
             const Datastore = require('nedb');
-            const {ipcRenderer} = electron;
             var data = new Datastore({ filename: 'dashboard/userdata/data.db', autoload: true });
-        
-        
+            const {ipcRenderer} = electron;
+            const remote = electron.remote
+            const fs = require('fs')
+
+            const path = 'dashboard/userdata/data.db';
             
                            
             ipcRenderer.on('page:change',function(e,item){
@@ -153,6 +222,8 @@
                     {
                         $("#dashnav").attr('class', 'nav-item active ');
                         $("#acadnav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Dashboard");
                         $("#canvas").html(
                         `<div class="row">
@@ -248,13 +319,49 @@
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item active ');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Academic History");
                         data.findOne({ acad: 'user-acadhistory' }, function(err, doc) {
-                            let acadhistory = doc.AcadHistory; 
+                            let acadhistory = doc.AcadHistory;
+                            let curriculumdetails = doc.CurriculumDetails;
                             let content = ``;
                             let course;
                             for(course in acadhistory)
                                 {
+                                    let temporary;
+                                    if(acadhistory[course] == "S")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-primary text-white">`
+                                        }
+                                    else if(acadhistory[course] == "A")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-info text-white">`
+                                        }
+                                    else if(acadhistory[course] == "B")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-success text-white">`
+                                        }
+                                    else if(acadhistory[course] == "C")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-warning text-white">`
+                                        }
+                                    else if(acadhistory[course] == "D")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-warning text-white">`
+                                        }
+                                    else if(acadhistory[course] == "E")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-warning text-white">`
+                                        }
+                                    else if(acadhistory[course] == "F")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-danger text-white">`
+                                        }
+                                    else
+                                        {
+                                            temporary = `<p class="btn btn-round bg-danger text-white">`
+                                        }
                                     content+= `<tr>
                                                   <td>
                                                   </td>
@@ -263,8 +370,8 @@
                                                   </td>
                                                   <td>
                                                   </td>
-                                                  <td class="text-danger">
-                                                    ${acadhistory[course]}
+                                                  <td>`+ temporary +
+                                                  `${acadhistory[course]}</p>
                                                   </td>
                                                   <td>
                                                   </td>
@@ -301,14 +408,88 @@
                                                         </div>
                                                       </div>
                                                     </div>
-                                                  </div>`
+                                                  </div>` +
+                                                    `<div class="row">
+                                                        <div class="col-md-12">
+                                                          <div class="card">
+                                                            <div class="card-header card-header-danger">
+                                                              <h4 class="card-title ">Curriculum Details</h4>
+                                                              <p class="card-category"> Your Curriculum Details</p>
+                                                            </div>
+                                                            <div class="card-body">
+                                                              <div class="table-responsive">
+                                                                <table class="table">
+                                                                  <thead class=" text-primary">
+                                                                    <th>
+                                                                    CGPA
+                                                                    </th>
+                                                                    <th>
+                                                                    </th>
+                                                                    <th>
+                                                                      CREDITS REGISTERED
+                                                                    </th>
+                                                                    <th>
+                                                                    </th>
+                                                                    <th>
+                                                                      CREDITS EARNED
+                                                                    </th> 
+                                                                  </thead>
+                                                                  <tbody>
+                                                                    <tr>
+                                                                      <td class="text-success">
+                                                                          <b>${curriculumdetails["CGPA"]}</b>
+                                                                      </td>
+                                                                      <td>
+                                                                      </td>
+                                                                      <td class="text-info">
+                                                                            ${curriculumdetails["CreditsRegistered"]}
+                                                                      </td>
+                                                                      <td>
+                                                                      </td>
+                                                                      <td class="text-success">
+                                                                          ${curriculumdetails["CreditsEarned"]}
+                                                                      </td>
+                                                                    </tr>
+                                                                  </tbody>
+                                                                </table>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>`
                             
                             $("#canvas").html(finalcontent)
                         });
                         
                     }
+                else if(item=='resync')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item active ');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Resync");
+                        ipcRenderer.on('resync:details',function(e,item){
+                            let regno = item.regno;
+                            let password = item.password;
+                            login(regno,password);
+                        });
+                    }
+                else if(item=='logout')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item active ');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item active ');
+                        $("#topheading").html("Logout");
+                        complete_logout();
+                    }
                 
             });
+        
+            $(document).ready(function() {
+                $("#loading").fadeOut(); 
+            })
                            
             
         
@@ -318,6 +499,135 @@
         
             function dashboard(){
                 ipcRenderer.send('page:change','dashboard');
+            }
+                
+            function resync(){
+                data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                            let item = {
+                                regno: doc.regno,
+                                password: doc.password
+                            }
+                            ipcRenderer.send('page:change','resync');
+                            ipcRenderer.send('resync:details',item);
+                        }); 
+            }
+        
+            function logout()
+            {
+                ipcRenderer.send('page:change','logout');
+            }
+            
+            function complete_logout()
+            {
+                fs.unlink(path, (err) => {
+                  if (err) {
+                    console.error(err)
+                    return
+                  }
+                });
+            }
+        
+            function login(regno,password){
+                let url = 'https://vitask.me/authenticate?username='+regno+'&password='+password;
+                let timetable_ini_url = 'https://vitask.me/timetableapi?token='
+                let acadhistory_ini_url = 'https://vitask.me/acadhistoryapi?token='
+                let attendance_ini_url = 'https://vitask.me/classesapi?token='
+                
+                $("#loading").show();
+                $("#wrapper").hide(); 
+                $("#progress").html("Verifying...").show().delay(7000).fadeOut( function() {
+                    $("#progress").html("Resyncing...").fadeIn();
+                });
+                
+                request(url, function (err, response, body) {
+                  if(err){
+                    console.log('error:', error);
+                  } else {
+                    let result = JSON.parse(body);
+                    result.profile = "user-profile";
+                    result.regno = regno;
+                    result.password = password;
+                    
+                    data.insert(result, function(err, doc) {
+                    console.log('Inserted', doc.Name);
+                    });
+                      
+                    data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                        
+                        
+                        
+                        timetable(doc.APItoken, function() {
+                            acadhistory(doc.APItoken, function(){
+                                attendance(doc.APItoken, function(){
+                                    ipcRenderer.send('resync:new','resynced');
+                                    done(doc.APItoken);
+                                });
+                            });
+                        });
+                        
+                    });
+                  }
+                });
+                
+                function timetable(token, callback){
+                    let timetable_url = timetable_ini_url+token;
+                    request(timetable_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body)
+                            result.tt = "user-timetable"
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Timetable);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                function acadhistory(token, callback){
+                    let acadhistory_url = acadhistory_ini_url+token;
+                    request(acadhistory_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body)
+                            result.acad = "user-acadhistory"
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.AcadHistory);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                
+                function attendance(token, callback){
+                    let attendance_url = attendance_ini_url+token;
+                    request(attendance_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body)
+                            result.classes = "user-attendance"
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Attended);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                function done(token){
+                    location.reload(true);
+                }
+                   
             }
             
     </script>

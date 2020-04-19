@@ -158,12 +158,28 @@
             const {ipcRenderer} = electron;
             const remote = electron.remote
             
-                
-        
+            function done(token)
+                {
+                    console.log('Found user:', token);
+                        
+                    var window = remote.getCurrentWindow();
+                    window.close();
+                }
+            
         
             $(document).ready(function() {
                 $("#loading").fadeOut();
-            });
+
+                data.findOne({ profile: 'user-profile' }, function(err, doc) { 
+                    if(doc != null)
+                        {
+                            ipcRenderer.send('login:new','loggedin');
+                            done(doc.APItoken);
+                        }
+                    
+                });
+                
+            })
             
         
             function login(){
@@ -186,8 +202,10 @@
                   if(err){
                     console.log('error:', error);
                   } else {
-                    let result = JSON.parse(body)
-                    result.profile = "user-profile"
+                    let result = JSON.parse(body);
+                    result.profile = "user-profile";
+                    result.regno = regno;
+                    result.password = password;
                     
                     data.insert(result, function(err, doc) {
                     console.log('Inserted', doc.Name);
@@ -264,17 +282,7 @@
                     });
                     
                 }
-                
-                
-                function done(token)
-                {
-                    console.log('Found user:', token);
-                        
-                    var window = remote.getCurrentWindow();
-                    window.close();
-                }
-                
-                
+                   
             }
     </script>
     
