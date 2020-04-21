@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Codes\\React-native\\VITask\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v21\\values-v21.xml",
+            "outputFile": "D:\\Codes\\Personal Study\\VITask\\VITask Android\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v21\\values-v21.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ADMIN\\.gradle\\caches\\transforms-2\\files-2.1\\7b4521e09033db39989053c4a0984cc2\\material-1.1.0\\res\\values-v21\\values-v21.xml",
