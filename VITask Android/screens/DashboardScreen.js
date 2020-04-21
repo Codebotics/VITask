@@ -4,6 +4,9 @@ import { Headline, Caption, Subheading,Card } from "react-native-paper";
 import {Timetable} from '../components/Timetable/Timetable'
 
 export class DashboardScreen extends Component {
+    componentDidMount(){
+        console.log(this.props.route.params)
+    }
     render() {
         return (
             <ScrollView>

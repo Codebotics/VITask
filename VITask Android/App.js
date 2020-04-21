@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Subject">
+      <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Loading" options= {{headerShown : false}}>
           {props =><LoadingScreen {...props} />}
         </Stack.Screen>
