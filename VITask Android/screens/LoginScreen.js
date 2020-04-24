@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, ToastAndroid, Linking, Image } from 'react-native'
-import { Headline,  TextInput,  Card, Caption, Button, Subheading} from "react-native-paper";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { View, StyleSheet, ToastAndroid, Linking, Image,ScrollView } from 'react-native'
+import { Headline,  TextInput, Button, Subheading} from "react-native-paper";
+import * as Animatable from "react-native-animatable"
 
 export class LoginScreen extends Component {
     state = {
@@ -16,25 +16,69 @@ export class LoginScreen extends Component {
             ToastAndroid.show("Please Enter Password to proceed", ToastAndroid.SHORT)
         }
         else{
-            this.props.navigation.navigate("Loading")
+            this.props.navigation.navigate("Loading", {username: this.state.text, password: this.state.password})
         }
     }
     //TODO: Use regex statement for checking registration number
     render() {
         return (
+            <ScrollView style={{backgroundColor:"#081631"}}>
             <View style={styles.view}>
+            <Animatable.View animation="fadeIn" easing="ease-out" duration={1500}>
                 <Image
                     style = {{marginBottom:"5%"}}
-                    source = {require("../favicon.png")} 
+                    source = {require("../assests/favicon.png")} 
                  />
-                 <Subheading style={{paddingTop:"10%", paddingBottom:"3%", fontSize:20, color:"gray"}}>Proceed with your</Subheading>
-                 <Headline style={{fontSize:30}}>VTOP Credentials</Headline>
+            </Animatable.View>
+            <Animatable.View animation="fadeIn" easing="ease-out" delay={500} duration={1500}>
+
+                 <Subheading style={{paddingTop:"10%", paddingBottom:"3%", fontSize:20, color:"#BBB"}}>Proceed with your</Subheading>
+                 <Headline style={{fontSize:30, color:"white"}}>VTOP Credentials</Headline>
+            </Animatable.View>
+            
                  <View style={{marginTop:"30%"}}>
-                     <TextInput label="Registration Number" mode="outlined" theme={{colors:{primary:"#f90024"}}} onChangeText={text=>this.setState({text})} value={this.state.text} />
-                     <TextInput label="Password" style={{marginTop:"5%"}} mode="outlined" theme={{colors:{primary:"#f90024"}}} onChangeText={password=>this.setState({password})} value={this.state.password}/>
+                <Animatable.View animation="fadeIn" easing="ease-out" delay={1000} duration={1500}>
+                    
+                     <TextInput 
+                        label="Registration Number" 
+                        mode="outlined" 
+                        theme={{
+                         colors:{
+                            primary:"#A7C0F1",
+                            text:"white",
+                            placeholder:"#A7C0F1"
+                         }}} 
+                        onChangeText={text=>this.setState({text})} 
+                        value={this.state.text}
+                        style={{
+                            backgroundColor:"#22365d",
+                            borderColor:"white"}} />
+                    </Animatable.View>
+                    <Animatable.View animation="fadeIn" easing="ease-out" delay={1200} duration={1500}>
+                    
+                     <TextInput 
+                     label="Password" 
+                     style={{marginTop:"5%"}} 
+                     mode="outlined" 
+                     theme={{
+                         colors:{
+                             primary:"#A7C0F1", 
+                             placeholder:"#A7C0F1",
+                             text:"white"
+                        }}} 
+                    textContentType="password"
+                    secureTextEntry={true}
+                    onChangeText={password=>this.setState({password})} 
+                    value={this.state.password} 
+                    style={{
+                            backgroundColor:"#22365d",
+                            borderColor:"white",
+                        }}/>
                      <Button style={{marginTop:"5%", width:"40%", alignSelf:"center"}} mode="contained" color="#f90024" onPress={()=>{this.checkAndProceed()}}>Login</Button>
+                 </Animatable.View>
                  </View>
             </View>
+            </ScrollView>
         )
     }
 }
@@ -44,7 +88,7 @@ export default LoginScreen
 const styles = StyleSheet.create({
     view : {
         margin : "10%",
-        marginTop:"17%"
+        marginTop:"17%",
     },
     textbox : {
         marginTop : "5%",
