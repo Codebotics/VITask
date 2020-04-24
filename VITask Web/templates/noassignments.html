@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    VITask | Assignments
+    VITask | Removed Assignments
   </title>
   <!-- Favicon -->
   <link href="{{ url_for('static', filename='assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
@@ -226,9 +226,8 @@
         <div class="col">
           <div class="card bg-default shadow">
             <div class="card-header bg-transparent border-0">
-              <h3 class="text-white mb-0">Your List of Assignments</h3>
-                <a class="btn btn-primary my-4" href="{{ url_for('moodleresync') }}">Resync</a>
-                <a class="btn btn-primary my-4" href="{{ url_for('noassignments') }}">Removed Assignments</a>
+              <h3 class="text-white mb-0">Your Removed Assignments</h3>
+                <a class="btn btn-primary my-4" href="{{ url_for('assignments') }}">Back to Active Assignments</a>
             </div>
             <div class="table-responsive">
               <table class="table align-items-center table-dark table-flush">
@@ -266,10 +265,10 @@
                           <i class="fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <form action="{{ url_for('removeassignment') }}" method="post">
+                            <form action="{{ url_for('restoreassignment') }}" method="post">
                                 <input type="hidden" value='{{ i["course"] }}' name="course">
                                 <input type="hidden" value='{{ i["time"] }}' name="time">
-                                <button type="submit" class="dropdown-item">Remove</button>
+                                <button type="submit" class="dropdown-item">Restore</button>
                             </form>
                         </div>
                       </div>

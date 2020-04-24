@@ -409,6 +409,8 @@ def moodleapi():
             temp["course"] = item["course"]["fullname"]
             temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
             temp["time"] = temp_time
+            # Assignment Status to check whether it's actual or not,yes for actual and no for not.
+            temp["status"] = "yes"
             all_assignments.append(temp)
 
         # Processing password before storing
@@ -657,8 +659,11 @@ def moodlelogin():
                 temp["course"] = item["course"]["fullname"]
                 temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
                 temp["time"] = temp_time
+                
+                # Assignment Status to check whether it's actual or not,yes for actual and no for not.
+                temp["status"] = "yes"
                 all_assignments.append(temp)
-
+                
             # Processing password before storing
             api_gen = moodle_password
             api_token = api_gen.encode('ascii')
@@ -674,12 +679,109 @@ def moodlelogin():
                 session['id']: {
                     'Username': moodle_username,
                     'Password': token,
-                    'Assignments': all_assignments   
+                    'Assignments': all_assignments
                 }
             })
             assignment = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Assignments').get()
 
             return render_template('assignments.html',name=session['name'],assignment=assignment)
+        
+# Remove assignments from Moodle
+@app.route('/removeassignment', methods=['GET', 'POST'])
+def removeassignment():
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        if request.method == 'POST' and 'course' in request.form and 'time' in request.form:
+            ref = db.reference('vitask')
+            temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
+            
+            course = request.form['course']
+            time = request.form['time']
+
+            if(session['moodle']==1 or temp is not None):
+                assignment = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Assignments').get()
+                moodle_username = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Username').get()
+                pass_token = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Password').get()
+                
+                for i in assignment:
+                    if(i["course"] == course and i["time"] == time):
+                        i["status"] = "no"
+                        
+                tut_ref = ref.child("moodle")
+                new_ref = tut_ref.child("moodle-"+session['id'])
+                new_ref.set({
+                    session['id']: {
+                        'Username': moodle_username,
+                        'Password': pass_token,
+                        'Assignments': assignment  
+                    }
+                })
+                        
+                return redirect(url_for('assignments'))
+            else:
+                return redirect(url_for('moodle'))
+        else:
+            return redirect(url_for('moodle'))
+        
+# Restore assignments from Moodle
+@app.route('/restoreassignment', methods=['GET', 'POST'])
+def restoreassignment():
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        if request.method == 'POST' and 'course' in request.form and 'time' in request.form:
+            ref = db.reference('vitask')
+            temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
+            
+            course = request.form['course']
+            time = request.form['time']
+
+            if(session['moodle']==1 or temp is not None):
+                assignment = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Assignments').get()
+                moodle_username = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Username').get()
+                pass_token = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Password').get()
+                
+                for i in assignment:
+                    if(i["course"] == course and i["time"] == time):
+                        i["status"] = "yes"
+                        
+                tut_ref = ref.child("moodle")
+                new_ref = tut_ref.child("moodle-"+session['id'])
+                new_ref.set({
+                    session['id']: {
+                        'Username': moodle_username,
+                        'Password': pass_token,
+                        'Assignments': assignment  
+                    }
+                })
+                        
+                return redirect(url_for('assignments'))
+            else:
+                return redirect(url_for('moodle'))
+        else:
+            return redirect(url_for('moodle'))
+        
+# Removed Assignments page for Moodle
+@app.route('/noassignments', methods=['GET', 'POST'])
+def noassignments():
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        ref = db.reference('vitask')
+        temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
+        if(session['moodle']==1 or temp is not None):
+            assignment = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Assignments').get()
+            
+            no_assignment = []
+            # Returning only the assignments which have status no
+            for i in assignment:
+                if(i["status"]=="no"):
+                    no_assignment.append(i)
+                    
+            return render_template('noassignments.html',name=session['name'],assignment=no_assignment)
+        else:
+            return redirect(url_for('moodle'))
             
 # Assignments page for Moodle
 @app.route('/assignments', methods=['GET', 'POST'])
@@ -691,11 +793,18 @@ def assignments():
         temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
         if(session['moodle']==1 or temp is not None):
             assignment = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Assignments').get()
-            return render_template('assignments.html',name=session['name'],assignment=assignment)
+            
+            yes_assignment = []
+            # Returning only the assignments which have status yes
+            for i in assignment:
+                if(i["status"]=="yes"):
+                    yes_assignment.append(i)
+                    
+            return render_template('assignments.html',name=session['name'],assignment=yes_assignment)
         else:
             return redirect(url_for('moodle'))
     
-# Assignments page for Moodle
+# Resync Assignments page for Moodle
 @app.route('/moodleresync', methods=['GET', 'POST'])
 def moodleresync():
     if(session['loggedin']==0):
@@ -714,6 +823,8 @@ def moodleresync():
         moodle_password = key
         sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
         due_items = get_dashboard_json(sess, sess_key)
+        
+        assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
 
         all_assignments = []
 
@@ -723,6 +834,17 @@ def moodleresync():
             temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
             temp["time"] = temp_time
             all_assignments.append(temp)
+            
+        yes_assignments = []
+            
+        for i in all_assignments:
+            for j in assignment:
+                if(i["course"]==j["course"] and i["time"]==j["time"] and j["status"]=="yes"):
+                    i["status"]="yes"
+                    yes_assignments.append(i)
+                elif(i["course"]==j["course"] and i["time"]==j["time"] and j["status"]=="no"):
+                    i["status"]="no"
+                    yes_assignments.append(i)
         
         # Processing password before storing
         api_gen = moodle_password
@@ -739,12 +861,12 @@ def moodleresync():
             session['id']: {
                 'Username': moodle_username,
                 'Password': token,
-                'Assignments': all_assignments   
+                'Assignments': yes_assignments   
             }
         })
         assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
 
-        return render_template('assignments.html',name=session['name'],assignment=assignment)
+        return redirect(url_for('assignments'))
             
 """---------------------------------------------------------------
 
