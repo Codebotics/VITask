@@ -401,6 +401,8 @@ def moodleapi():
         moodle_password = request.args.get('password')
         sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
         due_items = get_dashboard_json(sess, sess_key)
+        
+        ref = db.reference('vitask')
 
         all_assignments = []
 
@@ -409,9 +411,33 @@ def moodleapi():
             temp["course"] = item["course"]["fullname"]
             temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
             temp["time"] = temp_time
-            # Assignment Status to check whether it's actual or not,yes for actual and no for not.
-            temp["status"] = "yes"
             all_assignments.append(temp)
+            
+        assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
+        
+        yes_assignments = []
+        
+        if(assignment is not None):
+            for i in all_assignments:
+                for j in assignment:
+                    if(i["course"]==j["course"] and i["time"]==j["time"] and j["status"]=="yes"):
+                        i["status"]="yes"
+                        yes_assignments.append(i)
+                    elif(i["course"]==j["course"] and i["time"]==j["time"] and j["status"]=="no"):
+                        i["status"]="no"
+                        yes_assignments.append(i)
+                        
+        elif(assignment is None):
+            for item in due_items:
+                temp={}
+                temp["course"] = item["course"]["fullname"]
+                temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+                temp["time"] = temp_time
+                
+                # Assignment Status to check whether it's actual or not,yes for actual and no for not.
+                temp["status"] = "yes"
+                yes_assignments.append(temp)
+            
 
         # Processing password before storing
         api_gen = moodle_password
@@ -419,21 +445,74 @@ def moodleapi():
         temptoken = base64.b64encode(api_token)
         token = temptoken.decode('ascii')
 
-
-        ref = db.reference('vitask')
         tut_ref = ref.child("moodle")
         new_ref = tut_ref.child("moodle-"+session['id'])
         new_ref.set({
             session['id']: {
                 'Username': moodle_username,
                 'Password': token,
-                'Assignments': all_assignments   
+                'Assignments': yes_assignments   
             }
         })
         assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
         return jsonify({'Assignments': assignment})
-        
+    
 
+# Update Moodle API assignment status.The course and time parameters should be joined via delimiter ~ while sending the request
+@app.route('/updatemoodleapi')
+def updatemoodleapi():
+    ref = db.reference('vitask')
+    user_token = request.args.get('token')
+    course_ini = request.args.get('course')
+    time_ini = request.args.get('time')
+    status = request.args.get('status')
+    
+    course = " ".join(course_ini.split("~"))
+    time = " ".join(time_ini.split("~")) 
+    
+    
+    if(user_token is not None and course_ini is not None and time_ini is not None and status is not None):
+        # Decoding API token
+        temptoken = user_token.encode('ascii')
+        try:
+            appno = base64.b64decode(temptoken)
+        except:
+            return jsonify({'Error': 'Invalid API Token.'})
+        key = appno.decode('ascii')
+
+        temp = ref.child("moodle").child('moodle-'+key).child(key).child('Username').get()
+        
+        
+        if(temp is not None):
+            session['id'] = key
+            assignment = ref.child("moodle").child('moodle-'+session['id']).child(key).child('Assignments').get()
+            moodle_username = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Username').get()
+            pass_token = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Password').get()
+            
+            if(status!="yes" and status!="no"):
+                status = "yes"
+
+            for i in assignment:
+                if(i["course"] == course and i["time"] == time):
+                    i["status"] = status
+
+            tut_ref = ref.child("moodle")
+            new_ref = tut_ref.child("moodle-"+session['id'])
+            new_ref.set({
+                session['id']: {
+                    'Username': moodle_username,
+                    'Password': pass_token,
+                    'Assignments': assignment  
+                }
+            })
+
+            return jsonify({'Assignments': assignment})
+        
+        else:
+            return jsonify({'Error': 'Invalid API Token.'})
+    else:
+        return jsonify({'Error': 'Please Enter all the parameters.'})
+        
 """---------------------------------------------------------------
                     VITask API code ends here
 ------------------------------------------------------------------"""
