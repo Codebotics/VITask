@@ -30,6 +30,10 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
 }
 
+def timeconverter(hours,mins):
+    time = hours*60+mins
+    return time
+
 def generate_session(username, password):
     """
     This function generates a session with VTOP. Solves captcha and returns Session object
@@ -220,6 +224,23 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
             # Replaced Code with much shorter code
             days[arr[0]].append(p)
             p = []
+            
+    l1 = []
+    l2 = []
+            
+    for i in days:
+        for j in days[i]:
+            temp = j["startTime"].split(":")
+            hours = int(temp[0])
+            mins = int(temp[1])
+            final = timeconverter(hours,mins)
+            if(final>=360 and final<=780):
+                l2.append(j)
+            else:
+                l1.append(j)
+        days[i]=l2+l1
+        l1 = []
+        l2 = []
             
     ref = db.reference('vitask')
     tut_ref = ref.child("timetable")
