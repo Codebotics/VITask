@@ -36,7 +36,7 @@ def generate_session(username, password):
     """
     
     sess = requests.Session()
-    # VTOP also not secure, y u do dis ,, yy ??
+    # VTOP also not secure
     sess.get(VTOP_BASE_URL,headers = headers, verify= False)
     login_html = sess.post(VTOP_LOGIN,headers = headers, verify= False).text
     alt_index = login_html.find('src="data:image/png;base64,')
@@ -51,10 +51,23 @@ def generate_session(username, password):
     }
     post_login_html = sess.post("http://vtopcc.vit.ac.in:8080/vtop/doLogin", data=payload, headers=headers, verify=False).text
     
-    if "Invalid User Id / Password" in post_login_html:
-        raise ValueError("Invalid Password / Username")
-    else:
-        return sess
+    valid = True
+    
+    try:
+        soup = BeautifulSoup(post_login_html, 'lxml')
+        code_soup = soup.find_all('p', {"class": "box-title text-danger"})
+        try:
+            invalid = code_soup[0].getText()
+        except:
+            return (sess, valid)
+    finally:
+        try:
+            if(len(invalid)==27 or len(invalid)==61):
+                sess = False
+                valid = False
+        except:
+            return (sess, valid)
+        return (sess,valid)
 
 def get_attandance(sess, username, id, semesterID="CH2019205"):
     """
@@ -330,7 +343,7 @@ def get_student_profile(sess,username):
     """
     # TODO: Check if still login or not
 
-    # Weird Payload data returns yay,, i stil dont know what this is
+    # Weird Payload data returns yay, i stil dont know what this is
     payload = {
         "verifyMenu" : "true",        
         "winImage" : "undefined",

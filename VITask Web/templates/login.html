@@ -132,6 +132,20 @@
     <div class="container mt--8 pb-5" id="content">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7">
+            
+            {% if(correct==False) %}
+            
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
+                <span class="alert-text"><strong>Sorry!</strong> Invalid Password!</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            {% endif %}
+            
+            
           <div class="card bg-secondary shadow border-0">
             
             <div class="card-body px-lg-5 py-lg-5">
@@ -205,7 +219,7 @@
         function loading(){
             $("#loading").show();
             $("#content").hide(); 
-            $("#progress").html("Authenticating...").fadeIn().delay(3000).fadeOut( function() {
+            $("#progress").html("Authenticating...").fadeIn().delay(6000).fadeOut( function() {
                 $("#progress").html("Almost done...").fadeIn();
                 })
             }

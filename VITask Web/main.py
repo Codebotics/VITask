@@ -36,6 +36,7 @@ from vtop import get_student_profile
 from vtop import get_acadhistory
 from vtop import get_timetable
 from vtop import get_marks
+from multiprocessing import Process
 #For disabling warings this will save msecs..lol
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -133,6 +134,45 @@ def ProfileFunc():
     
     return (name, school, branch, program, regno, appno, email, proctoremail, proctorname, api)
 
+def parallel_timetable(sess, username, id):
+    ref = db.reference('vitask')
+    temp = ref.child("timetable").child('timetable-'+id).child(id).child('Timetable').get()
+    if(temp is None):
+        days = {}
+        days = get_timetable(sess, username, id)
+        session['timetable'] = 1
+    
+def parallel_acadhistory(sess, username, id):
+    ref = db.reference('vitask')
+    temp = ref.child("acadhistory").child('acadhistory-'+id).child(id).child('AcadHistory').get()
+    if(temp is None):
+        acadHistory = {}
+        curriculumDetails = {}
+        grades = get_acadhistory(sess,username,id)
+        acadHistory = grades['AcadHistory']
+        curriculumDetails = grades['CurriculumDetails']
+        session['acadhistory'] = 1
+        
+def parallel_attendance(sess, username, id):
+    attend = {}
+    q = {}
+    attend, q = get_attandance(sess, username, id)
+    session['classes'] = 1
+
+def parallel_marks(sess, username, id):
+    marksDict = {}
+    marksDict = get_marks(sess, username, id)
+    session['marks'] = 1
+    
+def runInParallel(*fns):
+    proc = []
+    for fn in fns:
+        p = Process(target=fn)
+        p.start()
+        proc.append(p)
+    for p in proc:
+        p.join()
+
 
 """---------------------------------------------------------------
                     Functions end here.
@@ -143,7 +183,7 @@ def ProfileFunc():
 ---------------------------------------------------------------"""
 @app.errorhandler(404)
 def page_not_found(error):
-   return render_template('404.html'), 404
+    return render_template('404.html'), 404
 
 """---------------------------------------------------------------
                   Error Pages end here.
@@ -190,55 +230,25 @@ def authenticate():
         username = request.args.get('username').upper()
         password = request.args.get('password')
         try:
-            sess = generate_session(username, password)
+            sess, valid = generate_session(username, password)
         finally:
-            # Profile Fetching
-            try:
-                profile = {}
-                profile = get_student_profile(sess, username)
-                session['id'] = profile['appNo']
-                session['name'] = profile['name']
-                session['reg'] = profile['regNo']
-                session['loggedin'] = 1
-            finally:
-                name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
-                
-                # Timetable Fetching
+            if( valid == False ):
+                return jsonify({'Error': 'Invalid Password.'})
+            else:
                 try:
-                    ref = db.reference('vitask')
-                    temp = ref.child("timetable").child('timetable-'+session['id']).child(session['id']).child('Timetable').get()
-                    if(temp is None):
-                        days = {}
-                        days = get_timetable(sess, username, session['id'])
-                        session['timetable'] = 1
+                    profile = {}
+                    profile = get_student_profile(sess, username)
+                    session['id'] = profile['appNo']
+                    session['name'] = profile['name']
+                    session['reg'] = profile['regNo']
+                    session['loggedin'] = 1
                 finally:
-                    # Attendance Fetching
+                    name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
+                    # Timetable,Attendance,Acadhistory and Marks fetching in parallel
                     try:
-                        attend = {}
-                        q = {}
-                        attend, q = get_attandance(sess, username, session['id'])
-                        session['classes'] = 1
-
+                        runInParallel(parallel_timetable(sess, username, session['id']), parallel_attendance(sess, username, session['id']), parallel_acadhistory(sess, username, session['id']), parallel_marks(sess, username, session['id'])) 
                     finally:
-                        # Academic History Fetching
-                        try:
-                            ref = db.reference('vitask')
-                            temp = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('AcadHistory').get()
-                            if(temp is None):
-                                acadHistory = {}
-                                curriculumDetails = {}
-                                grades = get_acadhistory(sess,username,session['id'])
-                                acadHistory = grades['AcadHistory']
-                                curriculumDetails = grades['CurriculumDetails']
-                                session['acadhistory'] = 1
-                        finally:
-                            # Marks Fetching
-                            try:
-                                marksDict = {}
-                                marksDict = get_marks(sess, username, session['id'])
-                                session['marks'] = 1
-                            finally:
-                                return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
+                        return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
                                 
 
                                 
@@ -536,10 +546,10 @@ def index():
         if(session['loggedin']==1):
             return redirect(url_for('profile'))
         else:
-            return render_template('login.html')
+            return render_template('login.html',correct=True)
     except:
         session['loggedin'] = 0
-        return render_template('login.html')
+        return render_template('login.html',correct=True)
 
 # Web login route(internal don't use for anything on user side)
 @app.route('/signin', methods=['GET', 'POST'])
@@ -554,54 +564,30 @@ def login():
         username = request.form['username'].upper()
         password = request.form['password']
         try:
-            sess = generate_session(username, password)
+            sess, valid = generate_session(username, password)
         finally:
-            # Profile Fetching
-            try:
-                profile = {}
-                profile = get_student_profile(sess, username)
-                session['id'] = profile['appNo']
-                session['name'] = profile['name']
-                session['reg'] = profile['regNo']
-                session['loggedin'] = 1
-            finally:
-                name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
-                # Timetable Fetching
-                try:
-                    ref = db.reference('vitask')
-                    temp = ref.child("timetable").child('timetable-'+session['id']).child(session['id']).child('Timetable').get()
-                    if(temp is None):
-                        days = {}
-                        days = get_timetable(sess, username, session['id'])
-                        session['timetable'] = 1
-                finally:
-                    # Attendance Fetching
-                    try:
-                        attend = {}
-                        q = {}
-                        attend, q = get_attandance(sess, username, session['id'])
-                        session['classes'] = 1
+            if( valid == False ):
+                return render_template('login.html',correct=False)
 
+            else:
+                try:
+                    profile = {}
+                    profile = get_student_profile(sess, username)
+                    session['id'] = profile['appNo']
+                    session['name'] = profile['name']
+                    session['reg'] = profile['regNo']
+                    session['loggedin'] = 1
+                finally:
+                    # Timetable,Attendance,Acadhistory and Marks fetching in parallel
+                    try:
+                        runInParallel(parallel_timetable(sess, username, session['id']), parallel_attendance(sess, username, session['id']), parallel_acadhistory(sess, username, session['id']), parallel_marks(sess, username, session['id'])) 
                     finally:
-                        # Academic History Fetching
-                        try:
-                            ref = db.reference('vitask')
-                            temp = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('AcadHistory').get()
-                            if(temp is None):
-                                acadHistory = {}
-                                curriculumDetails = {}
-                                grades = get_acadhistory(sess,username,session['id'])
-                                acadHistory = grades['AcadHistory']
-                                curriculumDetails = grades['CurriculumDetails']
-                                session['acadhistory'] = 1
-                        finally:
-                            # Marks Fetching
-                            try:
-                                marksDict = {}
-                                marksDict = get_marks(sess, username, session['id'])
-                                session['marks'] = 1
-                            finally:
-                                return redirect(url_for('profile'))
+                        return redirect(url_for('profile'))
+                       
+    else:
+        return redirect(url_for('index'))
+            
+                                    
                                 
                                 
                             
