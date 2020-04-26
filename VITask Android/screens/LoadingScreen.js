@@ -19,7 +19,8 @@ export class LoadingScreen extends Component {
             this.props.navigation.navigate("Dashboard", {
                 profile : this.state.profile,
                 timetable: this.state.timetable,
-                attendance: this.state.attendance
+                attendance: this.state.attendance,
+                moodle : {}
             })
         }
     }

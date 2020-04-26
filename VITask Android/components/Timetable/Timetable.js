@@ -77,7 +77,7 @@ export class Timetable extends Component {
                                 <Text style={{color:"#FFF", textAlign:"center"}}>{this.state.attendance*100}%</Text>
                                 </View>
                             </View>
-                            <Caption style={{color:"#FFF", textAlign:"center"}}>Attended 13 out of 15 classes</Caption>
+                            <Caption style={{color:"#FFF", textAlign:"center"}}>Attended {this.props.attended} out of {this.props.total} classes</Caption>
                         </View>
                     </View>
                 </Card>
