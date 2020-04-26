@@ -11,7 +11,9 @@ export class DashboardScreen extends Component {
         moodle : this.props.route.params.moodle,
         today : this.props.route.params.timetable.Timetable.Thursday,
         dashboard:[],
-        loading : true
+        loading : true,
+        classes:0,
+        labs: 0
     }
     setStateAsync = updater => new Promise(resolve => this.setState(updater, resolve))
     titleCase = (str)=>{
@@ -32,14 +34,15 @@ export class DashboardScreen extends Component {
         // TODO: Change according to day of week
         let today = this.props.route.params.timetable.Timetable.Tuesday
         let attendance = this.props.route.params.attendance
-
+        let classes = 0
+        let labs = 0
         for(let i=0; i< today.length; ++i){
             // Ik this is O(n^2) but it doesn't matter
             // TODO: Combine two labs together
             let subCode = today[i]['code']
             let slot = today[i]['slot']
             let isLab = slot[0] === 'L'
-            console.log(slot[0] === 'L', subCode)
+            
             for(let j=0;j<attendance['Attended'].length;++j){
                 if (attendance['Attended'][j]['code'] === subCode){
                     // Check for Lab and Theory
@@ -48,18 +51,21 @@ export class DashboardScreen extends Component {
                         today[i]['total']= attendance['Attended'][j]['total']
                         today[i]['percentage']= attendance['Attended'][j]['percentage']
                         today[i]['faculty']= this.titleCase(attendance['Attended'][j]['faculty'])
+                        labs = labs+1
                     }
                     else if ((!isLab && attendance['Attended'][j]['type'] === "Embedded Theory") || (subCode[0]==='S' && attendance['Attended'][j]['type']==="Soft Skill")){
                         today[i]['attended'] = attendance['Attended'][j]['attended']
                         today[i]['total']= attendance['Attended'][j]['total']
                         today[i]['percentage']= attendance['Attended'][j]['percentage']
                         today[i]['faculty']= this.titleCase(attendance['Attended'][j]['faculty'])
+                        classes= classes+1
                     }
                 }
             }
             // console.log(today[i])
         }
-        await this.setStateAsync({dashboard:today, loading:false})
+        labs = Number(labs/2)
+        await this.setStateAsync({dashboard:today, loading:false, classes :classes, labs :labs})
     }
 
     async componentDidMount(){
@@ -68,23 +74,26 @@ export class DashboardScreen extends Component {
     }
     render() {
         console.log("Render Called")
-        let moodle 
+        let moodle, moodleLogin
         if (Object.keys(this.state.moodle).length===0){
             //Moodle not login
             // TODO: Add link for Moodle login
+            moodleLogin = false
             moodle = (
                 <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
             ) 
         }
         else{
+            moodleLogin = true
             moodle =(
                 <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Currently 2 assignments are due.</Caption>
             )
         }
         if(this.state.loading){
             return(
-                <View style={{justifyContent:"center"}}>
+                <View style={{justifyContent:"center",backgroundColor:"#081631", alignItems:"center", height:"100%" }}>
                     <ActivityIndicator />
+                    <Caption style={{color:"white"}}>Loading..</Caption>
                 </View>
             )
         }
@@ -104,6 +113,8 @@ export class DashboardScreen extends Component {
                         attended = {this.state.dashboard[i]['attended']}
                         total = {this.state.dashboard[i]['total']}
                         key = {i}
+                        showMoodle = {moodleLogin}
+                        isLab = {this.state.dashboard[i]['slot'][0] === 'L'}
                     />
                 )
             }
@@ -112,7 +123,7 @@ export class DashboardScreen extends Component {
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
                     <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>Thursday</Headline>
-                    <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have 3 classes and 2 labs</Caption>
+                    <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.classes} classes and {this.state.labs} labs</Caption>
                     {moodle}
                     {timetable}
                     

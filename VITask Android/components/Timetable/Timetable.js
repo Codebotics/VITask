@@ -25,7 +25,30 @@ export class Timetable extends Component {
     }
 
     render() {
-        
+        let moodle
+        if(this.props.showMoodle){
+            moodle = (
+                <View style={{paddingVertical: "2%",paddingHorizontal:"7%", justifyContent: "flex-start", flexDirection:"row", alignItems: "center"}}>
+                    <Icon name="assignment" color="#FFF" size={18}/>
+                    <Text style={{fontWeight:"bold", color:"#EEE"}}>  {this.props.assignments}</Text> 
+                </View>
+            )
+        }
+        let lab 
+        if(this.props.isLab){
+            lab = (
+                <View style={{
+                    paddingVertical: "1%",
+                    flexDirection: "row",
+                    justifyContent:"flex-end",
+                    flex:1
+                }}>
+                    <View style={{ paddingVertical: "1%", flexDirection: "row",justifyContent: "flex-start", alignItems: "center"}}>
+                        <Text style={{fontWeight:"bold", color:"#EEE", backgroundColor:"#0068b3", paddingHorizontal:"6%", paddingVertical:"3%", borderRadius:10}}>Lab</Text> 
+                    </View>
+                </View>
+            )
+        }
         return (
             <View style={{marginVertical:"2%"}}>
                 <TouchableRipple>
@@ -50,7 +73,11 @@ export class Timetable extends Component {
                                     <Text style={{fontWeight:"bold", color:"#EEE"}}>  {this.props.time}</Text> 
                                 </View>
                             </View>
-                            
+                            <View style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                flex:1
+                            }}>
                             <View style={{
                                 paddingVertical: "2%",
                                 flexDirection: "row",
@@ -62,10 +89,9 @@ export class Timetable extends Component {
                                     <Text style={{fontWeight:"bold", color:"#EEE"}}>  {this.props.slot}</Text> 
                                 </View>
 
-                                <View style={{paddingVertical: "2%",paddingHorizontal:"7%", justifyContent: "flex-start", flexDirection:"row", alignItems: "center"}}>
-                                    <Icon name="assignment" color="#FFF" size={18}/>
-                                    <Text style={{fontWeight:"bold", color:"#EEE"}}>  {this.props.assignments}</Text> 
-                                </View>
+                                {moodle}
+                            </View>
+                            {lab}
                             </View>
                             </View>
                             
