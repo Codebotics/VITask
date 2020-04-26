@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Image, TouchableWithoutFeedback, TouchableWithoutFeedbackBase } from 'react-native'
+import {View, Image, TouchableWithoutFeedback,ToastAndroid } from 'react-native'
 import {Caption} from 'react-native-paper'
 import * as Animatable from  'react-native-animatable'
 
@@ -15,7 +15,6 @@ export class LoadingScreen extends Component {
     }
     checkAndProceed(){
         if(this.state.process === "Click on above logo to continue."){
-            console.log(this.state)
             this.props.navigation.navigate("Dashboard", {
                 profile : this.state.profile,
                 timetable: this.state.timetable,
@@ -45,6 +44,11 @@ export class LoadingScreen extends Component {
     async componentDidMount(){
         try{
             let api = await this.getAuth(this.props.route.params.username, this.props.route.params.password)
+            if(api.Error){
+            // Error occured and password incorrect
+            ToastAndroid.show("Password/ Registration Number is incorrect", ToastAndroid.LONG)
+            this.props.navigation.navigate("Login", {"Error":"Password"})
+            }
             let greetMsg = `Welcome ${api.Name}.`
             this.setState({
                 token:api.APItoken,

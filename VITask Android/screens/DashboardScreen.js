@@ -62,7 +62,6 @@ export class DashboardScreen extends Component {
                     }
                 }
             }
-            // console.log(today[i])
         }
         labs = Number(labs/2)
         await this.setStateAsync({dashboard:today, loading:false, classes :classes, labs :labs})
@@ -70,10 +69,8 @@ export class DashboardScreen extends Component {
 
     async componentDidMount(){
         await this.combineData()
-        console.log("----")
     }
     render() {
-        console.log("Render Called")
         let moodle, moodleLogin
         if (Object.keys(this.state.moodle).length===0){
             //Moodle not login
@@ -100,7 +97,6 @@ export class DashboardScreen extends Component {
         else{
             let timetable=[]
             for(let i=0;i<this.state.dashboard.length;++i){
-                console.log(this.state.dashboard[i])
                 timetable.push(
                     <Timetable
                         course= {this.state.dashboard[i]['courseName']}
@@ -126,9 +122,6 @@ export class DashboardScreen extends Component {
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.classes} classes and {this.state.labs} labs</Caption>
                     {moodle}
                     {timetable}
-                    
-                    
-
                 </View>
                 <View>
 

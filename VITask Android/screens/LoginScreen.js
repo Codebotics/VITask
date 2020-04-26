@@ -7,7 +7,7 @@ export class LoginScreen extends Component {
     state = {
         text : "",
         password : ""
-    };
+    }
     checkAndProceed(){
         if(this.state.text=== ''){
             ToastAndroid.show("Please Enter Registration Number to proceed", ToastAndroid.SHORT)
@@ -18,6 +18,9 @@ export class LoginScreen extends Component {
         else{
             this.props.navigation.navigate("Loading", {username: this.state.text, password: this.state.password})
         }
+    }
+    componentDidMount(){
+        
     }
     //TODO: Use regex statement for checking registration number
     render() {
