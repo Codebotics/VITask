@@ -1,6 +1,6 @@
-# This file contains all the functions required for VTOP
-# File made for VITask server. Development Version. Also VTOP Sucks
-
+# This file contains all the functions required for VTOP.
+# File made for VITask server. Development Version.
+# Special thanks to Apoorv for initial implementation.
 
 #imports
 import datetime
@@ -14,8 +14,6 @@ import base64
 
 
 #TODO: Make Constants file for storing all the constant URLs
-#TODO: Make Firebase Sync functions
-#TODO: Check whether user is Logged in or not before proceeding
 #TODO: Add a function to get all the courses for user and there details
 
 
@@ -30,6 +28,7 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
 }
 
+# Returns Total Time to sort Timetable.
 def timeconverter(hours,mins):
     time = hours*60+mins
     return time
@@ -91,7 +90,6 @@ def get_attandance(sess, username, id, semesterID="CH2019205"):
     }
     """
     
-    # TODO: Check if still login or not
     payload = {
         "semesterSubId" : semesterID,        # Filled for Winsem
         "authorizedID" : username,
@@ -103,7 +101,7 @@ def get_attandance(sess, username, id, semesterID="CH2019205"):
         raise ValueError("Could not fetch attendance")
     attendance_html = attendance.text
 
-    # Using earlier code from main.py. Thanks to who ever contributed.
+    # Parsing logic by Swapnil.
     soup = BeautifulSoup(attendance_html, 'lxml')
     code_soup = soup.find_all('tr')
     tutorial_code = [i.getText() for i in code_soup]
@@ -157,8 +155,8 @@ def get_attandance(sess, username, id, semesterID="CH2019205"):
 
 def get_timetable(sess, username, id, semesterID="CH2019205"):
     """
-    Return Timetable 
-    format of timetablel : {
+    Returns Timetable 
+    Format of timetable : {
         "Monday": [
             {
                 "slot" : "A1",
@@ -171,7 +169,6 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
         ]
     }
     """
-    # TODO: Check if still login or not
     payload = {
         "semesterSubId" : semesterID,        # Filled for Winsem
         "authorizedID" : username,
@@ -182,10 +179,8 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
     if timetable_sess.status_code !=200:
         raise ValueError("Could not fetch TimeTable")
     timetable_html = timetable_sess.text
-
-    # This code is copied from main.py, I may change some of the code, Thanks to whoever contributed
-    # I didnot named the variables. Please kill me!
-
+    
+    # Parsing logic by Apratim
     soup = BeautifulSoup(timetable_html, 'lxml')
     code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
     list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
@@ -255,7 +250,7 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
 
 def get_acadhistory(sess,username,id):
     """
-    Get Academic History of Student or Grade History, as VTOP likes to call it
+    Returns Academic History of Student or Grade History
     Format is {
         subjects : {
             subjectName : grade
@@ -272,24 +267,18 @@ def get_acadhistory(sess,username,id):
     }
     """
 
-    # TODO: Check if still login or not
-
-    #Finally some change in Payload. VTOP Grow UP you sucker
+    # Payload for Academic History.
     payload = {
-        "verifyMenu" : "true",        # IDK, what is this
+        "verifyMenu" : "true",        
         "winImage" : "undefined",
         "authorizedID": username,
-        "nocache" : "@(new Date().getTime())"   # WTF does it even mean?
+        "nocache" : "@(new Date().getTime())"   
     }
     acad_sess = sess.post(ACADHISTORY, data=payload, headers=headers, verify=False)
     # Check for 200 CODE
     if acad_sess.status_code !=200:
         raise ValueError("Could not fetch Academic History")
     acad_html = acad_sess.text
-
-    # This sucks I dont want to see my acad history, kill me pls!
-    # This code is copied from main.py, I may change some of the code, Thanks to whoever contributed
-    # Special thanks to this guys, he included comments yay!
 
     soup = BeautifulSoup(acad_html, 'lxml')
     # Fetching the last row in academic history which contains the Curriculum Details
@@ -349,8 +338,8 @@ def get_acadhistory(sess,username,id):
 
 def get_student_profile(sess,username):
     """
-    Returns students personal details, maybe useful idk
-    format is {
+    Returns Students Personal Details
+    Format is {
         "name: "Name-OF-Student",
         "branch": "Elecronisdnvvjssvkjnvljdf",
         "program" : "BTECH",
@@ -362,9 +351,7 @@ def get_student_profile(sess,username):
         "proctorName' "Good Guy",
     }
     """
-    # TODO: Check if still login or not
-
-    # Weird Payload data returns yay, i stil dont know what this is
+    # Payload for Profile page.
     payload = {
         "verifyMenu" : "true",        
         "winImage" : "undefined",
@@ -377,8 +364,7 @@ def get_student_profile(sess,username):
         raise ValueError("Could not fetch Profile Details Properly")
     profile_html = profile_sess.text
 
-    # This code is copied from main.py, I may change some of the code, Thanks to whoever contributed
-
+    # Parsing logic by Apratim.
     soup = BeautifulSoup(profile_html, 'lxml')
     code_soup = soup.find_all('td', {'style': lambda s: 'background-color: #f2dede;' in s})
     tutorial_code = [i.getText() for i in code_soup]
@@ -430,8 +416,21 @@ def get_student_profile(sess,username):
     return profile
 
 def get_marks(sess, username, id, semesterID="CH2019205"):
-    # TODO: Check if still login or not
-
+    """
+    Returns Marks of the Student
+    Format is: {
+      "Marks": {
+        "Course 1 Course1 Type": {
+          "Exam-1": "50",
+          "Exam-2": "44"
+        },
+        "Course 2 Course2 Type": {
+          "Exam-1": "39"
+        }
+      }
+    }
+    """
+    # Payload for Marks page.
     payload = {
         "semesterSubId" : semesterID,        # Filled for Winsem
         "authorizedID" : username 
@@ -442,7 +441,7 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
         raise ValueError("Could not fetch Marks Details Properly")
     marks_html = marks_sess.text
     
-    # Thanks to Mayank for the parsing logic,I have modified it accordingly for the new version
+    # Parsing Logic by Mayank.
     soup = BeautifulSoup(marks_html, 'lxml')
     code_soup = soup.findAll("table", {"class": "customTable-level1"})
     code_soup2 = soup.findAll("tr", {"class": "tableContent"})
