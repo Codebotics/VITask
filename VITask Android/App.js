@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { LoadingScreen } from "./screens/LoadingScreen";
-import { LoginScreen } from "./screens/LoginScreen";
+import  LoginScreen  from "./screens/LoginScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { SubjectScreen } from "./screens/SubjectScreen";
 import { MoodleScreen } from "./screens/MoodleScreen";
