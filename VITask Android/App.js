@@ -8,6 +8,10 @@ import { LoadingScreen } from "./screens/LoadingScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { SubjectScreen } from "./screens/SubjectScreen";
+import { MoodleScreen } from "./screens/MoodleScreen";
+import { AboutUsScreen } from "./screens/AboutUsScreen";
+
+
 
 
 const Stack = createStackNavigator();
@@ -21,6 +25,12 @@ function App() {
         </Stack.Screen>
         <Stack.Screen name="Dashboard" options= {{headerShown : false}}>
           {props =><DashboardScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name="About" options= {{headerShown : false}}>
+          {props =><AboutUsScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name="MoodelLogin" options= {{headerShown : false}}>
+          {props =><MoodleScreen {...props} />}
         </Stack.Screen>
         <Stack.Screen name="Subject" options= {{headerShown : false}}>
           {props =><SubjectScreen {...props} />}
