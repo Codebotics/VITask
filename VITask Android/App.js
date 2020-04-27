@@ -4,7 +4,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { LoadingScreen } from "./screens/LoadingScreen";
+import LoadingScreen from "./screens/LoadingScreen";
 import  LoginScreen  from "./screens/LoginScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { SubjectScreen } from "./screens/SubjectScreen";
@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Loading">
       <Stack.Screen name="Loading" options= {{headerShown : false}}>
           {props =><LoadingScreen {...props} />}
         </Stack.Screen>

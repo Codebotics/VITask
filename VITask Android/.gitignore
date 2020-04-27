@@ -57,3 +57,8 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# Personal
+check.js
+timetableapi.json
+classesapi.json

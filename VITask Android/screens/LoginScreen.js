@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { View, StyleSheet, ToastAndroid, Linking, Image,ScrollView } from 'react-native'
-import { Headline,  TextInput, Button, Subheading} from "react-native-paper";
+import { Headline,  TextInput, Button, Subheading, ActivityIndicator} from "react-native-paper";
 import * as Animatable from "react-native-animatable"
-import {connect} from 'react-redux'
-import {loginVTOP} from '../actions/types'
+
 
 class LoginScreen extends Component {
     state = {
@@ -23,9 +22,6 @@ class LoginScreen extends Component {
         else{
             this.props.navigation.navigate("Loading", {username: this.state.text, password: this.state.password})
         }
-    }
-    componentDidMount(){
-        console.log(this.props.login())
     }
     //TODO: Use regex statement for checking registration number
     render() {
@@ -91,21 +87,8 @@ class LoginScreen extends Component {
     }
 }
 
-function mapStateToProps(state){
-    console.log(state)
-    return {
-        state
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-      login: () => {
-        dispatch(loginVTOP('17BEC1162', 'tempPass123@'))
-      }
-    }
-  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)
+export default LoginScreen
 
 const styles = StyleSheet.create({
     view : {

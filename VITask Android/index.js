@@ -7,7 +7,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import {name as appName} from './app.json';
 import App from './App';
 import {Provider} from 'react-redux'
-import configureStore from "./actions/types";
+import configureStore from "./reducer/reducer";
 
 const store = configureStore()
 
