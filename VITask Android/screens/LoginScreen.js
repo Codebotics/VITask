@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import { View, StyleSheet, ToastAndroid, Linking, Image,ScrollView } from 'react-native'
-import { Headline,  TextInput, Button, Subheading} from "react-native-paper";
+import { Headline,  TextInput, Button, Subheading, ActivityIndicator} from "react-native-paper";
 import * as Animatable from "react-native-animatable"
 
-export class LoginScreen extends Component {
+
+class LoginScreen extends Component {
     state = {
         text : "",
         password : ""
+    }
+    constructor(props){
+        super(props)
     }
     checkAndProceed(){
         if(this.state.text=== ''){
@@ -18,9 +22,6 @@ export class LoginScreen extends Component {
         else{
             this.props.navigation.navigate("Loading", {username: this.state.text, password: this.state.password})
         }
-    }
-    componentDidMount(){
-        
     }
     //TODO: Use regex statement for checking registration number
     render() {
@@ -85,6 +86,7 @@ export class LoginScreen extends Component {
         )
     }
 }
+
 
 export default LoginScreen
 

@@ -2,8 +2,14 @@ import React, { Component } from 'react'
 import {View, Image, TouchableWithoutFeedback,ToastAndroid } from 'react-native'
 import {Caption} from 'react-native-paper'
 import * as Animatable from  'react-native-animatable'
+import {connect} from 'react-redux'
+import {
+    loginVTOP,
+    fetchAttendance,
+    fetchTimetable
+} from '../actions/actions'
 
-export class LoadingScreen extends Component {
+class LoadingScreen extends Component {
     state = {
         text : "Wandering in the dungeons of VTOP",
         token : "",
@@ -41,49 +47,97 @@ export class LoadingScreen extends Component {
         let json = await response.json()
         return json
     }
-    async componentDidMount(){
-        try{
-            let api = await this.getAuth(this.props.route.params.username, this.props.route.params.password)
-            if(api.Error){
-            // Error occured and password incorrect
-            ToastAndroid.show("Password/ Registration Number is incorrect", ToastAndroid.LONG)
-            this.props.navigation.navigate("Login", {"Error":"Password"})
+    // async componentDidMount(){
+    //     try{
+    //         let api = await this.getAuth(this.props.route.params.username, this.props.route.params.password)
+    //         if(api.Error){
+    //         // Error occured and password incorrect
+    //         ToastAndroid.show("Password/ Registration Number is incorrect", ToastAndroid.LONG)
+    //         this.props.navigation.navigate("Login", {"Error":"Password"})
+    //         }
+    //         let greetMsg = `Welcome ${api.Name}.`
+    //         this.setState({
+    //             token:api.APItoken,
+    //             name:api.Name,
+    //             text : greetMsg,
+    //             process:"Getting your Timetable.",
+    //             profile : api
+    //         })
+    //         let timetable = await this.getTimetable()
+    //         this.setState({
+    //             text:"And before we forget...",
+    //             process: "Getting your Attendance",
+    //              timetable: timetable
+    //         })
+    //         let attendance = await this.getAttendance()
+    //         greetMsg = `Welcome ${api.Name}. VITask is at your service`
+    //         // While changing process statement below make sure to change checkAndProceed also
+    //         this.setState({
+    //             text: greetMsg,
+    //             process:"Click on above logo to continue.",
+    //         // While changing process statement below make sure to change checkAndProceed also
+    //             attendance: attendance
+    //         })
+    //         this.logo.stopAnimation()
+    //         this.text.stopAnimation()
+    //         this.process.stopAnimation()
+    //     }
+    //     catch(err){
+    //         this.setState({
+    //             text: "Oops! This was not supposed to happen. ",
+    //             process: "Please check your Internet Connection and try again"
+    //         })
+    //     }
+        
+        
+    // }
+    componentDidMount(){
+        // First call login function
+        // this.props.login('17BEC1162', 'tempPass123@')
+        // console.log(this.props)
+    }
+    componentDidUpdate(){
+        const { state } = this.props
+        if(state.status === "ERROR"){
+            // SOME ERROR OCCURED
+            if(state.error === "Password / Username Incorrect"){
+                ToastAndroid.show("Password/ Registration Number is incorrect", ToastAndroid.LONG)
+                this.props.navigation.navigate("Login", {error: "Password Incorrect"})
             }
-            let greetMsg = `Welcome ${api.Name}.`
+            else {
+                // Connection error or Server Error
+                ToastAndroid.show("Something went wrong", ToastAndroid.SHORT)
+                this.setState({
+                    text: "Oops! This was not supposed to happen. ",
+                    process: "Please check your Internet Connection and try again"
+                })
+                this.logo.stopAnimation()
+                this.text.stopAnimation()
+                this.process.stopAnimation()
+            }
+        }
+        else if (state.status === "VTOP_COMPLETE"){
+            // After authenticating, call the timetable function
+            let greetMsg = `Welcome ${state.userInfo.Name}.`
             this.setState({
-                token:api.APItoken,
-                name:api.Name,
+                name:state.userInfo.Name,
                 text : greetMsg,
                 process:"Getting your Timetable.",
-                profile : api
             })
-            let timetable = await this.getTimetable()
+            this.props.getTimetable()
+        }
+        else if (state.status === "TIMETABLE_COMPLETE"){
+            // Timetable complete, call the attendance api
             this.setState({
                 text:"And before we forget...",
-                process: "Getting your Attendance",
-                 timetable: timetable
+                process: "Getting your Attendance"
             })
-            let attendance = await this.getAttendance()
-            greetMsg = `Welcome ${api.Name}. VITask is at your service`
-            // While changing process statement below make sure to change checkAndProceed also
-            this.setState({
-                text: greetMsg,
-                process:"Click on above logo to continue.",
-            // While changing process statement below make sure to change checkAndProceed also
-                attendance: attendance
-            })
-            this.logo.stopAnimation()
-            this.text.stopAnimation()
-            this.process.stopAnimation()
+            this.props.getAttendance()
         }
-        catch(err){
-            this.setState({
-                text: "Oops! This was not supposed to happen. ",
-                process: "Please check your Internet Connection and try again"
-            })
+        else if (state.status === "ATTENDANCE_COMPLETE"){
+            // Attendance complete call the reformat api
+            
         }
-        
-        
     }
     render() {
         let image = (
@@ -163,4 +217,24 @@ export class LoadingScreen extends Component {
     }
 }
 
-export default LoadingScreen
+function mapStateToProps(state){
+    return {
+        state: state.reducer
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+      login: (username, password) => {
+        dispatch(loginVTOP(username, password))
+      },
+      getAttendance: ()=>{
+          dispatch(fetchAttendance())
+      },
+      getTimetable: ()=>{
+          dispatch(fetchTimetable())
+      }
+    }
+  }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingScreen)
