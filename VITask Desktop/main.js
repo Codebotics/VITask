@@ -11,6 +11,8 @@ app.on('ready',function(){
     createMainWindow();
 });
 
+
+
 function createMainWindow()
 {
     mainWindow = new BrowserWindow({
@@ -22,7 +24,8 @@ function createMainWindow()
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
+        icon: __dirname + '/icons/png/256x256.png'
     }));
     //Quit app when closed
     mainWindow.on('closed',function(){
@@ -36,27 +39,6 @@ function createMainWindow()
 
 
 
-//Add Window
-function createAddWindow(){
-    addWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
-        title: 'Add Shopping List Item',
-        webPreferences: {
-            nodeIntegration: true
-        }
-    });
-    addWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'addWindow.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-    //Garbage Collection Handle
-    addWindow.on('click',function(){
-        addWindow = null;
-    });
-};
-
 function createDashboard(){
     dashWindow = new BrowserWindow({
         webPreferences: {
@@ -67,10 +49,11 @@ function createDashboard(){
     dashWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'dashboard.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
+        icon: __dirname + '/icons/png/256x256.png'
     }));
     dashWindow.on('closed',function(){
-        app.quit();
+        dashWindow = null;
     });
     
 };
@@ -81,6 +64,12 @@ ipcMain.on('login:new',function(e,item){
     console.log(item);
     createDashboard();
     dashWindow.webContents.send('login:new',item);
+});
+
+//catch logout:new
+ipcMain.on('logout:new',function(e,item){
+    console.log(item);
+    createMainWindow();
 });
 
 //catch resync:new
@@ -101,12 +90,6 @@ ipcMain.on('resync:details',function(e,item){
     dashWindow.webContents.send('resync:details',item);
 });
 
-//catch item:add
-ipcMain.on('item:add',function(e,item){
-    console.log(item);
-    mainWindow.webContents.send('item:add',item);
-    addWindow.close();
-});
 
 //create menu template
 const mainMenuTemplate = [

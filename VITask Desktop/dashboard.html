@@ -128,8 +128,8 @@
               <p>Attendance</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./typography.html">
+          <li class="nav-item " id="marksnav">
+            <a class="nav-link" onclick="marks();">
               <i class="material-icons">school</i>
               <p>Marks</p>
             </a>
@@ -222,6 +222,7 @@
                     {
                         $("#dashnav").attr('class', 'nav-item active ');
                         $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Dashboard");
@@ -319,6 +320,7 @@
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item active ');
+                        $("#marksnav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Academic History");
@@ -458,7 +460,95 @@
                                                         </div>
                                                       </div>`
                             
-                            $("#canvas").html(finalcontent)
+                            $("#canvas").html(finalcontent);
+                        });
+                    }
+                        
+                else if(item=='marks')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item active ');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Marks");
+                        data.findOne({ marks: 'user-marks' }, function(err, doc) {
+                            let marks = doc.Marks;
+                            let content = ``;
+                            let course;
+                            let exam;
+                            let finalcontent = ``;
+                            let tempcourse;
+                            let type1;
+                            let type2;
+                            let type;
+                            for(course in marks)
+                                {
+                                    let temp = marks[course];
+                                    for(exam in temp)
+                                        {
+                                            content += `<tr>
+                                                          <td>
+                                                          </td>
+                                                          <td>
+                                                              <b>${exam}</b>
+                                                          </td>
+                                                          <td>
+
+                                                          </td>
+                                                          <td>
+                                                          </td>
+                                                          <td class="text-success">
+                                                              <b>${temp[exam]}</b>
+                                                          </td>
+                                                        </tr>`
+                                        }
+                                    
+                                    tempcourse = course.split(" ");
+                                    type1 = tempcourse.pop();
+                                    type2 = tempcourse.pop();
+                                    type = type2 + " " + type1;
+                                    course = tempcourse.join(' ');
+                                    
+                                    finalcontent += `<div class="row">
+                                                    <div class="col-md-12">
+                                                      <div class="card">
+                                                        <div class="card-header card-header-danger">
+                                                          <h4 class="card-title ">${course}-${type}</h4>
+                                                          <p class="card-category"> Your Marks in ${course}-${type}</p>
+                                                        </div>
+                                                        <div class="card-body">
+                                                          <div class="table-responsive">
+                                                            <table class="table">
+                                                              <thead class=" text-primary">
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                  Exam
+                                                                </th>
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                  Marks
+                                                                </th> 
+                                                              </thead>
+                                                              <tbody>`
+                                                             + content +
+                                                              `</tbody>
+                                                            </table>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                <br>`
+                                    
+                                    content = ``;
+                                    $("#canvas").html(finalcontent);
+                                    
+                                }
                         });
                         
                     }
@@ -466,6 +556,7 @@
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item active ');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Resync");
@@ -479,6 +570,7 @@
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item active ');
+                        $("#marksnav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item active ');
                         $("#topheading").html("Logout");
@@ -500,6 +592,10 @@
             function dashboard(){
                 ipcRenderer.send('page:change','dashboard');
             }
+        
+            function marks(){
+                ipcRenderer.send('page:change','marks');
+            }
                 
             function resync(){
                 data.findOne({ profile: 'user-profile' }, function(err, doc) {
@@ -515,6 +611,7 @@
             function logout()
             {
                 ipcRenderer.send('page:change','logout');
+                ipcRenderer.send('logout:new','logging out');
             }
             
             function complete_logout()
@@ -524,6 +621,8 @@
                     console.error(err)
                     return
                   }
+                var window = remote.getCurrentWindow();
+                window.close();
                 });
             }
         
