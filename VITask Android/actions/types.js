@@ -14,6 +14,12 @@ export const FETCH_ATTENDANCE_SUCCESS = "FETCH_ATTENDANCE_SUCCESS"
 export const FETCH_ATTENDANCE_ERROR = "FETCH_ATTENDANCE_ERROR"
 export const SYNC_ATTENDANCE = 'SYNC_ATTENDANCE'
 
+// These are only for using developement purpose to save api calls, instead api calls are done to dummy server
+export const DEV_LOAD_ATTENDANCE = "DEV_LOAD_ATTENDANCE"
+export const DEV_LOAD_PROFILE = "DEV_LOAD_PROFILE"
+export const DEV_LOAD_TIMETABLE = "DEV_LOAD_TIMETABLE"
+
+
 // Formatting data, only called first time
 export const REFORMAT_DATA = "REFORMAT_DATA"
 // Will be called after Logging into Moodle

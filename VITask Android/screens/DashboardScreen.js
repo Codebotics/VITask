@@ -68,7 +68,7 @@ export class DashboardScreen extends Component {
     }
 
     async componentDidMount(){
-        await this.combineData()
+        // await this.combineData()
     }
     render() {
         let moodle, moodleLogin
