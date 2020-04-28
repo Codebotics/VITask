@@ -77,8 +77,6 @@ class LoadingScreen extends Component {
                 this.props.reformat()
             }
             else if (state.status === "FORMAT_COMPLETE"){
-            console.log(state.coursesInfo)
-            console.log(state.timetable)
             let greetMsg = `Welcome ${state.userInfo.Name}. VITask is at your service`
             this.setState({
                 text:greetMsg,
