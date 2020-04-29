@@ -568,6 +568,11 @@ def timetableapi():
 def home():
     return render_template('home.html')
 
+# Team Page
+@app.route('/ourteam' , methods=['GET'])
+def ourteam():
+    return render_template('team.html')
+
 # Login path for VITask Web app
 @app.route('/login', methods=['GET', 'POST'])
 def index():
