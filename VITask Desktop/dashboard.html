@@ -140,8 +140,8 @@
               <p>Moodle</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./map.html">
+          <li class="nav-item " id="timetablenav">
+            <a class="nav-link" onclick="timetable();">
               <i class="material-icons">date_range</i>
               <p>Timetable</p>
             </a>
@@ -223,6 +223,7 @@
                         $("#dashnav").attr('class', 'nav-item active ');
                         $("#acadnav").attr('class', 'nav-item');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Dashboard");
@@ -321,6 +322,7 @@
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item active ');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Academic History");
@@ -469,6 +471,7 @@
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item');
                         $("#marksnav").attr('class', 'nav-item active ');
+                        $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Marks");
@@ -552,11 +555,329 @@
                         });
                         
                     }
+                else if(item=='timetable')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item active ');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Timetable");
+                        
+                        data.findOne({ tt: 'user-timetable' }, function(err, doc) {
+                            let tt = doc.Timetable;
+                            let content = ``;
+                            let day;
+                            let template = `<div class="row">
+                                                <div class="col-lg-12 col-md-12">
+                                                  <div class="card">
+                                                    <div class="card-header card-header-tabs card-header-danger">
+                                                      <div class="nav-tabs-navigation">
+                                                        <div class="nav-tabs-wrapper">
+
+                                                          <ul class="nav nav-tabs" data-tabs="tabs">
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#monday" data-toggle="tab" id="mon">
+                                                                <i class="material-icons">waves</i> Monday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#tuesday" data-toggle="tab" id="tue">
+                                                                <i class="material-icons">graphic_eq</i> Tuesday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#wednesday" data-toggle="tab" id="wed">
+                                                                <i class="material-icons">bar_chart</i> Wednesday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#thursday" data-toggle="tab" id="thu">
+                                                                <i class="material-icons">show_chart</i> Thursday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#friday" data-toggle="tab" id="fri">
+                                                                <i class="material-icons">gesture</i> Friday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                          </ul>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="tab-content">`;
+                            for(day in tt)
+                                {
+                                    let temp = day;
+                                    let subject;
+                                    let tempcontent = ``;
+                                    if (temp=="Monday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane active" id="monday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                            
+                                        }
+                                    else if (temp=="Tuesday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="tuesday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+                                    else if (temp=="Wednesday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="wednesday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+                                    else if (temp=="Thursday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="thursday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+                                    else if (temp=="Friday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="friday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+  
+                                }
+                            template += content + `</div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>`;
+                            $("#canvas").html(template);
+                            let date = new Date();
+                            let dayno = date.getDay();
+                            if(dayno==1)
+                                {
+                                    $("#mon").attr('class', 'nav-link active');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==2)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==3)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link active');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==4)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link active');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==5)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link active');
+                                }
+                            else
+                                {
+                                    $("#mon").attr('class', 'nav-link active');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+
+                            
+                            
+                        });
+                    }
                 else if(item=='resync')
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item active ');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Resync");
@@ -571,6 +892,7 @@
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item active ');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item active ');
                         $("#topheading").html("Logout");
@@ -583,18 +905,21 @@
                 $("#loading").fadeOut(); 
             })
                            
-            
+
+            function dashboard(){
+                ipcRenderer.send('page:change','dashboard');
+            }
         
             function academics(){
                 ipcRenderer.send('page:change','academics');
             }
         
-            function dashboard(){
-                ipcRenderer.send('page:change','dashboard');
-            }
-        
             function marks(){
                 ipcRenderer.send('page:change','marks');
+            }
+        
+            function timetable(){
+                ipcRenderer.send('page:change','timetable');
             }
                 
             function resync(){
