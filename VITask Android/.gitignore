@@ -62,3 +62,4 @@ buck-out/
 check.js
 timetableapi.json
 classesapi.json
+authenticate.json
