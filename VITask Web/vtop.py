@@ -1,6 +1,9 @@
 # This file contains all the functions required for VTOP.
 # File made for VITask server. Development Version.
 # Special thanks to Apoorv for initial implementation.
+# Thanks to whoever spelled my name correct.
+# Also, you can use Cherub or Uragirii as I prefer these
+# usernames. Anyways thanks
 
 #imports
 import datetime
@@ -421,11 +424,12 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
     Format is: {
       "Marks": {
         "Course 1 Course1 Type": {
-          "Exam-1": "50",
-          "Exam-2": "44"
-        },
-        "Course 2 Course2 Type": {
-          "Exam-1": "39"
+          "Exam-1": {
+              "max" : 50 //Maximum marks possible in the exam
+              "weighatagePercentage" : 15, // % Weightage of this exam
+              "scored" : -45   // Actual marks scored, yeah i get -45 marks
+              "weightage" : -12.4 // Actual weightage we get
+          }
         }
       }
     }
@@ -461,20 +465,28 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
         temp = i.findAll("tr", {"class": "tableContent-level1"})
         for j in temp:
             hold = j.findAll("td")
-            temp_dict[hold[1].getText()] = hold[5].getText()
+            temp_dict[hold[1].getText()] = {
+                "max" : hold[2].getText(),
+                "weightagePercentage" : hold[3].getText(),
+                "scored" : hold[5].getText(),
+                "weightage" : hold[6].getText()
+            } 
         hold_array.append(temp_dict)
         temp_dict = {}
         
     marksDict = {}
     for i in range(0,len(courses)):
         marksDict[courses[i]] = hold_array[i]
-        
-    ref = db.reference('vitask')
-    tut_ref = ref.child('marks')
-    new_ref = tut_ref.child('marks-'+id)
-    new_ref.set({
-        id: {
-            'Marks': marksDict
-        }
-    })
-    return marksDict
+    print(marksDict)
+    # ref = db.reference('vitask')
+    # tut_ref = ref.child('marks')
+    # new_ref = tut_ref.child('marks-'+id)
+    # new_ref.set({
+    #     id: {
+    #         'Marks': marksDict
+    #     }
+    # })
+    # return marksDict
+
+sess,_ = generate_session("17BEC1162", input("Enter password: "))
+get_marks(sess, "17BEC1162", 1)
