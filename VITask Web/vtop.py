@@ -477,16 +477,13 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
     marksDict = {}
     for i in range(0,len(courses)):
         marksDict[courses[i]] = hold_array[i]
-    print(marksDict)
-    # ref = db.reference('vitask')
-    # tut_ref = ref.child('marks')
-    # new_ref = tut_ref.child('marks-'+id)
-    # new_ref.set({
-    #     id: {
-    #         'Marks': marksDict
-    #     }
-    # })
-    # return marksDict
+    ref = db.reference('vitask')
+    tut_ref = ref.child('marks')
+    new_ref = tut_ref.child('marks-'+id)
+    new_ref.set({
+        id: {
+            'Marks': marksDict
+        }
+    })
+    return marksDict
 
-sess,_ = generate_session("17BEC1162", input("Enter password: "))
-get_marks(sess, "17BEC1162", 1)
