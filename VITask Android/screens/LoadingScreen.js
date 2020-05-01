@@ -29,9 +29,10 @@ class LoadingScreen extends Component {
     handleTextRef = ref => this.text = ref
     handleProcessRef = ref => this.process = ref
     componentDidMount(){
+        console.log(this.props.route.params)
         // First call login function
         // Change the dummy api calls in the ./actions/actions.js
-        this.props.login('FuckYou', 'NotGonnaGiveYou')
+        this.props.login(this.props.route.params.username, this.props.route.params.password)
     }
     componentDidUpdate(prevProps){
         if(prevProps.state.status !== this.props.state.status){
