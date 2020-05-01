@@ -1,9 +1,7 @@
 # This file contains all the functions required for VTOP.
 # File made for VITask server. Development Version.
-# Special thanks to Apoorv for initial implementation.
-# Thanks to whoever spelled my name correct.
-# Also, you can use Cherub or Uragirii as I prefer these
-# usernames. Anyways thanks
+# Special thanks to Cherub for initial implementation.
+
 
 #imports
 import datetime
@@ -219,7 +217,7 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
                 "startTime": arr[1],
                 "endTime" : arr[2]
             }
-            # Replaced Code with much shorter code
+            # Replaced Code with much shorter code (Cherub)
             days[arr[0]].append(p)
             p = []
             
@@ -282,7 +280,8 @@ def get_acadhistory(sess,username,id):
     if acad_sess.status_code !=200:
         raise ValueError("Could not fetch Academic History")
     acad_html = acad_sess.text
-
+    
+    # Parsing logic by Mayank.
     soup = BeautifulSoup(acad_html, 'lxml')
     # Fetching the last row in academic history which contains the Curriculum Details
     code_soup = soup.findAll("tr", {"class": "tableContent"})
@@ -427,7 +426,7 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
           "Exam-1": {
               "max" : 50 //Maximum marks possible in the exam
               "weighatagePercentage" : 15, // % Weightage of this exam
-              "scored" : -45   // Actual marks scored, yeah i get -45 marks
+              "scored" : -45   // Actual marks scored, yeah I get -45 marks
               "weightage" : -12.4 // Actual weightage we get
           }
         }
@@ -445,7 +444,7 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
         raise ValueError("Could not fetch Marks Details Properly")
     marks_html = marks_sess.text
     
-    # Parsing Logic by Mayank.
+    # Parsing Logic by Mayank (modified by Apratim and Cherub).
     soup = BeautifulSoup(marks_html, 'lxml')
     code_soup = soup.findAll("table", {"class": "customTable-level1"})
     code_soup2 = soup.findAll("tr", {"class": "tableContent"})
