@@ -544,6 +544,11 @@ def home():
 def ourteam():
     return render_template('team.html')
 
+# Sitemap
+@app.route('/sitemap.xml' , methods=['GET'])
+def sitemap():
+    return render_template('sitemap.xml')
+
 # Login path for VITask Web app
 @app.route('/login', methods=['GET', 'POST'])
 def index():
