@@ -9,8 +9,9 @@ import  LoginScreen  from "./screens/LoginScreen";
 import  DashboardScreen from "./screens/DashboardScreen";
 import { SubjectScreen } from "./screens/SubjectScreen";
 import { MoodleScreen } from "./screens/MoodleScreen";
+import CourseScreen from './screens/CourseScreen'
 import { AboutUsScreen } from "./screens/AboutUsScreen";
-
+import GpaCalculator from './screens/GpaCalculator'
 
 
 
@@ -20,6 +21,12 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="GpaCalculator" options= {{headerShown : false}}>
+          {props =><GpaCalculator {...props} />}
+        </Stack.Screen>        
+      <Stack.Screen name="Courses" options= {{headerShown : false}}>
+          {props =><CourseScreen {...props} />}
+        </Stack.Screen>
       <Stack.Screen name="Loading" options= {{headerShown : false}}>
           {props =><LoadingScreen {...props} />}
         </Stack.Screen>

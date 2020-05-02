@@ -7,7 +7,8 @@ import {
     loginVTOP,
     fetchAttendance,
     fetchTimetable,
-    reformatData
+    reformatData,
+    fetchMarks
 } from '../actions/actions'
 
 class LoadingScreen extends Component {
@@ -68,6 +69,7 @@ class LoadingScreen extends Component {
             else if (state.status === "TIMETABLE_COMPLETE" && this.state.process !== "Getting your Attendances"){
                 // Timetable complete, call the attendance api
                 this.props.getAttendance()
+                this.props.getMarks()
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"
@@ -179,6 +181,9 @@ const mapDispatchToProps = (dispatch) => {
       },
       getTimetable: ()=>{
           dispatch(fetchTimetable())
+      },
+      getMarks:()=>{
+        dispatch(fetchMarks())
       },
       reformat: ()=>{
           dispatch(reformatData())

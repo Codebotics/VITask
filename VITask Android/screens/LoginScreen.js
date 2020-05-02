@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, ToastAndroid, Linking, Image,ScrollView } from 'react-native'
+import { View, StyleSheet, ToastAndroid, Linking, Image,ScrollView,AsyncStorage } from 'react-native'
 import { Headline,  TextInput, Button, Subheading, ActivityIndicator} from "react-native-paper";
 import * as Animatable from "react-native-animatable"
 
@@ -12,6 +12,47 @@ class LoginScreen extends Component {
     constructor(props){
         super(props)
     }
+    _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem('VITask_user');
+          console.log(value)
+          const user_obj = JSON.parse(value)
+          if (user_obj.status == 1) {
+            this.props.navigation.navigate("Loading", {username: user_obj.regno, password: user_obj.password})
+
+          }
+        //   else{
+//else for splash Screen
+        //   }
+        } catch (error) {
+             console.log(error)
+        }
+      }
+
+    UNSAFE_componentWillMount(){
+        console.log('inside Component will mount of Login')
+
+          this._retrieveData();
+    }
+    _storeData = async (reg , pass , status) => {
+        let user_obj = {
+          regno : reg ,
+          password : pass,
+          status : status
+        }
+        console.log("Storing data in ASYNC")
+        try {
+          await AsyncStorage.setItem('VITask_user', JSON.stringify(user_obj));
+        } catch (error) {
+          // Error saving data
+          console.log(error)
+          await AsyncStorage.setItem('VITask_user', JSOn.stringify({
+            email : '',
+            password :'',
+            status : 0
+          }))
+        }
+      };
     checkAndProceed(){
         if(this.state.text=== ''){
             ToastAndroid.show("Please Enter Registration Number to proceed", ToastAndroid.SHORT)
@@ -20,6 +61,7 @@ class LoginScreen extends Component {
             ToastAndroid.show("Please Enter Password to proceed", ToastAndroid.SHORT)
         }
         else{
+            this._storeData(this.state.text,this.state.password,1)
             this.props.navigation.navigate("Loading", {username: this.state.text, password: this.state.password})
         }
     }
