@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
   <!-- CSS Files -->
   <link href="dashboard/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <!-- CSS Just for demo purpose, don't include it in your project background-color:#3C4858-->
   <link href="dashboard/assets/demo/demo.css" rel="stylesheet" />
     <style>
     #loading {
@@ -30,6 +30,302 @@
     width: 120px; 
     }
     </style>
+
+    <style>
+      /* 
+    ================================
+        Best Viewed In Full Page
+    ================================
+*/
+
+/* Hover over a card to flip, can tab too. */
+
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+/* default */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+}
+
+/* body */
+
+
+/* .flip-card-container */
+.flip-card-container {
+  --hue: 150;
+  --primary: #ffffff;
+  --white-1:#ffffff;
+  --white-2:ffffff;
+  --dark: #ffffff;
+  --grey: #ffffff;
+
+  width: 235px;
+  height: 290px;
+  margin: 8px;
+
+  perspective: 300px;
+}
+
+/* .flip-card */
+.flip-card {
+  width: inherit;
+  height: inherit;
+
+  position: relative;
+  transform-style: preserve-3d;
+  transition: .6s .1s;
+}
+
+/* hover and focus-within states */
+.flip-card-container:hover .flip-card,
+.flip-card-container:focus-within .flip-card {
+  transform: rotateY(180deg);
+}
+
+/* .card-... */
+.card-front,
+.card-back {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+
+  background: var(--dark);
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+
+  backface-visibility: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .card-front */
+.card-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+/* .card-back */
+.card-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+/* figure */
+
+
+.card-front .img-bg {
+  clip-path: polygon(0 20%, 100% 40%, 100% 100%, 0 100%);
+}
+
+.card-front .img-bg::before {
+  content: "";
+
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(18deg);
+
+  width: 100%;
+  height: 6px;
+  border: 1px solid var(--primary);
+  border-left-color: transparent;
+  border-right-color: transparent;
+
+  transition: .1s;
+}
+
+.card-back .img-bg {
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 60%);
+}
+
+/* hover state */
+.flip-card-container:hover .card-front .img-bg::before {
+  width: 6px;
+  border-left-color: var(--primary);
+  border-right-color: var(--primary);
+}
+
+/* ul */
+
+/* .design-container */
+.design-container {
+  --tr: 90;
+  --op: .5;
+
+  width: 100%;
+  height: 100%;
+
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  pointer-events: none;
+}
+
+/* .design */
+.design {
+  display: block;
+
+  background: var(--grey);
+  position: absolute;
+
+  opacity: var(--op);
+  transition: .3s;
+}
+
+.design--1,
+.design--2,
+.design--3,
+.design--4 {
+  width: 1px;
+  height: 100%;
+}
+
+.design--1,
+.design--2 {
+  top: 0;
+  transform: translateY(calc((var(--tr) - (var(--tr) * 2)) * 1%))
+}
+
+.design--1 {
+  left: 20%;
+}
+
+.design--2 {
+  left: 80%;
+}
+
+.design--3,
+.design--4 {
+  bottom: 0;
+  transform: translateY(calc((var(--tr) + (var(--tr) - var(--tr))) * 1%))
+}
+
+.design--3 {
+  left: 24%;
+}
+
+.design--4 {
+  left: 76%;
+}
+
+.design--5,
+.design--6,
+.design--7,
+.design--8 {
+  width: 100%;
+  height: 1px;
+}
+
+.design--5,
+.design--6 {
+  left: 0;
+  transform: translateX(calc((var(--tr) - (var(--tr) * 2)) * 1%));
+}
+
+.design--5 {
+  top: 41%;
+}
+
+.design--6 {
+  top: 59%;
+}
+
+.design--7,
+.design--8 {
+  right: 0;
+  transform: translateX(calc((var(--tr) + (var(--tr) - var(--tr))) * 1%))
+}
+
+.design--7 {
+  top: 44%;
+}
+
+.design--8 {
+  top: 56%;
+}
+
+/* states */
+button:hover+.design-container,
+button:active+.design-container,
+button:focus+.design-container {
+  --tr: 20;
+  --op: .7;
+}
+
+.abs-site-link {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: hsla(0, 0%, 100%, .6);
+  font-size: 16px;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+    </style>
+
+   
+
+<style>@import url('https://fonts.googleapis.com/css?family=Alice:300,400,600,700&&display=swap');
+
+  /*Required CSS*/
+  svg.radial-progress{height:auto;max-width:150px;padding:0;transform:rotate(-90deg);width:100%;background-image: url(assets/img/bg2.jpg);border-radius:50%;}
+  section.svg-container svg.radial-progress:nth-child(even) {margin: 0 15px;}
+  svg.radial-progress circle{fill:transparent;stroke:#f44336;}
+  svg.radial-progress circle.bar-static{stroke:#ffffff!important;}
+  svg.radial-progress circle.bar--animated{stroke-dasharray:219px;stroke:#f44336;stroke-width:2px;stroke-linecap:round;}
+  svg.radial-progress text{fill:#ffffff;font-family:Roboto;font-size:16px;font-weight:700;text-anchor:middle;text-shadow:0 0 5px #0000007a;}
+  </style>
+
+  <style>.btn1 {
+    position:unset;
+    padding: 5px 15px;
+    margin: 0.3125rem -1px;
+    font-size: .75rem;
+    font-weight: 400;
+    line-height: 1.428571;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0.2rem;
+    outline: 0;
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: box-shadow, transform;
+  }
+  
+  .btn1 {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.46875rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .btn1.btn1-round {
+      border-radius: 30px;
+  }
+  
+  .btn1:not(:disabled):not(.disabled) {
+      cursor: pointer;
+  }
+  </style>
 </head>
 
 <body class="">
@@ -122,8 +418,8 @@
               <p>Academic History</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./tables.html">
+          <li class="nav-item " id="attennav">
+            <a class="nav-link" onclick="attendance()">
               <i class="material-icons">content_paste</i>
               <p>Attendance</p>
             </a>
@@ -203,6 +499,7 @@
       
     </div>
   </div>
+</div>
     <script>
             const electron =  require('electron');
             const Store = require('electron-store');
@@ -222,6 +519,7 @@
                     {
                         $("#dashnav").attr('class', 'nav-item active ');
                         $("#acadnav").attr('class', 'nav-item');
+                        $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
@@ -321,6 +619,7 @@
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item active ');
+                        $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
@@ -465,11 +764,99 @@
                             $("#canvas").html(finalcontent);
                         });
                     }
+
+                    else if(item=='attendance')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $('#attennav').attr('class','nav-item active');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item ');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Attendance");
+                        data.findOne({ classes: 'user-attendance' }, function(err, doc) {
+                          let attendancedict = doc.Attended;
+                          let track = doc.Track;
+                          let content = ``;
+                          let current_course_count = 1;
+                          for (i in attendancedict)
+                          {
+                            let percent =  Object.values(attendancedict[i])[4];
+                            let total = Object.values(attendancedict[i])[5];
+                            let attended = Object.values(attendancedict[i])[0];
+                            let name_of_course = Object.values(attendancedict[i])[2];
+                            let lab_or_theory = Object.values(attendancedict[i])[6];
+                            content+= `
+                            <div class="flip-card-container" style="--hue: 220">
+    <div class="flip-card">
+  
+      <div class="card-front">
+        <div class="card card-profile">                
+                <div class="card-body">
+                                                <section class="svg-container">
+                                                <svg  class="radial-progress" data-countervalue='' viewBox="0 0 80 80">
+                                                    <circle class="bar-static" cx="40" cy="40" r="35"></circle>
+                                                    <circle  class="bar--animated" cx="40" cy="40" style="stroke-dashoffset:${219 - percent*2.2}px" r="35" ></circle>
+                                                    <text  class="countervalue start" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">${percent}%</text>
+                                                </svg>
+
+                                            </section>
+
+                                              <h6 class="card-category text-gray" id="card_regno">${name_of_course}</h6>
+                                              <h4 class="card-title" id="card_name">${lab_or_theory}</h4>
+                                              <p class="card-description" id="card_info">
+                                                Hover for Bunkmeter
+                                              </p>
+                                              </div>
+                                              </div>
+     </div>
+
+     <div class="card-back">
+      <div class="card card-profile">                
+                <div class="card-body">
+                                        
+                                              <section class="svg-container">
+                                                <svg id="currentidnew${current_course_count}" class="radial-progress" data-countervalue='' viewBox="0 0 80 80">
+                                                    <circle class="bar-static" cx="40" cy="40" r="35"></circle>
+                                                    <circle id="currentid${current_course_count}" class="bar--animated" cx="40" cy="40" style="stroke-dashoffset:${219 - percent*2.2}px" r="35" ></circle>
+                                                    <text id="answerid${current_course_count}" class="countervalue start" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">${percent}%</text>
+                                                </svg>
+
+                                            </section>
+
+                                            <h6 class="card-category text-gray" id="card_regno">${name_of_course}</h6>
+                                             
+                                              <h6 class="card-title" id="card_name">Bunk &ensp; &ensp; &ensp; &ensp; &ensp;&ensp; Attend</h6> 
+                                              <p id="nobunk${current_course_count}" onclick="Bunk_subtract(${current_course_count})" value="${percent}" value1="${total}" value2="${attended}" class="btn1 btn1-round bg-danger text-white">-</p> <p id="newid${current_course_count}" onclick="Bunk_add(${current_course_count});" value="${percent}" value1="${total}" value2="${attended}" class="btn1 btn1-round bg-danger text-white">+</p> 
+                                              &nbsp;&nbsp;&nbsp;
+                                              <p id="cancelattend${current_course_count}" onclick="Attend_subtract(${current_course_count})" value="${percent}" value1="${total}" value2="${attended}" class="btn1 btn1-round bg-danger text-white">-</p>    <p id="attend${current_course_count}" onclick="Attend_add(${current_course_count})" value="${percent}" value1="${total}" value2="${attended}" class="btn1 btn1-round bg-danger text-white">+</p>
+                                             </div>
+                                             
+                                            </div>
+                                              </div>
+                                             </div>
+                                             </div>
+                                            
+                                        `
+                                        current_course_count++;
+                          }
+                        let finalcontent = `
+                        
+                                                <div class="row">
+                                                `+content+`
+                                                
+                                                  </div>`;
+                          $("#canvas").html(finalcontent);
+                        });
+                        
+                    }
                         
                 else if(item=='marks')
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item');
+                        $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item active ');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
@@ -559,6 +946,7 @@
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item');
+                        $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item active ');
                         $("#resyncnav").attr('class', 'nav-item');
@@ -904,6 +1292,268 @@
             $(document).ready(function() {
                 $("#loading").fadeOut(); 
             })
+        
+        
+            function Bunk_add(id){
+                let select_id = "#newid"+String(id);
+                let noselect_id = "#nobunk"+String(id);
+                let attend_id = "#attend"+String(id);
+                let noattend_id = "#cancelattend"+String(id);
+                let answer_id = "#answerid"+String(id);
+                let current_idnew = "#currentidnew"+String(id);
+                let currentid = "#currentid"+String(id);
+
+                // console.log(select_id);
+                //$(select_id).html("test");
+                
+                let classes_total = $(select_id).attr("value1");
+                let classes_attended = $(select_id).attr("value2");
+
+                ++classes_total;
+
+                let attendance_final = (classes_attended/classes_total)*100;
+                
+                //console.log(attendance_final);
+ 
+                $(select_id).attr("value1",classes_total);
+                $(select_id).attr("value2",classes_attended);
+                $(select_id).val(attendance_final);
+
+
+                $(noselect_id).attr("value1",classes_total);
+                $(noselect_id).attr("value2",classes_attended);
+                $(noselect_id).val(attendance_final);
+                
+
+
+                $(attend_id).attr("value1",classes_total);
+                $(attend_id).attr("value2",classes_attended);
+                $(attend_id).val(attendance_final);
+                
+
+                $(noattend_id).attr("value1",classes_total);
+                $(noattend_id).attr("value2",classes_attended);
+                $(noattend_id).val(attendance_final);
+
+                
+                
+                let ans = Math.round(attendance_final) + '%';
+
+                let stroke = 219 - (attendance_final*2.2);
+                let strokedash = "stroke-dashoffset:"+stroke+"px";
+            
+
+                $(currentid).attr("style",strokedash);
+                console.log(strokedash);
+
+
+                $(current_idnew).attr("data-countervalue",ans);
+
+                $(answer_id).html(ans);
+
+
+                //attendance_final = Math.min(Math.max(parsed, 0), 100)
+
+
+
+                /*document.getElementById("currentid"+i).setAttribute("style","stroke-dashoffset:"+attendance_final/2.93+"px;");
+                document.getElementById("currentid1"+i).setAttribute("data-countervalue",+attendance_final);
+
+                // $("#currentid").hide();
+                // $('#answerid').show();
+
+                console.log(attendance_final*2.93);*/
+            }
+
+
+            function Bunk_subtract(id){
+              let select_id = "#newid"+String(id);
+                let noselect_id = "#nobunk"+String(id);
+                let attend_id = "#attend"+String(id);
+                let noattend_id = "#cancelattend"+String(id);
+                let answer_id = "#answerid"+String(id);
+                let current_idnew = "#currentidnew"+String(id);
+                let currentid = "#currentid"+String(id);
+
+
+                let classes_total = $(select_id).attr("value1");
+                let classes_attended = $(select_id).attr("value2");
+   //if (classes_total > total_fixed)
+   //{
+     --classes_total;
+   //}
+
+   //total_attendance = (classes_attended/classes_total)*100;
+
+//   document.getElementById("nobunk{{q[i]}}").setAttribute("value1",classes_total);
+ //  document.getElementById("nobunk{{q[i]}}").setAttribute("value2",classes_attended);
+ //  document.getElementById("nobunk{{q[i]}}").value = total_attendance;
+ //  document.getElementById("answerid{{q[i]}}").innerHTML = total_attendance;
+        let attendance_final = (classes_attended/classes_total)*100;
+
+    if(attendance_final<=100)
+            {   
+              $(select_id).attr("value1",classes_total);
+                $(select_id).attr("value2",classes_attended);
+                $(select_id).val(attendance_final);
+
+
+                $(noselect_id).attr("value1",classes_total);
+                $(noselect_id).attr("value2",classes_attended);
+                $(noselect_id).val(attendance_final);
+                
+
+
+                $(attend_id).attr("value1",classes_total);
+                $(attend_id).attr("value2",classes_attended);
+                $(attend_id).val(attendance_final);
+                
+
+                $(noattend_id).attr("value1",classes_total);
+                $(noattend_id).attr("value2",classes_attended);
+                $(noattend_id).val(attendance_final);
+
+                
+                
+                let ans = Math.round(attendance_final) + '%';
+
+                let stroke = 219 - (attendance_final*2.2);
+                let strokedash = "stroke-dashoffset:"+stroke+"px";
+            
+
+                $(currentid).attr("style",strokedash);
+                console.log(strokedash);
+
+
+                $(current_idnew).attr("data-countervalue",ans);
+
+                $(answer_id).html(ans);
+               
+        
+  
+            }
+        // $("#currentid{{q[i]}}").hide();
+        // $('#answerid{{q[i]}}').show();
+                
+            }
+
+        
+        
+        function Attend_add(id){
+          let select_id = "#newid"+String(id);
+                let noselect_id = "#nobunk"+String(id);
+                let attend_id = "#attend"+String(id);
+                let noattend_id = "#cancelattend"+String(id);
+                let answer_id = "#answerid"+String(id);
+                let current_idnew = "#currentidnew"+String(id);
+                let currentid = "#currentid"+String(id);
+
+                let classes_total = $(select_id).attr("value1");
+                let classes_attended = $(select_id).attr("value2");
+                ++classes_total;
+                ++classes_attended;
+            
+                let attendance_final = (classes_attended/classes_total)*100;
+
+                $(select_id).attr("value1",classes_total);
+                $(select_id).attr("value2",classes_attended);
+                $(select_id).val(attendance_final);
+
+
+                $(noselect_id).attr("value1",classes_total);
+                $(noselect_id).attr("value2",classes_attended);
+                $(noselect_id).val(attendance_final);
+                
+
+
+                $(attend_id).attr("value1",classes_total);
+                $(attend_id).attr("value2",classes_attended);
+                $(attend_id).val(attendance_final);
+                
+
+                $(noattend_id).attr("value1",classes_total);
+                $(noattend_id).attr("value2",classes_attended);
+                $(noattend_id).val(attendance_final);
+
+                
+                
+                let ans = Math.round(attendance_final) + '%';
+
+                let stroke = 219 - (attendance_final*2.2);
+                let strokedash = "stroke-dashoffset:"+stroke+"px";
+            
+
+                $(currentid).attr("style",strokedash);
+                console.log(strokedash);
+
+
+                $(current_idnew).attr("data-countervalue",ans);
+
+                $(answer_id).html(ans);
+       
+}
+
+
+function Attend_subtract(id)
+{
+  let select_id = "#newid"+String(id);
+                let noselect_id = "#nobunk"+String(id);
+                let attend_id = "#attend"+String(id);
+                let noattend_id = "#cancelattend"+String(id);
+                let answer_id = "#answerid"+String(id);
+                let current_idnew = "#currentidnew"+String(id);
+                let currentid = "#currentid"+String(id);
+      
+                let classes_total = $(select_id).attr("value1");
+                let classes_attended = $(select_id).attr("value2");
+
+    --classes_total;
+    --classes_attended;
+
+    let attendance_final = (classes_attended/classes_total)*100;
+                
+ 
+                $(select_id).attr("value1",classes_total);
+                $(select_id).attr("value2",classes_attended);
+                $(select_id).val(attendance_final);
+
+
+                $(noselect_id).attr("value1",classes_total);
+                $(noselect_id).attr("value2",classes_attended);
+                $(noselect_id).val(attendance_final);
+                
+
+
+                $(attend_id).attr("value1",classes_total);
+                $(attend_id).attr("value2",classes_attended);
+                $(attend_id).val(attendance_final);
+                
+
+                $(noattend_id).attr("value1",classes_total);
+                $(noattend_id).attr("value2",classes_attended);
+                $(noattend_id).val(attendance_final);
+
+                
+                
+                let ans = Math.round(attendance_final) + '%';
+
+                let stroke = 219 - (attendance_final*2.2);
+                let strokedash = "stroke-dashoffset:"+stroke+"px";
+            
+
+                $(currentid).attr("style",strokedash);
+                console.log(strokedash);
+
+
+                $(current_idnew).attr("data-countervalue",ans);
+
+                $(answer_id).html(ans);
+
+
+
+}
+//Bunk Meter Ends here.
+
                            
 
             function dashboard(){
@@ -912,6 +1562,10 @@
         
             function academics(){
                 ipcRenderer.send('page:change','academics');
+            }
+
+            function attendance(){
+                ipcRenderer.send('page:change','attendance');
             }
         
             function marks(){
@@ -1270,6 +1924,76 @@
       });
     });
   </script>
+
+<script>
+  function radial_animate() { 
+        $('svg.radial-progress').each(function( index, value ) { 
+
+            $(this).find($('circle.bar--animated')).removeAttr( 'style' );    
+            // Get element in Veiw port
+            var elementTop = $(this).offset().top;
+            var elementBottom = elementTop + $(this).outerHeight();
+            var viewportTop = $(window).scrollTop();
+            var viewportBottom = viewportTop + $(window).height();
+            
+            if(elementBottom > viewportTop && elementTop < viewportBottom) {
+                var percent = $(value).data('countervalue');
+                var radius = $(this).find($('circle.bar--animated')).attr('r');
+                var circumference = 2 * Math.PI * radius;
+                var strokeDashOffset = circumference - ((percent * circumference) / 100);
+                $(this).find($('circle.bar--animated')).animate({'stroke-dashoffset': strokeDashOffset}, 2800);
+            }
+        });
+    }
+// To check If it is in Viewport 
+    var $window = $(window);
+    function check_if_in_view() {    
+        $('.countervalue').each(function(){
+            if ($(this).hasClass('start')){
+                var elementTop = $(this).offset().top;
+                var elementBottom = elementTop + $(this).outerHeight();
+
+                var viewportTop = $(window).scrollTop();
+                var viewportBottom = viewportTop + $(window).height();
+
+                if (elementBottom > viewportTop && elementTop < viewportBottom) {
+                          $(this).removeClass('start');
+                          $('.countervalue').text();
+                          var myNumbers = $(this).text();
+                          if (myNumbers == Math.floor(myNumbers)) {
+                              $(this).animate({
+                                  Counter: $(this).text()
+                              }, {
+                                  duration: 2800,
+                                  easing: 'swing',
+                                  step: function(now) {
+                                      $(this).text(Math.ceil(now)  + '%');                                
+                                  }
+                              });
+                          } else {
+                              $(this).animate({
+                                  Counter: $(this).text()
+                              }, {
+                                  duration: 2800,
+                                  easing: 'swing',
+                                  step: function(now) {                                
+                                      $(this).text(now.toFixed(2)  + '$'); 
+                                  }
+                              });
+                          }
+
+                          radial_animate();
+                      }
+            }
+        });
+    }
+
+    $window.on('scroll', check_if_in_view);
+    $window.on('load', check_if_in_view);
+
+</script>
+
+
     
 </body>
 
