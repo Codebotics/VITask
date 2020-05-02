@@ -6,6 +6,8 @@ certifi==2019.11.28
 cffi==1.13.2
 chardet==3.0.4
 Click==7.0
+distlib==0.3.0
+filelock==3.0.12
 firebase-admin==3.2.1
 Flask==1.1.1
 google-api-core==1.16.0
@@ -25,8 +27,10 @@ Jinja2==2.11.1
 lxml==4.5.0
 MarkupSafe==1.1.1
 msgpack==0.6.2
+multidict==4.7.5
 numpy==1.18.1
 pandas==1.0.0
+Pillow==7.0.0
 protobuf==3.11.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
@@ -40,5 +44,7 @@ six==1.14.0
 soupsieve==1.9.5
 uritemplate==3.0.1
 urllib3==1.25.8
+virtualenv==20.0.15
+websockets==8.1
 Werkzeug==0.16.1
-pillow==7.0.0
+yarl==1.4.2

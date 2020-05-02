@@ -8,56 +8,88 @@ let mainWindow;
 let addWindow;
 
 app.on('ready',function(){
+    createMainWindow();
+});
+
+
+
+function createMainWindow()
+{
     mainWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true
         }
     });
-    mainWindow.maximize();
+    /*mainWindow.maximize();*/
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
+        icon: __dirname + '/icons/png/256x256.png'
     }));
     //Quit app when closed
     mainWindow.on('closed',function(){
-        app.quit();
+        mainWindow = null;
     });
     //Build Menu from template
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     //Insert Menu
     Menu.setApplicationMenu(mainMenu);
-});
+}
 
 
 
-//Add Window
-function createAddWindow(){
-    addWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
-        title: 'Add Shopping List Item',
+function createDashboard(){
+    dashWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true
         }
     });
-    addWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'addWindow.html'),
+    /*dashWindow.maximize();*/
+    dashWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'dashboard.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
+        icon: __dirname + '/icons/png/256x256.png'
     }));
-    //Garbage Collection Handle
-    addWindow.on('click',function(){
-        addWindow = null;
+    dashWindow.on('closed',function(){
+        dashWindow = null;
     });
+    
 };
 
-//catch item:add
-ipcMain.on('item:add',function(e,item){
+
+//catch login:new
+ipcMain.on('login:new',function(e,item){
     console.log(item);
-    mainWindow.webContents.send('item:add',item);
-    addWindow.close();
+    createDashboard();
+    dashWindow.webContents.send('login:new',item);
 });
+
+//catch logout:new
+ipcMain.on('logout:new',function(e,item){
+    console.log(item);
+    createMainWindow();
+});
+
+//catch resync:new
+ipcMain.on('resync:new',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('resync:new',item);
+});
+
+//catch page:change
+ipcMain.on('page:change',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('page:change',item);
+});
+
+//catch resync:details
+ipcMain.on('resync:details',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('resync:details',item);
+});
+
 
 //create menu template
 const mainMenuTemplate = [

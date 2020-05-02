@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="notification_action_color_filter">@color/secondary_text_default_material_light</color>
+    <dimen name="mtrl_calendar_pre_l_text_clip_padding">0dp</dimen>
+    <dimen name="mtrl_exposed_dropdown_menu_popup_vertical_offset">1dp</dimen>
+    <item format="float" name="mtrl_high_ripple_default_alpha" type="dimen">0.48</item>
+    <item format="float" name="mtrl_high_ripple_focused_alpha" type="dimen">0.48</item>
+    <item format="float" name="mtrl_high_ripple_hovered_alpha" type="dimen">0.16</item>
+    <item format="float" name="mtrl_high_ripple_pressed_alpha" type="dimen">0.48</item>
+    <item format="float" name="mtrl_low_ripple_default_alpha" type="dimen">0.24</item>
+    <item format="float" name="mtrl_low_ripple_focused_alpha" type="dimen">0.24</item>
+    <item format="float" name="mtrl_low_ripple_hovered_alpha" type="dimen">0.08</item>
+    <item format="float" name="mtrl_low_ripple_pressed_alpha" type="dimen">0.24</item>
     <dimen name="notification_content_margin_start">0dp</dimen>
     <dimen name="notification_main_column_padding_top">0dp</dimen>
     <dimen name="notification_media_narrow_margin">12dp</dimen>
@@ -65,6 +75,9 @@
     <style name="Base.Theme.AppCompat.Light" parent="Base.V21.Theme.AppCompat.Light"/>
     <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V21.Theme.AppCompat.Light.Dialog"/>
     <style name="Base.ThemeOverlay.AppCompat.Dialog" parent="Base.V21.ThemeOverlay.AppCompat.Dialog"/>
+    <style name="Base.ThemeOverlay.MaterialComponents.Dialog" parent="Base.V14.ThemeOverlay.MaterialComponents.Dialog">
+    <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
+  </style>
     <style name="Base.V21.Theme.AppCompat" parent="Base.V7.Theme.AppCompat">
         <!-- Action Bar styling attributes -->
         <item name="actionBarSize">?android:attr/actionBarSize</item>
@@ -224,6 +237,32 @@
     <style name="Base.Widget.AppCompat.TextView.SpinnerItem" parent="android:Widget.Material.TextView.SpinnerItem"/>
     <style name="Base.Widget.AppCompat.Toolbar.Button.Navigation" parent="android:Widget.Material.Toolbar.Button.Navigation">
     </style>
+    <style name="Base.Widget.MaterialComponents.CheckedTextView" parent="android:Widget.Material.CheckedTextView"/>
+    <style name="Base.Widget.MaterialComponents.PopupMenu.ContextMenu" parent="Widget.AppCompat.PopupMenu">
+    <item name="android:overlapAnchor">true</item>
+  </style>
+    <style name="Base.Widget.MaterialComponents.PopupMenu.ListPopupWindow" parent="Widget.AppCompat.ListPopupWindow">
+      <item name="android:popupBackground">?attr/popupMenuBackground</item>
+      <item name="android:popupElevation">8dp</item>
+      <item name="android:dropDownVerticalOffset">1dp</item>
+    </style>
+    <style name="MaterialAlertDialog.MaterialComponents.Picker.Date.Calendar" parent="android:Widget.DeviceDefault.DatePicker">
+    <item name="backgroundInsetTop">@dimen/mtrl_alert_dialog_picker_background_inset</item>
+    <item name="backgroundInsetBottom">@dimen/mtrl_alert_dialog_picker_background_inset</item>
+    <item name="shapeAppearance">?attr/shapeAppearanceMediumComponent</item>
+    <item name="android:datePickerMode">calendar</item>
+    <item name="android:calendarTextColor">?attr/colorOnSurface</item>
+    <item name="android:headerBackground">?attr/colorPrimary</item>
+    <item name="android:headerMonthTextAppearance">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date.Header.Text</item>
+    <item name="android:headerDayOfMonthTextAppearance">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date.Header.Text.Day</item>
+    <item name="android:headerYearTextAppearance">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date.Header.Text</item>
+  </style>
+    <style name="MaterialAlertDialog.MaterialComponents.Picker.Date.Spinner" parent="android:Widget.DeviceDefault.DatePicker">
+    <item name="backgroundInsetTop">@dimen/mtrl_alert_dialog_picker_background_inset</item>
+    <item name="backgroundInsetBottom">@dimen/mtrl_alert_dialog_picker_background_inset</item>
+    <item name="shapeAppearance">?attr/shapeAppearanceMediumComponent</item>
+    <item name="android:datePickerMode">spinner</item>
+  </style>
     <style name="Platform.AppCompat" parent="Platform.V21.AppCompat"/>
     <style name="Platform.AppCompat.Light" parent="Platform.V21.AppCompat.Light"/>
     <style name="Platform.ThemeOverlay.AppCompat" parent="">
@@ -264,51 +303,47 @@
     </style>
     <style name="TextAppearance.Compat.Notification" parent="@android:style/TextAppearance.Material.Notification"/>
     <style name="TextAppearance.Compat.Notification.Info" parent="@android:style/TextAppearance.Material.Notification.Info"/>
-    <style name="TextAppearance.Compat.Notification.Info.Media">
-        <item name="android:textColor">@color/secondary_text_default_material_dark</item>
-    </style>
-    <style name="TextAppearance.Compat.Notification.Media">
-        <item name="android:textColor">@color/secondary_text_default_material_dark</item>
-    </style>
     <style name="TextAppearance.Compat.Notification.Time" parent="@android:style/TextAppearance.Material.Notification.Time"/>
-    <style name="TextAppearance.Compat.Notification.Time.Media">
-        <item name="android:textColor">@color/secondary_text_default_material_dark</item>
-    </style>
     <style name="TextAppearance.Compat.Notification.Title" parent="@android:style/TextAppearance.Material.Notification.Title"/>
-    <style name="TextAppearance.Compat.Notification.Title.Media">
-        <item name="android:textColor">@color/primary_text_default_material_dark</item>
-    </style>
-    <style name="TextAppearance.MaterialComponents.Button" parent="TextAppearance.AppCompat.Button">
+    <style name="TextAppearance.MaterialComponents.Badge" parent="Base.TextAppearance.MaterialComponents.Badge">
+    <!-- Roboto Medium was added in this api level -->
     <item name="fontFamily">sans-serif-medium</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:textSize">14sp</item>
-    <item name="android:letterSpacing">0.0892857143</item>
   </style>
-    <style name="TextAppearance.MaterialComponents.Headline6" parent="TextAppearance.AppCompat.Title">
+    <style name="TextAppearance.MaterialComponents.Button" parent="Base.TextAppearance.MaterialComponents.Button">
+    <!-- Roboto Medium was added in this api level -->
     <item name="fontFamily">sans-serif-medium</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
-    <item name="android:textAllCaps">false</item>
-    <item name="android:textSize">20sp</item>
-    <item name="android:letterSpacing">0.0125</item>
   </style>
-    <style name="TextAppearance.MaterialComponents.Overline" parent="TextAppearance.AppCompat">
+    <style name="TextAppearance.MaterialComponents.Headline6" parent="Base.TextAppearance.MaterialComponents.Headline6">
+    <!-- Roboto Medium was added in this api level -->
     <item name="fontFamily">sans-serif-medium</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:textSize">12sp</item>
-    <item name="android:letterSpacing">0.166666667</item>
   </style>
-    <style name="TextAppearance.MaterialComponents.Subtitle2" parent="TextAppearance.AppCompat.Subhead">
+    <style name="TextAppearance.MaterialComponents.Subtitle2" parent="Base.TextAppearance.MaterialComponents.Subtitle2">
+    <!-- Roboto Medium was added in this api level -->
     <item name="fontFamily">sans-serif-medium</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
-    <item name="android:textAllCaps">false</item>
-    <item name="android:textSize">14sp</item>
-    <item name="android:letterSpacing">0.00714285714</item>
+  </style>
+    <style name="ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <item name="android:buttonBarPositiveButtonStyle">@style/Widget.MaterialComponents.Button.TextButton.Dialog</item>
+    <item name="android:buttonBarNegativeButtonStyle">@style/Widget.MaterialComponents.Button.TextButton.Dialog</item>
+  </style>
+    <style name="ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date.Calendar">
+    <item name="android:datePickerStyle">@style/MaterialAlertDialog.MaterialComponents.Picker.Date.Calendar</item>
+  </style>
+    <style name="ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date.Header.Text" parent="TextAppearance.MaterialComponents.Headline6">
+    <item name="android:textColor">?attr/colorOnPrimary</item>
+  </style>
+    <style name="ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date.Header.Text.Day" parent="TextAppearance.MaterialComponents.Headline1">
+    <item name="android:textColor">?attr/colorOnPrimary</item>
+  </style>
+    <style name="ThemeOverlay.MaterialComponents.MaterialAlertDialog.Picker.Date.Spinner">
+    <item name="android:datePickerStyle">@style/MaterialAlertDialog.MaterialComponents.Picker.Date.Spinner</item>
   </style>
     <style name="Widget.Compat.NotificationActionContainer" parent="">
         <item name="android:background">@drawable/notification_action_background</item>
@@ -318,4 +353,12 @@
         <item name="android:textColor">@color/secondary_text_default_material_light</item>
         <item name="android:textSize">@dimen/notification_action_text_size</item>
     </style>
+    <style name="Widget.MaterialComponents.PopupMenu" parent="Base.Widget.MaterialComponents.PopupMenu">
+    <item name="android:popupBackground">?attr/popupMenuBackground</item>
+    <item name="android:popupElevation">8dp</item>
+  </style>
+    <style name="Widget.MaterialComponents.PopupMenu.Overflow" parent="Base.Widget.MaterialComponents.PopupMenu.Overflow">
+    <item name="android:popupBackground">?attr/popupMenuBackground</item>
+    <item name="android:popupElevation">8dp</item>
+  </style>
 </resources>

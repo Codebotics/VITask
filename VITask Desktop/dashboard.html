@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="dashboard/assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="dashboard/assets/img/favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>
+    VITask
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <!-- CSS Files -->
+  <link href="dashboard/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href="dashboard/assets/demo/demo.css" rel="stylesheet" />
+    <style>
+    #loading {
+    cursor: wait;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    }
+    #svgload{
+    width: 120px; 
+    }
+    </style>
+</head>
+
+<body class="">
+        <div id="loading">
+                <svg id="svgload" version="1.1" id="preloader" x="0px" y="0px" width="240px" height="120px" viewBox="0 0 240 120">
+
+                    <style type="text/css" >
+                        <![CDATA[
+
+                            #plug,
+                            #socket { fill:#ffffff }
+
+                            #loop-normal { fill: none; stroke: #ffffff; stroke-width: 12 }
+                            #loop-offset { display: none }
+
+                        ]]>
+                    </style>
+
+                    <path id="loop-normal" class="st1" d="M120.5,60.5L146.48,87.02c14.64,14.64,38.39,14.65,53.03,0s14.64-38.39,0-53.03s-38.39-14.65-53.03,0L120.5,60.5
+                    L94.52,87.02c-14.64,14.64-38.39,14.64-53.03,0c-14.64-14.64-14.64-38.39,0-53.03c14.65-14.64,38.39-14.65,53.03,0z">
+                        <animate attributeName="stroke-dasharray" attributeType="XML"
+                            from="500, 50"  to="450 50"
+                            begin="0s" dur="2s"
+                            repeatCount="indefinite"/>
+                        <animate attributeName="stroke-dashoffset" attributeType="XML"
+                            from="-40"  to="-540"
+                            begin="0s" dur="2s"
+                            repeatCount="indefinite"/>  
+                    </path>
+
+                    <path id="loop-offset" d="M146.48,87.02c14.64,14.64,38.39,14.65,53.03,0s14.64-38.39,0-53.03s-38.39-14.65-53.03,0L120.5,60.5
+                    L94.52,87.02c-14.64,14.64-38.39,14.64-53.03,0c-14.64-14.64-14.64-38.39,0-53.03c14.65-14.64,38.39-14.65,53.03,0L120.5,60.5
+                    L146.48,87.02z"/>
+
+                    <path id="socket" d="M7.5,0c0,8.28-6.72,15-15,15l0-30C0.78-15,7.5-8.28,7.5,0z"/>  
+
+                    <path id="plug" d="M0,9l15,0l0-5H0v-8.5l15,0l0-5H0V-15c-8.29,0-15,6.71-15,15c0,8.28,6.71,15,15,15V9z"/>
+
+                    <animateMotion
+                        xlink:href="#plug"
+                        dur="2s"
+                        rotate="auto"
+                        repeatCount="indefinite"
+                        calcMode="linear"
+                        keyTimes="0;1"    
+                        keySplines="0.42, 0, 0.58, 1">
+                        <mpath xlink:href="#loop-normal"/>
+                    </animateMotion>
+
+                    <animateMotion             
+                        xlink:href="#socket"
+                        dur="2s"
+                        rotate="auto"
+                        repeatCount="indefinite"
+                        calcMode="linear"
+                        keyTimes="0;1"
+                        keySplines="0.42, 0, 0.58, 1">
+                        <mpath xlink:href="#loop-offset"/>
+                    </animateMotion>  
+                </svg>
+
+                <br>
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 col-md-6">
+                      <p class="text-lead text-white" id="progress" style="font-weight: 600;"></p>
+                    </div>
+                </div>
+            </div>
+  <div class="wrapper " id="wrapper">
+    <div class="sidebar" data-color="danger" data-background-color="white" data-image="dashboard/assets/img/sidebar-1.jpg">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+      <div class="logo"><a href="" class="simple-text logo-normal">
+          VITask
+        </a></div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li class="nav-item" id="dashnav">
+            <a class="nav-link" onclick="dashboard();">
+              <i class="material-icons">dashboard</i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item" id="acadnav">
+            <a class="nav-link" onclick="academics();">
+              <i class="material-icons">emoji_events</i>
+              <p>Academic History</p>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="./tables.html">
+              <i class="material-icons">content_paste</i>
+              <p>Attendance</p>
+            </a>
+          </li>
+          <li class="nav-item " id="marksnav">
+            <a class="nav-link" onclick="marks();">
+              <i class="material-icons">school</i>
+              <p>Marks</p>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="./icons.html">
+              <i class="material-icons">bubble_chart</i>
+              <p>Moodle</p>
+            </a>
+          </li>
+          <li class="nav-item " id="timetablenav">
+            <a class="nav-link" onclick="timetable();">
+              <i class="material-icons">date_range</i>
+              <p>Timetable</p>
+            </a>
+          </li>
+          <hr class="bg-white">
+          <li class="nav-item " id="resyncnav">
+            <a class="nav-link" onclick="resync();">
+              <i class="material-icons">refresh</i>
+              <p>Resync</p>
+            </a>
+          </li>
+          <li class="nav-item " id="logoutnav">
+            <a class="nav-link" onclick="logout();">
+              <i class="material-icons">exit_to_app</i>
+              <p>Logout</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <a class="navbar-brand" href="javascript:;" id="topheading">Welcome to VITask</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+          </button>
+          
+        </div>
+      </nav>
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="container-fluid" id="canvas">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-danger">
+                  <h4 class="card-title">Welcome to VITask!</h4>
+                  <p class="card-category">VITask is a platform Build by Developers,For Developers.</p>
+                </div>
+                <div class="card-body">
+                  <blockquote class="blockquote">
+                      <p>
+                        VITask is a powerful one stop solution for students as well as developers! Are you looking for a way to view your Timetable in a beautiful interface? Or do you want to calculate your GPA for this semester and your overall CGPA? Forget about hassling on different websites for different stuff and utilize the full potential of VITask!
+                      </p>
+                    </blockquote>
+                    <a class="btn btn-danger pull-right" onclick="dashboard();" style="cursor: pointer;color: white;">Explore</a>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+    <script>
+            const electron =  require('electron');
+            const Store = require('electron-store');
+            const request = require('request');
+            window.$ = window.jQuery = require('jquery');
+            const Datastore = require('nedb');
+            var data = new Datastore({ filename: 'dashboard/userdata/data.db', autoload: true });
+            const {ipcRenderer} = electron;
+            const remote = electron.remote
+            const fs = require('fs')
+
+            const path = 'dashboard/userdata/data.db';
+            
+                           
+            ipcRenderer.on('page:change',function(e,item){
+                if(item=='dashboard')
+                    {
+                        $("#dashnav").attr('class', 'nav-item active ');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Dashboard");
+                        $("#canvas").html(
+                        `<div class="row">
+                            <div class="col-md-8">
+                              <div class="card">
+                                <div class="card-header card-header-danger">
+                                  <h4 class="card-title">My Profile</h4>
+                                  <p class="card-category">My account information</p>
+                                </div>
+                                <div class="card-body">
+                                  <form>
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"></label>
+                                          <input type="text" class="form-control" id="appno" disabled>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"></label>
+                                          <input type="text" class="form-control" id="apitoken" disabled>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"></label>
+                                          <input type="text" class="form-control" id="name" disabled>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"></label>
+                                          <input type="email" class="form-control" id="email" disabled>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"></label>
+                                          <input type="text" class="form-control" id="proctorname" disabled>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"></label>
+                                          <input type="email" class="form-control" id="proctoremail" disabled>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-danger pull-right">Settings</button>
+                                    <div class="clearfix"></div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="card card-profile">
+                                <div class="card-avatar">
+                                  <a href="javascript:;">
+                                    <img class="img" src="dashboard/assets/img/faces/marc.jpg" />
+                                  </a>
+                                </div>
+                                <div class="card-body">
+                                  <h6 class="card-category text-gray" id="card_regno"></h6>
+                                  <h4 class="card-title" id="card_name"></h4>
+                                  <p class="card-description" id="card_info">
+                                  </p>
+                                  <a href="javascript:;" class="btn btn-danger btn-round">My Timetable</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>`
+                        )
+                        data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                            $("#appno").val(doc.AppNo);
+                            $("#apitoken").val(doc.APItoken);
+                            $("#name").val(doc.Name);
+                            $("#email").val(doc.Email);
+                            $("#proctorname").val(doc.ProctorName);
+                            $("#proctoremail").val(doc.ProctorEmail);  
+                            $("#card_regno").html(doc.RegNo);
+                            $("#card_name").html(doc.Name); 
+                            $("#card_info").html(doc.Program+"-"+doc.Branch+"<br>"+doc.School);  
+                        });  
+                    }
+                else if(item=='academics')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item active ');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Academic History");
+                        data.findOne({ acad: 'user-acadhistory' }, function(err, doc) {
+                            let acadhistory = doc.AcadHistory;
+                            let curriculumdetails = doc.CurriculumDetails;
+                            let content = ``;
+                            let course;
+                            for(course in acadhistory)
+                                {
+                                    let temporary;
+                                    if(acadhistory[course] == "S")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-primary text-white">`
+                                        }
+                                    else if(acadhistory[course] == "A")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-info text-white">`
+                                        }
+                                    else if(acadhistory[course] == "B")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-success text-white">`
+                                        }
+                                    else if(acadhistory[course] == "C")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-warning text-white">`
+                                        }
+                                    else if(acadhistory[course] == "D")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-warning text-white">`
+                                        }
+                                    else if(acadhistory[course] == "E")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-warning text-white">`
+                                        }
+                                    else if(acadhistory[course] == "F")
+                                        {
+                                            temporary = `<p class="btn btn-round bg-danger text-white">`
+                                        }
+                                    else
+                                        {
+                                            temporary = `<p class="btn btn-round bg-danger text-white">`
+                                        }
+                                    content+= `<tr>
+                                                  <td>
+                                                  </td>
+                                                  <td>
+                                                    ${course}
+                                                  </td>
+                                                  <td>
+                                                  </td>
+                                                  <td>`+ temporary +
+                                                  `${acadhistory[course]}</p>
+                                                  </td>
+                                                  <td>
+                                                  </td>
+                                                </tr>`;
+                                }
+                            let finalcontent = `<div class="row">
+                                                    <div class="col-md-12">
+                                                      <div class="card">
+                                                        <div class="card-header card-header-danger">
+                                                          <h4 class="card-title ">Academic History</h4>
+                                                          <p class="card-category"> Your Academic History</p>
+                                                        </div>
+                                                        <div class="card-body">
+                                                          <div class="table-responsive">
+                                                            <table class="table">
+                                                              <thead class=" text-primary">
+                                                                    <th>
+                                                                    </th>
+                                                                    <th>
+                                                                      Course Name
+                                                                    </th>
+                                                                    <th>
+                                                                    </th>
+                                                                    <th>
+                                                                      Grade
+                                                                    </th>
+                                                                    <th>
+                                                                    </th>
+                                                                </thead>
+                                                                <tbody>`+content+
+                                                                `</tbody>
+                                                            </table>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>` +
+                                                    `<div class="row">
+                                                        <div class="col-md-12">
+                                                          <div class="card">
+                                                            <div class="card-header card-header-danger">
+                                                              <h4 class="card-title ">Curriculum Details</h4>
+                                                              <p class="card-category"> Your Curriculum Details</p>
+                                                            </div>
+                                                            <div class="card-body">
+                                                              <div class="table-responsive">
+                                                                <table class="table">
+                                                                  <thead class=" text-primary">
+                                                                    <th>
+                                                                    CGPA
+                                                                    </th>
+                                                                    <th>
+                                                                    </th>
+                                                                    <th>
+                                                                      CREDITS REGISTERED
+                                                                    </th>
+                                                                    <th>
+                                                                    </th>
+                                                                    <th>
+                                                                      CREDITS EARNED
+                                                                    </th> 
+                                                                  </thead>
+                                                                  <tbody>
+                                                                    <tr>
+                                                                      <td class="text-success">
+                                                                          <b>${curriculumdetails["CGPA"]}</b>
+                                                                      </td>
+                                                                      <td>
+                                                                      </td>
+                                                                      <td class="text-info">
+                                                                            ${curriculumdetails["CreditsRegistered"]}
+                                                                      </td>
+                                                                      <td>
+                                                                      </td>
+                                                                      <td class="text-success">
+                                                                          ${curriculumdetails["CreditsEarned"]}
+                                                                      </td>
+                                                                    </tr>
+                                                                  </tbody>
+                                                                </table>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>`
+                            
+                            $("#canvas").html(finalcontent);
+                        });
+                    }
+                        
+                else if(item=='marks')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item active ');
+                        $("#timetablenav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Marks");
+                        data.findOne({ marks: 'user-marks' }, function(err, doc) {
+                            let marks = doc.Marks;
+                            let content = ``;
+                            let course;
+                            let exam;
+                            let finalcontent = ``;
+                            let tempcourse;
+                            let type1;
+                            let type2;
+                            let type;
+                            for(course in marks)
+                                {
+                                    let temp = marks[course];
+                                    for(exam in temp)
+                                        {
+                                            content += `<tr>
+                                                          <td>
+                                                          </td>
+                                                          <td>
+                                                              <b>${exam}</b>
+                                                          </td>
+                                                          <td>
+
+                                                          </td>
+                                                          <td>
+                                                          </td>
+                                                          <td>
+                                                             <p class="btn btn-round bg-danger text-white"><b>${temp[exam]}</b></p> 
+                                                          </td>
+                                                        </tr>`
+                                        }
+                                    
+                                    tempcourse = course.split(" ");
+                                    type1 = tempcourse.pop();
+                                    type2 = tempcourse.pop();
+                                    type = type2 + " " + type1;
+                                    course = tempcourse.join(' ');
+                                    
+                                    finalcontent += `<div class="row">
+                                                    <div class="col-md-12">
+                                                      <div class="card">
+                                                        <div class="card-header card-header-danger">
+                                                          <h4 class="card-title ">${course}-${type}</h4>
+                                                          <p class="card-category"> Your Marks in ${course}-${type}</p>
+                                                        </div>
+                                                        <div class="card-body">
+                                                          <div class="table-responsive">
+                                                            <table class="table">
+                                                              <thead class=" text-primary">
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                  Exam
+                                                                </th>
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                  Marks
+                                                                </th> 
+                                                              </thead>
+                                                              <tbody>`
+                                                             + content +
+                                                              `</tbody>
+                                                            </table>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                <br>`
+                                    
+                                    content = ``;
+                                    $("#canvas").html(finalcontent);
+                                    
+                                }
+                        });
+                        
+                    }
+                else if(item=='timetable')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item active ');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Timetable");
+                        
+                        data.findOne({ tt: 'user-timetable' }, function(err, doc) {
+                            let tt = doc.Timetable;
+                            let content = ``;
+                            let day;
+                            let template = `<div class="row">
+                                                <div class="col-lg-12 col-md-12">
+                                                  <div class="card">
+                                                    <div class="card-header card-header-tabs card-header-danger">
+                                                      <div class="nav-tabs-navigation">
+                                                        <div class="nav-tabs-wrapper">
+
+                                                          <ul class="nav nav-tabs" data-tabs="tabs">
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#monday" data-toggle="tab" id="mon">
+                                                                <i class="material-icons">waves</i> Monday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#tuesday" data-toggle="tab" id="tue">
+                                                                <i class="material-icons">graphic_eq</i> Tuesday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#wednesday" data-toggle="tab" id="wed">
+                                                                <i class="material-icons">bar_chart</i> Wednesday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#thursday" data-toggle="tab" id="thu">
+                                                                <i class="material-icons">show_chart</i> Thursday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                              <a class="nav-link" href="#friday" data-toggle="tab" id="fri">
+                                                                <i class="material-icons">gesture</i> Friday
+                                                                <div class="ripple-container"></div>
+                                                              </a>
+                                                            </li>
+                                                          </ul>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="tab-content">`;
+                            for(day in tt)
+                                {
+                                    let temp = day;
+                                    let subject;
+                                    let tempcontent = ``;
+                                    if (temp=="Monday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane active" id="monday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                            
+                                        }
+                                    else if (temp=="Tuesday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="tuesday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+                                    else if (temp=="Wednesday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="wednesday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+                                    else if (temp=="Thursday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="thursday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+                                    else if (temp=="Friday")
+                                        {
+                                            let record = tt[day];
+                                            for (subject in record)
+                                                {
+                                                    let show = record[subject];
+                                                    tempcontent += `<tr>
+                                                                        <td>
+                                                                          <div>
+                                                                            <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["code"]}</b>
+                                                                            </p>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["courseName"]}</b>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                          <p class="btn btn-round bg-dark text-white">
+                                                                              <b>${show["startTime"]}-${show["endTime"]}</b>
+                                                                          </p>
+                                                                          <p class="btn btn-round bg-danger text-white">
+                                                                              <b>${show["class"]}</b>
+                                                                          </p>
+                                                                        </td>
+                                                                      </tr>`
+                                                }
+                                            content += `<div class="tab-pane" id="friday">
+                                                                  <table class="table">
+                                                                    <tbody>`+
+                                                                    tempcontent +
+                                                                    `</tbody>
+                                                                      </table>
+                                                                    </div>`;
+                                                
+                                        }
+  
+                                }
+                            template += content + `</div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>`;
+                            $("#canvas").html(template);
+                            let date = new Date();
+                            let dayno = date.getDay();
+                            if(dayno==1)
+                                {
+                                    $("#mon").attr('class', 'nav-link active');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==2)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==3)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link active');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==4)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link active');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+                            else if(dayno==5)
+                                {
+                                    $("#mon").attr('class', 'nav-link');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link active');
+                                }
+                            else
+                                {
+                                    $("#mon").attr('class', 'nav-link active');
+                                    $("#tue").attr('class', 'nav-link');
+                                    $("#wed").attr('class', 'nav-link');
+                                    $("#thu").attr('class', 'nav-link');
+                                    $("#fri").attr('class', 'nav-link');
+                                }
+
+                            
+                            
+                        });
+                    }
+                else if(item=='resync')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item active ');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Resync");
+                        ipcRenderer.on('resync:details',function(e,item){
+                            let regno = item.regno;
+                            let password = item.password;
+                            login(regno,password);
+                        });
+                    }
+                else if(item=='logout')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item active ');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#timetablenav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item active ');
+                        $("#topheading").html("Logout");
+                        complete_logout();
+                    }
+                
+            });
+        
+            $(document).ready(function() {
+                $("#loading").fadeOut(); 
+            })
+                           
+
+            function dashboard(){
+                ipcRenderer.send('page:change','dashboard');
+            }
+        
+            function academics(){
+                ipcRenderer.send('page:change','academics');
+            }
+        
+            function marks(){
+                ipcRenderer.send('page:change','marks');
+            }
+        
+            function timetable(){
+                ipcRenderer.send('page:change','timetable');
+            }
+                
+            function resync(){
+                data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                            let item = {
+                                regno: doc.regno,
+                                password: doc.password
+                            }
+                            ipcRenderer.send('page:change','resync');
+                            ipcRenderer.send('resync:details',item);
+                        }); 
+            }
+        
+            function logout()
+            {
+                ipcRenderer.send('page:change','logout');
+                ipcRenderer.send('logout:new','logging out');
+            }
+            
+            function complete_logout()
+            {
+                fs.unlink(path, (err) => {
+                  if (err) {
+                    console.error(err)
+                    return
+                  }
+                var window = remote.getCurrentWindow();
+                window.close();
+                });
+            }
+        
+            function login(regno,password){
+                let url = 'https://vitask.me/authenticate?username='+regno+'&password='+password;
+                let timetable_ini_url = 'https://vitask.me/timetableapi?token='
+                let acadhistory_ini_url = 'https://vitask.me/acadhistoryapi?token='
+                let attendance_ini_url = 'https://vitask.me/classesapi?token='
+                
+                $("#loading").show();
+                $("#wrapper").hide(); 
+                $("#progress").html("Verifying...").show().delay(7000).fadeOut( function() {
+                    $("#progress").html("Resyncing...").fadeIn();
+                });
+                
+                request(url, function (err, response, body) {
+                  if(err){
+                    console.log('error:', error);
+                  } else {
+                    let result = JSON.parse(body);
+                    result.profile = "user-profile";
+                    result.regno = regno;
+                    result.password = password;
+                    
+                    data.insert(result, function(err, doc) {
+                    console.log('Inserted', doc.Name);
+                    });
+                      
+                    data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                        
+                        
+                        
+                        timetable(doc.APItoken, function() {
+                            acadhistory(doc.APItoken, function(){
+                                attendance(doc.APItoken, function(){
+                                    ipcRenderer.send('resync:new','resynced');
+                                    done(doc.APItoken);
+                                });
+                            });
+                        });
+                        
+                    });
+                  }
+                });
+                
+                function timetable(token, callback){
+                    let timetable_url = timetable_ini_url+token;
+                    request(timetable_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body)
+                            result.tt = "user-timetable"
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Timetable);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                function acadhistory(token, callback){
+                    let acadhistory_url = acadhistory_ini_url+token;
+                    request(acadhistory_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body)
+                            result.acad = "user-acadhistory"
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.AcadHistory);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                
+                function attendance(token, callback){
+                    let attendance_url = attendance_ini_url+token;
+                    request(attendance_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body)
+                            result.classes = "user-attendance"
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Attended);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                function done(token){
+                    location.reload(true);
+                }
+                   
+            }
+            
+    </script>
+
+  <!--   Core JS Files   -->
+  <script src="dashboard/assets/js/core/jquery.min.js"></script>
+  <script src="dashboard/assets/js/core/popper.min.js"></script>
+  <script src="dashboard/assets/js/core/bootstrap-material-design.min.js"></script>
+  <script src="dashboard/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!-- Plugin for the momentJs  -->
+  <script src="dashboard/assets/js/plugins/moment.min.js"></script>
+  <!--  Plugin for Sweet Alert -->
+  <script src="dashboard/assets/js/plugins/sweetalert2.js"></script>
+  <!-- Forms Validations Plugin -->
+  <script src="dashboard/assets/js/plugins/jquery.validate.min.js"></script>
+  <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+  <script src="dashboard/assets/js/plugins/jquery.bootstrap-wizard.js"></script>
+  <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+  <script src="dashboard/assets/js/plugins/bootstrap-selectpicker.js"></script>
+  <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+  <script src="dashboard/assets/js/plugins/bootstrap-datetimepicker.min.js"></script>
+  <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
+  <script src="dashboard/assets/js/plugins/jquery.dataTables.min.js"></script>
+  <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+  <script src="dashboard/assets/js/plugins/bootstrap-tagsinput.js"></script>
+  <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+  <script src="dashboard/assets/js/plugins/jasny-bootstrap.min.js"></script>
+  <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+  <script src="dashboard/assets/js/plugins/fullcalendar.min.js"></script>
+  <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
+  <script src="dashboard/assets/js/plugins/jquery-jvectormap.js"></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script src="dashboard/assets/js/plugins/nouislider.min.js"></script>
+  <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+  <!-- Library for adding dinamically elements -->
+  <script src="dashboard/assets/js/plugins/arrive.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chartist JS -->
+  <script src="dashboard/assets/js/plugins/chartist.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="dashboard/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="dashboard/assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+  <!-- Material Dashboard DEMO methods, don't include it in your project! -->
+  <script src="dashboard/assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function() {
+      $().ready(function() {
+        $sidebar = $('.sidebar');
+
+        $sidebar_img_container = $sidebar.find('.sidebar-background');
+
+        $full_page = $('.full-page');
+
+        $sidebar_responsive = $('body > .navbar-collapse');
+
+        window_width = $(window).width();
+
+        fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+        if (window_width > 767 && fixed_plugin_open == 'Dashboard') {
+          if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
+            $('.fixed-plugin .dropdown').addClass('open');
+          }
+
+        }
+
+        $('.fixed-plugin a').click(function(event) {
+          // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+          if ($(this).hasClass('switch-trigger')) {
+            if (event.stopPropagation) {
+              event.stopPropagation();
+            } else if (window.event) {
+              window.event.cancelBubble = true;
+            }
+          }
+        });
+
+        $('.fixed-plugin .active-color span').click(function() {
+          $full_page_background = $('.full-page-background');
+
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data-color', new_color);
+          }
+
+          if ($full_page.length != 0) {
+            $full_page.attr('filter-color', new_color);
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.attr('data-color', new_color);
+          }
+        });
+
+        $('.fixed-plugin .background-color .badge').click(function() {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('background-color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data-background-color', new_color);
+          }
+        });
+
+        $('.fixed-plugin .img-holder').click(function() {
+          $full_page_background = $('.full-page-background');
+
+          $(this).parent('li').siblings().removeClass('active');
+          $(this).parent('li').addClass('active');
+
+
+          var new_image = $(this).find("img").attr('src');
+
+          if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+            $sidebar_img_container.fadeOut('fast', function() {
+              $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+              $sidebar_img_container.fadeIn('fast');
+            });
+          }
+
+          if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+            $full_page_background.fadeOut('fast', function() {
+              $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+              $full_page_background.fadeIn('fast');
+            });
+          }
+
+          if ($('.switch-sidebar-image input:checked').length == 0) {
+            var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
+            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+            $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+            $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+          }
+        });
+
+        $('.switch-sidebar-image input').change(function() {
+          $full_page_background = $('.full-page-background');
+
+          $input = $(this);
+
+          if ($input.is(':checked')) {
+            if ($sidebar_img_container.length != 0) {
+              $sidebar_img_container.fadeIn('fast');
+              $sidebar.attr('data-image', '#');
+            }
+
+            if ($full_page_background.length != 0) {
+              $full_page_background.fadeIn('fast');
+              $full_page.attr('data-image', '#');
+            }
+
+            background_image = true;
+          } else {
+            if ($sidebar_img_container.length != 0) {
+              $sidebar.removeAttr('data-image');
+              $sidebar_img_container.fadeOut('fast');
+            }
+
+            if ($full_page_background.length != 0) {
+              $full_page.removeAttr('data-image', '#');
+              $full_page_background.fadeOut('fast');
+            }
+
+            background_image = false;
+          }
+        });
+
+        $('.switch-sidebar-mini input').change(function() {
+          $body = $('body');
+
+          $input = $(this);
+
+          if (md.misc.sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            md.misc.sidebar_mini_active = false;
+
+            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
+
+          } else {
+
+            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
+
+            setTimeout(function() {
+              $('body').addClass('sidebar-mini');
+
+              md.misc.sidebar_mini_active = true;
+            }, 300);
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function() {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function() {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+
+        });
+      });
+    });
+  </script>
+    
+</body>
+
+</html>

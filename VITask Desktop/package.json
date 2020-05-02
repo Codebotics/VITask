@@ -10,6 +10,11 @@
   "license": "MIT",
   "dependencies": {
     "electron": "^7.1.10",
+    "electron-json-storage": "^4.1.8",
+    "electron-store": "^5.1.1",
+    "jquery": "^3.5.0",
+    "nedb": "^1.8.0",
+    "nedb-promises": "^4.0.1",
     "request": "^2.88.0"
   }
 }

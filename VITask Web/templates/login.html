@@ -2,8 +2,23 @@
 <html lang="en">
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157430748-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-157430748-1');
+    </script>
+    
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+  <meta name="description" content="VITask is an evolution to the existing technology that VITians are privy to.">
+  <meta name="keywords" content="vitask,moodle,captcha,login,chennai,vit,vellore institute of technology,vtop,ffcs,vitask web,vitask app,vitask chennai,earthing,earthing in club penguin,technovit,vibrance,technovit chennai,vibrance chennai,vitask login,vitask moodle,vitask integration,vitask policies,vitask cloud">
+  <meta name="author" content="VITask Team">
+    
   <title>
     VITask | Login
   </title>
@@ -18,46 +33,30 @@
   <link href="{{ url_for('static', filename='assets/css/argon-dashboard.css') }}" rel="stylesheet" />
   <!-- jQuery CDN -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <style>
+    #loading {
+    cursor: wait;
+    }
+    #svgload{
+    width: 100px;
+    height: 100px;
+    margin: 20px;
+    display:inline-block;
+        }
+    </style>
+    
 </head>
 
 <body class="bg-dark">
   <div class="main-content">
+    
     <!-- Navbar -->
     <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
       <div class="container px-4">
-        <a class="navbar-brand" href="../index.html">
+        <a class="navbar-brand" href="{{ url_for('home') }}">
           <img src="{{ url_for('static', filename='assets/img/brand/white.png') }}" />
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbar-collapse-main">
-          <!-- Collapse header -->
-          <div class="navbar-collapse-header d-md-none">
-            <div class="row">
-              <div class="col-6 collapse-brand">
-                <a href="../index.html">
-                  <img src="{{ url_for('static', filename='assets/img/brand/blue.png') }}">
-                </a>
-              </div>
-              <div class="col-6 collapse-close">
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
-                  <span></span>
-                  <span></span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- Navbar items -->
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link nav-link-icon" href="{{ url_for('home') }}">
-                <i class="ni ni-planet"></i>
-                <span class="nav-link-inner--text">Home</span>
-              </a>
-            </li>
-          </ul>
-        </div>
+        </a> 
       </div>
     </nav>
     <!-- Header -->
@@ -72,6 +71,41 @@
           </div>
         </div>
       </div>
+        
+    <div id="loading">
+        <svg id="svgload" version="1.1" id="L6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+           <rect fill="none" stroke="#fff" stroke-width="4" x="25" y="25" width="50" height="50">
+          <animateTransform
+             attributeName="transform"
+             dur="0.5s"
+             from="0 50 50"
+             to="180 50 50"
+             type="rotate"
+             id="strokeBox"
+             attributeType="XML"
+             begin="rectBox.end"/>
+          </rect>
+           <rect x="27" y="27" fill="#fff" width="46" height="50">
+          <animate
+             attributeName="height"
+             dur="1.3s"
+             attributeType="XML"
+             from="50" 
+             to="0"
+             id="rectBox" 
+             fill="freeze"
+             begin="0s;strokeBox.end"/>
+          </rect>
+        </svg>
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6">
+              <p class="text-lead text-white" id="progress"></p>
+            </div>
+        </div>
+    </div>
+        
       <div class="separator separator-bottom separator-skew zindex-100">
         <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <polygon class="fill-dark" points="2560 0 2560 100 0 100"></polygon>
@@ -79,9 +113,24 @@
       </div>
     </div>
     <!-- Page content -->
-    <div class="container mt--8 pb-5">
+    
+    <div class="container mt--8 pb-5" id="content">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7">
+            
+            {% if(correct==False) %}
+            
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
+                <span class="alert-text"><strong>Sorry!</strong> Invalid Password!</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            {% endif %}
+            
+            
           <div class="card bg-secondary shadow border-0">
             
             <div class="card-body px-lg-5 py-lg-5">
@@ -91,7 +140,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-spaceship"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Registration Number" type="text" name="username">
+                    <input class="form-control" placeholder="Registration Number" type="text" name="username" required>
                   </div>
                 </div>
                 <div class="form-group">
@@ -99,12 +148,12 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Password" type="password" name="password">
+                    <input class="form-control" placeholder="Password" type="password" name="password" required>
                   </div>
                 </div>
             
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary my-4">Sign in</button>
+                  <button type="submit" class="btn btn-primary my-4" onclick="loading();">Sign in</button>
                 </div>
               </form>
             </div>
@@ -123,13 +172,13 @@
           <div class="col-xl-6">
             <ul class="nav nav-footer justify-content-center justify-content-xl-end">
               <li class="nav-item">
-                <a href="https://vitask.me" class="nav-link" target="_blank">Home</a>
+                <a href="{{ url_for('home') }}" class="nav-link" target="_blank">Home</a>
               </li>
               <li class="nav-item">
-                <a href="https://vitask.me/team" class="nav-link" target="_blank">Our Team</a>
+                <a href="{{ url_for('ourteam') }}" class="nav-link" target="_blank">Our Team</a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link" target="_blank">Github</a>
+                <a href="https://github.com/Codebotics/VITask" class="nav-link" target="_blank">Github</a>
               </li>
               <li class="nav-item">
                 <a href="" class="nav-link" target="_blank">Policy</a>
@@ -143,12 +192,23 @@
     <div class="loader-wrapper">
       <span class="loader"><span class="loader-inner"></span></span>
     </div>
-    <!-- Loader -->
+   
     <script>
-        $("#cap").on("load",function(){
-          $(".loader-wrapper").fadeOut("slow");
+        $(document).ready(function() {
+            $("#loading").fadeOut();
         });
     </script>
+    
+    <!-- Response Loader -->
+    <script type="text/javascript">// <![CDATA[
+        function loading(){
+            $("#loading").show();
+            $("#content").hide(); 
+            $("#progress").html("Authenticating...").fadeIn().delay(6000).fadeOut( function() {
+                $("#progress").html("Almost done...").fadeIn();
+                })
+            }
+// ]]></script>
 
   <!--   Core   -->
   <script src="{{ url_for('static', filename='assets/js/plugins/jquery/dist/jquery.min.js') }}"></script>

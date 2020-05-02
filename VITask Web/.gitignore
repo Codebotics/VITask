@@ -1,1 +1,7 @@
-/venv
+venv/
+captcha/
+.vscode/
+files/
+credential.txt
+captcha.png
+__pycache__
