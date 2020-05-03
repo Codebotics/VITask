@@ -14,6 +14,14 @@ export const FETCH_ATTENDANCE_SUCCESS = "FETCH_ATTENDANCE_SUCCESS"
 export const FETCH_ATTENDANCE_ERROR = "FETCH_ATTENDANCE_ERROR"
 export const SYNC_ATTENDANCE = 'SYNC_ATTENDANCE'
 
+
+// Will sync Marks details
+export const FETCH_MARKS_REQUEST = "FETCH_MARKS_REQUESTS"
+export const FETCH_MARKS_SUCCESS = "FETCH_MARKS_SUCCESS"
+export const FETCH_MARKS_ERROR = "FETCH_MARKS_ERROR"
+export const SYNC_MARKS = "SYNC_MARKS"
+
+
 // These are only for using developement purpose to save api calls, instead api calls are done to dummy server
 export const DEV_LOAD_ATTENDANCE = "DEV_LOAD_ATTENDANCE"
 export const DEV_LOAD_PROFILE = "DEV_LOAD_PROFILE"
