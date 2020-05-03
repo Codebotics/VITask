@@ -11,7 +11,10 @@ import {
     FETCH_TIMETABLE_SUCCESS,
     FETCH_TIMETABLE_ERROR,
 
-    REFORMAT_DATA
+    REFORMAT_DATA,
+    FETCH_MARKS_SUCCESS,
+    FETCH_MARKS_REQUEST,
+    FETCH_MARKS_ERROR
     } from '../actions/types'
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunkMiddleware from 'redux-thunk'
@@ -168,6 +171,27 @@ const reducer = (state = initialState, action)=>{
                 error : action.error
             }
 
+        case FETCH_MARKS_REQUEST:
+            return{
+                ...state,
+                status:"REQUEST_MARKS",
+                error : ""
+            }
+
+        case FETCH_MARKS_SUCCESS:
+            return{
+                ...state,
+                status : "MARKS_COMPLETE",
+                marks : action.data
+            }
+        
+        case FETCH_MARKS_ERROR:
+            return{
+                ...state,
+                status : "ERROR",
+                error : action.error
+            }
+
         case REFORMAT_DATA:
             // This will be called only once and reformate the api
             const {timetable, coursesInfo } = formatData(state)
@@ -177,6 +201,7 @@ const reducer = (state = initialState, action)=>{
                 coursesInfo,
                 status : "FORMAT_COMPLETE"
             }
+
         default :
             return state
     }
