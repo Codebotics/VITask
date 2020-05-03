@@ -430,8 +430,8 @@ button:focus+.design-container {
               <p>Marks</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./icons.html">
+          <li class="nav-item " id="moodlenav">
+            <a class="nav-link" onclick="moodlelogin();">
               <i class="material-icons">bubble_chart</i>
               <p>Moodle</p>
             </a>
@@ -521,6 +521,7 @@ button:focus+.design-container {
                         $("#acadnav").attr('class', 'nav-item');
                         $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#moodlenav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
@@ -621,6 +622,7 @@ button:focus+.design-container {
                         $("#acadnav").attr('class', 'nav-item active ');
                         $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#moodlenav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
@@ -771,6 +773,7 @@ button:focus+.design-container {
                         $("#acadnav").attr('class', 'nav-item');
                         $('#attennav').attr('class','nav-item active');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#moodlenav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item ');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
@@ -858,6 +861,7 @@ button:focus+.design-container {
                         $("#acadnav").attr('class', 'nav-item');
                         $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item active ');
+                        $("#moodlenav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
@@ -889,7 +893,7 @@ button:focus+.design-container {
                                                           <td>
                                                           </td>
                                                           <td>
-                                                             <p class="btn btn-round bg-danger text-white"><b>${temp[exam]}</b></p> 
+                                                             <p class="btn btn-round bg-danger text-white"><b>${temp[exam]["scored"]}</b></p> 
                                                           </td>
                                                         </tr>`
                                         }
@@ -948,6 +952,7 @@ button:focus+.design-container {
                         $("#acadnav").attr('class', 'nav-item');
                         $('#attennav').attr('class','nav-item');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#moodlenav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item active ');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
@@ -1260,11 +1265,63 @@ button:focus+.design-container {
                             
                         });
                     }
+                else if(item=='moodlelogin')
+                    {
+                        $("#dashnav").attr('class', 'nav-item');
+                        $("#acadnav").attr('class', 'nav-item');
+                        $("#marksnav").attr('class', 'nav-item');
+                        $("#moodlenav").attr('class', 'nav-item active ');
+                        $("#timetablenav").attr('class', 'nav-item');
+                        $("#resyncnav").attr('class', 'nav-item');
+                        $("#logoutnav").attr('class', 'nav-item');
+                        $("#topheading").html("Moodle Login");
+                        
+                        let template = `<div class="row">
+                                            <div class="col-md-12">
+                                              <div class="card">
+                                                <div class="card-header card-header-danger" style="text-align: center;">
+                                                <div class="card card-profile bg-danger" style="box-shadow: none;">
+                                                    <div class="card-avatar">
+                                                      <a href="javascript:;">
+                                                        <img class="img" src="dashboard/assets/img/faces/moodle.png" />
+                                                      </a>
+                                                    </div>
+                                                </div>
+                                                <h4 class="card-title">Integrate Moodle</h4>
+                                                  <p class="card-category">Enter your Moodle Account Details for one-click integration.</p>
+                                                </div>
+                                                <div class="card-body">
+                                                  <form>
+                                                    <div class="row">
+                                                      <div class="col-md-6">
+                                                        <div class="form-group">
+                                                          <label class="bmd-label-floating">Moodle Username</label>
+                                                          <input type="text" class="form-control" id="moodle_username">
+                                                        </div>
+                                                      </div>
+                                                      <div class="col-md-6">
+                                                        <div class="form-group">
+                                                          <label class="bmd-label-floating">Moodle Password</label>
+                                                          <input type="password" class="form-control" id="moodle_password">
+                                                        </div>
+                                                      </div>
+                                                      </div>
+                                                    <a class="btn btn-danger text-white pull-right" onclick="moodleauthenticate();">Authenticate</a>
+                                                    <div class="clearfix"></div>
+                                                  </form>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>`;
+                        $("#canvas").html(template);
+                         
+                    }
                 else if(item=='resync')
                     {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#moodlenav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item active ');
                         $("#logoutnav").attr('class', 'nav-item');
@@ -1272,6 +1329,20 @@ button:focus+.design-container {
                         ipcRenderer.on('resync:details',function(e,item){
                             let regno = item.regno;
                             let password = item.password;
+                            data.findOne({ moodle: 'user-moodle' }, function(err, doc) { 
+                                if(doc != null)
+                                    {
+                                        let moodle_username = doc.regno;
+                                        let moodle_password = doc.password;
+                                        let newitem = {regno: moodle_username,password: moodle_password};
+                                        ipcRenderer.send('moodle:new',newitem); 
+                                    }
+                                else{
+                                    ipcRenderer.send('nomoodle:new','no_moodle_authenticate');
+                                }
+
+                            });
+                            
                             login(regno,password);
                         });
                     }
@@ -1280,6 +1351,7 @@ button:focus+.design-container {
                         $("#dashnav").attr('class', 'nav-item');
                         $("#acadnav").attr('class', 'nav-item active ');
                         $("#marksnav").attr('class', 'nav-item');
+                        $("#moodlenav").attr('class', 'nav-item');
                         $("#timetablenav").attr('class', 'nav-item');
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item active ');
@@ -1302,9 +1374,6 @@ button:focus+.design-container {
                 let answer_id = "#answerid"+String(id);
                 let current_idnew = "#currentidnew"+String(id);
                 let currentid = "#currentid"+String(id);
-
-                // console.log(select_id);
-                //$(select_id).html("test");
                 
                 let classes_total = $(select_id).attr("value1");
                 let classes_attended = $(select_id).attr("value2");
@@ -1313,7 +1382,6 @@ button:focus+.design-container {
 
                 let attendance_final = (classes_attended/classes_total)*100;
                 
-                //console.log(attendance_final);
  
                 $(select_id).attr("value1",classes_total);
                 $(select_id).attr("value2",classes_attended);
@@ -1350,19 +1418,6 @@ button:focus+.design-container {
                 $(current_idnew).attr("data-countervalue",ans);
 
                 $(answer_id).html(ans);
-
-
-                //attendance_final = Math.min(Math.max(parsed, 0), 100)
-
-
-
-                /*document.getElementById("currentid"+i).setAttribute("style","stroke-dashoffset:"+attendance_final/2.93+"px;");
-                document.getElementById("currentid1"+i).setAttribute("data-countervalue",+attendance_final);
-
-                // $("#currentid").hide();
-                // $('#answerid').show();
-
-                console.log(attendance_final*2.93);*/
             }
 
 
@@ -1378,69 +1433,59 @@ button:focus+.design-container {
 
                 let classes_total = $(select_id).attr("value1");
                 let classes_attended = $(select_id).attr("value2");
-   //if (classes_total > total_fixed)
-   //{
-     --classes_total;
-   //}
 
-   //total_attendance = (classes_attended/classes_total)*100;
+                --classes_total;
 
-//   document.getElementById("nobunk{{q[i]}}").setAttribute("value1",classes_total);
- //  document.getElementById("nobunk{{q[i]}}").setAttribute("value2",classes_attended);
- //  document.getElementById("nobunk{{q[i]}}").value = total_attendance;
- //  document.getElementById("answerid{{q[i]}}").innerHTML = total_attendance;
-        let attendance_final = (classes_attended/classes_total)*100;
+                let attendance_final = (classes_attended/classes_total)*100;
 
-    if(attendance_final<=100)
-            {   
-              $(select_id).attr("value1",classes_total);
-                $(select_id).attr("value2",classes_attended);
-                $(select_id).val(attendance_final);
+                if(attendance_final<=100)
+                        {   
+                          $(select_id).attr("value1",classes_total);
+                            $(select_id).attr("value2",classes_attended);
+                            $(select_id).val(attendance_final);
 
 
-                $(noselect_id).attr("value1",classes_total);
-                $(noselect_id).attr("value2",classes_attended);
-                $(noselect_id).val(attendance_final);
-                
+                            $(noselect_id).attr("value1",classes_total);
+                            $(noselect_id).attr("value2",classes_attended);
+                            $(noselect_id).val(attendance_final);
 
 
-                $(attend_id).attr("value1",classes_total);
-                $(attend_id).attr("value2",classes_attended);
-                $(attend_id).val(attendance_final);
-                
 
-                $(noattend_id).attr("value1",classes_total);
-                $(noattend_id).attr("value2",classes_attended);
-                $(noattend_id).val(attendance_final);
-
-                
-                
-                let ans = Math.round(attendance_final) + '%';
-
-                let stroke = 219 - (attendance_final*2.2);
-                let strokedash = "stroke-dashoffset:"+stroke+"px";
-            
-
-                $(currentid).attr("style",strokedash);
-                console.log(strokedash);
+                            $(attend_id).attr("value1",classes_total);
+                            $(attend_id).attr("value2",classes_attended);
+                            $(attend_id).val(attendance_final);
 
 
-                $(current_idnew).attr("data-countervalue",ans);
+                            $(noattend_id).attr("value1",classes_total);
+                            $(noattend_id).attr("value2",classes_attended);
+                            $(noattend_id).val(attendance_final);
 
-                $(answer_id).html(ans);
-               
-        
-  
-            }
-        // $("#currentid{{q[i]}}").hide();
-        // $('#answerid{{q[i]}}').show();
-                
-            }
+
+
+                            let ans = Math.round(attendance_final) + '%';
+
+                            let stroke = 219 - (attendance_final*2.2);
+                            let strokedash = "stroke-dashoffset:"+stroke+"px";
+
+
+                            $(currentid).attr("style",strokedash);
+                            console.log(strokedash);
+
+
+                            $(current_idnew).attr("data-countervalue",ans);
+
+                            $(answer_id).html(ans);
+
+
+
+                        }
+
+                }
 
         
         
         function Attend_add(id){
-          let select_id = "#newid"+String(id);
+                let select_id = "#newid"+String(id);
                 let noselect_id = "#nobunk"+String(id);
                 let attend_id = "#attend"+String(id);
                 let noattend_id = "#cancelattend"+String(id);
@@ -1553,7 +1598,32 @@ function Attend_subtract(id)
 
 }
 //Bunk Meter Ends here.
-
+        
+        
+            function moodleauthenticate(){
+                let moodle_ini_username = $("#moodle_username").val();
+                let moodle_username = moodle_ini_username.toLowerCase();
+                let moodle_password = $("#moodle_password").val();
+                let item = {regno: moodle_username,password: moodle_password}
+                ipcRenderer.send('moodle:new',item); 
+            }
+        
+            ipcRenderer.on('moodle:new',function(e,item){
+                data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                    login(doc.regno,doc.password,item.regno,item.password,'moodle_authenticate');
+                });
+            });
+        
+            ipcRenderer.on('nomoodle:new',function(e,item){
+                data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                    login(doc.regno,doc.password,null,null,'no_moodle_authenticate');
+                });
+            });
+        
+        
+            function moodlelogin(){
+                ipcRenderer.send('page:change','moodlelogin');
+            }
                            
 
             function dashboard(){
@@ -1605,11 +1675,12 @@ function Attend_subtract(id)
                 });
             }
         
-            function login(regno,password){
+            function login(regno,password,moodle_username=null,moodle_password=null,mode=null){
                 let url = 'https://vitask.me/authenticate?username='+regno+'&password='+password;
-                let timetable_ini_url = 'https://vitask.me/timetableapi?token='
-                let acadhistory_ini_url = 'https://vitask.me/acadhistoryapi?token='
-                let attendance_ini_url = 'https://vitask.me/classesapi?token='
+                let timetable_ini_url = 'https://vitask.me/timetableapi?token=';
+                let acadhistory_ini_url = 'https://vitask.me/acadhistoryapi?token=';
+                let attendance_ini_url = 'https://vitask.me/classesapi?token=';
+                let moodle_ini_url = 'https://vitask.me/moodleapi?appno=';
                 
                 $("#loading").show();
                 $("#wrapper").hide(); 
@@ -1617,35 +1688,100 @@ function Attend_subtract(id)
                     $("#progress").html("Resyncing...").fadeIn();
                 });
                 
-                request(url, function (err, response, body) {
-                  if(err){
-                    console.log('error:', error);
-                  } else {
-                    let result = JSON.parse(body);
-                    result.profile = "user-profile";
-                    result.regno = regno;
-                    result.password = password;
-                    
-                    data.insert(result, function(err, doc) {
-                    console.log('Inserted', doc.Name);
-                    });
-                      
-                    data.findOne({ profile: 'user-profile' }, function(err, doc) {
-                        
-                        
-                        
-                        timetable(doc.APItoken, function() {
-                            acadhistory(doc.APItoken, function(){
-                                attendance(doc.APItoken, function(){
-                                    ipcRenderer.send('resync:new','resynced');
-                                    done(doc.APItoken);
-                                });
+                
+                if(mode=='moodle_authenticate')
+                    {
+                        request(url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body);
+                            result.profile = "user-profile";
+                            result.regno = regno;
+                            result.password = password;
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Name);
                             });
-                        });
-                        
+
+                            data.findOne({ profile: 'user-profile' }, function(err, doc) {
+
+
+
+                                timetable(doc.APItoken, function() {
+                                    acadhistory(doc.APItoken, function(){
+                                        attendance(doc.APItoken, function(){
+                                            moodlefetch(moodle_username,moodle_password,doc.AppNo, function(){
+                                                ipcRenderer.send('resync:new','resynced');
+                                                done(doc.APItoken);
+                                            });
+                                        });
+                                    });
+                                });
+
+                            });
+                          }
+                        }); 
+                    }
+                
+                else if(mode=='no_moodle_authenticate')
+                    {
+
+                        request(url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body);
+                            result.profile = "user-profile";
+                            result.regno = regno;
+                            result.password = password;
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Name);
+                            });
+
+                            data.findOne({ profile: 'user-profile' }, function(err, doc) {
+
+
+
+                                timetable(doc.APItoken, function() {
+                                    acadhistory(doc.APItoken, function(){
+                                        attendance(doc.APItoken, function(){
+                                            ipcRenderer.send('resync:new','resynced');
+                                            done(doc.APItoken);
+                                        });
+                                    });
+                                });
+
+                            });
+                          }
+
                     });
-                  }
-                });
+            }
+
+         
+                function moodlefetch(moodle_username,moodle_password,appno, callback){
+                    console.log(moodle_username+" "+moodle_password+" "+appno);
+                    let moodle_url = moodle_ini_url+appno+"&username="+moodle_username+"&password="+moodle_password;
+                    request(moodle_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body);
+                            result.moodle = "user-moodle";
+                            result.regno = moodle_username;
+                            result.password = moodle_password;
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Assignments);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                
                 
                 function timetable(token, callback){
                     let timetable_url = timetable_ini_url+token;

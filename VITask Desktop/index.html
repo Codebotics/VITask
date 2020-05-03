@@ -214,8 +214,7 @@
                       
                     data.findOne({ profile: 'user-profile' }, function(err, doc) {
                         
-                        
-                        
+                       
                         timetable(doc.APItoken, function() {
                             acadhistory(doc.APItoken, function(){
                                 attendance(doc.APItoken, function(){
