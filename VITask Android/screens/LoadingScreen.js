@@ -8,7 +8,9 @@ import {
     fetchAttendance,
     fetchTimetable,
     reformatData,
-    fetchMarks
+    fetchMarks,
+    fetchMoodleAssignments,
+    fetchAcadHistory
 } from '../actions/actions'
 
 class LoadingScreen extends Component {
@@ -70,6 +72,8 @@ class LoadingScreen extends Component {
                 // Timetable complete, call the attendance api
                 this.props.getAttendance()
                 this.props.getMarks()
+                this.props.getMoodle()
+                this.props.getAcadHistory()
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"
@@ -184,6 +188,12 @@ const mapDispatchToProps = (dispatch) => {
       },
       getMarks:()=>{
         dispatch(fetchMarks())
+      },
+      getMoodle:()=>{
+        dispatch(fetchMoodleAssignments())
+      },
+      getAcadHistory:()=>{
+          dispatch(fetchAcadHistory())
       },
       reformat: ()=>{
           dispatch(reformatData())

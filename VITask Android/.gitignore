@@ -63,3 +63,6 @@ check.js
 timetableapi.json
 classesapi.json
 authenticate.json
+acadhistory.json
+marks.json
+moodleapi.json
