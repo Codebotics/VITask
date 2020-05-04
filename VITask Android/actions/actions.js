@@ -15,6 +15,16 @@ import {
     FETCH_MARKS_REQUEST,
     FETCH_MARKS_SUCCESS,
     FETCH_MARKS_ERROR,
+
+    FETCH_MOODLE_ASSIGNMENTS_REQUEST,
+    FETCH_MOODLE_ASSIGNMENTS_SUCCESS,
+    FETCH_MOODLE_ASSIGNMENTS_ERROR,
+    FETCH_MOODLE_ASSIGNMENTS_SYNC,
+
+    FETCH_ACADHISTORY_REQUEST,
+    FETCH_ACADHISTORY_SUCCESS,
+    FETCH_ACADHISTORY_ERROR,
+
     } from './types'
     
     
@@ -93,7 +103,47 @@ import {
     
     const fetchMarksError = (err)=>{
         return{
-            type : FETCH_MARKS_SUCCESS,
+            type : FETCH_MARKS_ERROR,
+            error : err
+        }
+    }
+
+    const fetchMoodleAssignmentsRequest = ()=>{
+        return{
+            type : FETCH_MOODLE_ASSIGNMENTS_REQUEST
+        }
+    }
+
+    const fetchMoodleAssignmentsSuccess = (assignments) =>{
+        return{
+            type : FETCH_MOODLE_ASSIGNMENTS_SUCCESS,
+            data : assignments
+        }
+    }
+
+    const fetchMoodleAssignmentsError = (err) =>{
+        return{
+            type : FETCH_MOODLE_ASSIGNMENTS_ERROR,
+            error : err
+        }
+    }
+
+    const fetchAcadHistoryRequest = () =>{
+        return{
+            type : FETCH_ACADHISTORY_REQUEST
+        }
+    }
+
+    const fetchAcadHistorySuccess = (acadHistory) =>{
+        return{
+            type : FETCH_ACADHISTORY_SUCCESS,
+            data : acadHistory
+        }
+    }
+
+    const fetchAcadHistoryError = (err) =>{
+        return{
+            type : FETCH_ATTENDANCE_ERROR,
             error : err
         }
     }
@@ -108,6 +158,8 @@ import {
     const ORIGINAL_ATTENDANCE = `https://vitask.me/classesapi?token={state.reducer.userInfo.APItoken}`
     const ORIGINAL_TIMETABLE = `https://vitask.me/timetableapi?token={state.reducer.userInfo.APItoken}`
     const ORIGINAL_MARKS = 'https://vitask.me/marksapi?token={state.reducer.userInfo.APItoken}'
+    const ORIGINAL_MOODLE = 'https://vitask.me/moodleapi?token={state.reducer.userInfo.APItoken}'
+    const ORIGINAL_ACADEMIC_HISTORY = "https://vitask.me/acadhistoryapi?token={state.reducer.userInfo.APItoken}"
     
     export const loginVTOP =(username, password) => {
         return dispatch=>{
@@ -170,5 +222,35 @@ import {
                 dispatch(fetchMarksSuccess(res))
             })
             .catch(err=> dispatch(fetchMarksError(err)))
+        }
+    }
+
+    export const fetchMoodleAssignments = ()=>{
+        return (dispatch, getState)=>{
+            const state = getState()
+            dispatch(fetchMoodleAssignmentsRequest)
+            fetch('https://jsonplaceholder.typicode.com/posts')
+            .then(res =>{
+                res = require('../moodleapi.json')
+                return res
+            }).then(res =>{
+                dispatch(fetchMoodleAssignmentsSuccess(res))
+            })
+            .catch(err => dispatch(fetchMoodleAssignmentsError(err)))
+        }
+    }
+
+    export const fetchAcadHistory = () =>{
+        return(dispatch,getState) =>{
+            const state = getState()
+            dispatch(fetchAcadHistoryRequest)
+            fetch('https://jsonplaceholder.typicode.com/posts')
+            .then(res =>{
+                res = require('../acadhistory.json')
+                return res
+            }).then(res =>{
+                dispatch(fetchAcadHistorySuccess(res))
+            })
+            .catch(err =>{dispatch((fetchAcadHistoryError(err)))})
         }
     }

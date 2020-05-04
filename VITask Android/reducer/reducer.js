@@ -11,10 +11,18 @@ import {
     FETCH_TIMETABLE_SUCCESS,
     FETCH_TIMETABLE_ERROR,
 
-    REFORMAT_DATA,
     FETCH_MARKS_SUCCESS,
     FETCH_MARKS_REQUEST,
-    FETCH_MARKS_ERROR
+    FETCH_MARKS_ERROR,
+
+    FETCH_MOODLE_ASSIGNMENTS_REQUEST,
+    FETCH_MOODLE_ASSIGNMENTS_SUCCESS,
+    FETCH_MOODLE_ASSIGNMENTS_ERROR,
+    FETCH_MOODLE_ASSIGNMENTS_SYNC,
+
+    REFORMAT_DATA,
+    FETCH_ACADHISTORY_REQUEST,
+    FETCH_ACADHISTORY_SUCCESS,
     } from '../actions/types'
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunkMiddleware from 'redux-thunk'
@@ -167,14 +175,14 @@ const reducer = (state = initialState, action)=>{
         case FETCH_TIMETABLE_ERROR:
             return {
                 ...state,
-                status: "ERROR",
+                status : "ERROR",
                 error : action.error
             }
 
         case FETCH_MARKS_REQUEST:
             return{
                 ...state,
-                status:"REQUEST_MARKS",
+                status : "REQUEST_MARKS",
                 error : ""
             }
 
@@ -186,6 +194,48 @@ const reducer = (state = initialState, action)=>{
             }
         
         case FETCH_MARKS_ERROR:
+            return{
+                ...state,
+                status : "ERROR",
+                error : action.error
+            }
+        
+        case FETCH_MOODLE_ASSIGNMENTS_REQUEST:
+            return{
+                ...state,
+                status : "REQUEST_MOODLE_ASSIGNMENTS",
+                error : ""
+            }
+
+        case FETCH_MOODLE_ASSIGNMENTS_SUCCESS:
+            return{
+                ...state,
+                status : "MOODLE_ASSIGNMENTS_COMPLETE",
+                assignments : action.data
+            }
+
+        case FETCH_MOODLE_ASSIGNMENTS_ERROR:
+            return{
+                ...state,
+                staus : "ERROR",
+                error : action.error
+            }
+
+        case FETCH_ACADHISTORY_REQUEST:
+            return{
+                ...state,
+                status : "REQUEST_ACADHISTORY",
+                error : ""
+            }
+
+        case FETCH_ACADHISTORY_SUCCESS:
+            return{
+                ...state,
+                status : "ACADHISTORY_COMPLETE",
+                acadhistory : action.data
+            }
+
+        case FETCH_ATTENDANCE_ERROR:
             return{
                 ...state,
                 status : "ERROR",

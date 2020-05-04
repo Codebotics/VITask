@@ -19,7 +19,7 @@ class DashboardScreen extends Component {
     
     componentDidMount(){
         console.log(Object.keys(this.props))
-        console.log(this.props.state.marks)
+        console.log(this.props.state.acadhistory)
         let totalClass = 0
         let totalLab = 0
         for(classes of this.state.timetable){
