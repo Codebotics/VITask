@@ -78,6 +78,12 @@ ipcMain.on('resync:new',function(e,item){
     dashWindow.webContents.send('resync:new',item);
 });
 
+//catch moodle:new
+ipcMain.on('moodle:new',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('moodle:new',item)
+});
+
 //catch page:change
 ipcMain.on('page:change',function(e,item){
     console.log(item);
@@ -88,6 +94,12 @@ ipcMain.on('page:change',function(e,item){
 ipcMain.on('resync:details',function(e,item){
     console.log(item);
     dashWindow.webContents.send('resync:details',item);
+});
+
+//catch nomoodle:new
+ipcMain.on('nomoodle:new',function(e,item){
+    console.log(item);
+    dashWindow.webContents.send('nomoodle:new',item);
 });
 
 

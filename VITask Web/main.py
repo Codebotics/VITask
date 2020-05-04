@@ -404,7 +404,7 @@ def moodleapi():
             return jsonify({'Error': 'Invalid API Token.'})
     else:
         try:
-            test_var = session['id']
+            session['id'] = request.args.get('appno')
         except:
             return jsonify({'Error': 'Please authenticate first.'})
         moodle_username =  request.args.get('username')

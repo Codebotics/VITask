@@ -7,7 +7,10 @@ import {
     loginVTOP,
     fetchAttendance,
     fetchTimetable,
-    reformatData
+    reformatData,
+    fetchMarks,
+    fetchMoodleAssignments,
+    fetchAcadHistory
 } from '../actions/actions'
 
 class LoadingScreen extends Component {
@@ -29,9 +32,10 @@ class LoadingScreen extends Component {
     handleTextRef = ref => this.text = ref
     handleProcessRef = ref => this.process = ref
     componentDidMount(){
+        console.log(this.props.route.params)
         // First call login function
         // Change the dummy api calls in the ./actions/actions.js
-        this.props.login('FuckYou', 'NotGonnaGiveYou')
+        this.props.login(this.props.route.params.username, this.props.route.params.password)
     }
     componentDidUpdate(prevProps){
         if(prevProps.state.status !== this.props.state.status){
@@ -67,6 +71,9 @@ class LoadingScreen extends Component {
             else if (state.status === "TIMETABLE_COMPLETE" && this.state.process !== "Getting your Attendances"){
                 // Timetable complete, call the attendance api
                 this.props.getAttendance()
+                this.props.getMarks()
+                this.props.getMoodle()
+                this.props.getAcadHistory()
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"
@@ -178,6 +185,15 @@ const mapDispatchToProps = (dispatch) => {
       },
       getTimetable: ()=>{
           dispatch(fetchTimetable())
+      },
+      getMarks:()=>{
+        dispatch(fetchMarks())
+      },
+      getMoodle:()=>{
+        dispatch(fetchMoodleAssignments())
+      },
+      getAcadHistory:()=>{
+          dispatch(fetchAcadHistory())
       },
       reformat: ()=>{
           dispatch(reformatData())

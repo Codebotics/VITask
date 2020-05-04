@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const date = new Date()
-const today = days[date.getDay()]
+// const today = days[date.getDay()]
+// Just for Testing
+const today = "Friday"
 class DashboardScreen extends Component {
     state = {
         day: today,
@@ -17,6 +19,7 @@ class DashboardScreen extends Component {
     
     componentDidMount(){
         console.log(Object.keys(this.props))
+        console.log(this.props.state.acadhistory)
         let totalClass = 0
         let totalLab = 0
         for(classes of this.state.timetable){
