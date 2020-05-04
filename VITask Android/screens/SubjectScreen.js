@@ -4,6 +4,7 @@ import { Headline, Caption, Subheading,Card, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Assignment from '../components/Assignment/Assignment'
 import Marks from '../components/Marks/Marks'
+import LastSync  from "../components/LastSync/LastSync";
 
 
 export class SubjectScreen extends Component {
@@ -13,40 +14,7 @@ export class SubjectScreen extends Component {
         color: "#00e6ac",
         loading: true
     }
-    millisecondsToStr (milliseconds) {
-        // Copied from https://stackoverflow.com/a/8212878/8077711
-        // Thanks @Dan from Stackoverflow
-        // TIP: to find current time in milliseconds, use:
-        // var  current_time_milliseconds = new Date().getTime();
     
-        function numberEnding (number) {
-            return (number > 1) ? 's' : '';
-        }
-    
-        var temp = Math.floor(milliseconds / 1000);
-        var years = Math.floor(temp / 31536000);
-        if (years) {
-            return years + ' year' + numberEnding(years) + ' ago';
-        }
-        //TODO: Months! Maybe weeks? 
-        var days = Math.floor((temp %= 31536000) / 86400);
-        if (days) {
-            return days + ' day' + numberEnding(days) + ' ago';
-        }
-        var hours = Math.floor((temp %= 86400) / 3600) ;
-        if (hours) {
-            return hours + ' hour' + numberEnding(hours) + ' ago';
-        }
-        var minutes = Math.floor((temp %= 3600) / 60);
-        if (minutes) {
-            return minutes + ' minutes' + numberEnding(minutes) + ' ago';
-        }
-        var seconds = temp % 60;
-        if (seconds) {
-            return seconds + ' second' + numberEnding(seconds) + ' ago';
-        }
-        return 'just now'; //'just now' //or other string you like;
-    }
     onMiss(type){
         let bunk = this.state.bunk+ (type*1)
         let attended = this.state.attended+ (type*1)
@@ -68,7 +36,6 @@ export class SubjectScreen extends Component {
         })
     }
     componentDidMount(){
-        console.log(this.state)
         const course = this.props.route.params.course
         this.setState({
             ...course
@@ -108,6 +75,18 @@ export class SubjectScreen extends Component {
                 </View>
             )
         }
+        else{
+            marks = []
+            for(const mark in this.state.marks){
+                marks.push(
+                    <Marks 
+                        title = {mark}
+                        marks = {this.state.marks[mark]}
+                        key = {mark}
+                    />
+                )
+            }
+        }
         if (this.state.percentage<75){
             shortNotice = (
                 <Card elevation={12} style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#ffc480"}}>
@@ -130,7 +109,7 @@ export class SubjectScreen extends Component {
                         <Card elevation={12} style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}}>
                             <View style={{...styles.justifySpaceRow, marginTop:0}}>
                             <View style={{...styles.justifySpaceCol, marginTop:0, flex:1}}>
-                                <Headline style={{color:this.state.color, fontSize:65, paddingTop:"40%", textAlign:"center"}}>{this.state.percentage}%</Headline>
+                                <Headline style={{color:this.state.color, fontSize:57, paddingTop:"32%", textAlign:"center"}}>{this.state.percentage}%</Headline>
                                 <Caption style={{color:"#BBB", textAlign:"center"}} >{this.state.attended} out of {this.state.total}</Caption>
                             </View>
                             <View style={{...styles.justifySpaceCol, marginTop:0, flex:1, justifyContent:"center", alignItems:"center"}}>
@@ -184,10 +163,7 @@ export class SubjectScreen extends Component {
                         </View>
                         </Card>
 
-                        <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center",marginBottom:"4%", paddingVertical:"5%"}}>
-                                    <Icon name="sync" size={15} style={{color:"#FFF"}} />
-                                    <Caption style={{color:"#FFF", paddingLeft:"1%"}}>{this.millisecondsToStr((new Date().getTime())-(new Date(this.state.updatedOn).getTime()))}</Caption >
-                        </View>           
+                        <LastSync/>
 
                     </View>
 
