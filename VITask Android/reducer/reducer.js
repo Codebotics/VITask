@@ -55,6 +55,7 @@ const toggleCase = (str)=>{
 const formatData = (state)=>{
     attendance = state.attendance
     timetable = state.timetable
+    marks = state.marks.Marks
 
     let slots = attendance.Slots
     slots = slots.map(splitSlots)
@@ -66,7 +67,8 @@ const formatData = (state)=>{
             ...attendance.Attended[i],
             slot: slots[i],
             faculty: toggleCase(attendance.Attended[i].faculty),
-            days: []
+            days: [],
+            marks : marks[attendance.Attended[i].courseName+" "+attendance.Attended[i].type]
         })
     }
     let newTimetable = {

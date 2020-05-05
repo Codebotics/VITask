@@ -22,9 +22,6 @@ class Course extends Component {
         for(let i=1; i<slot.length; i++){
             slotUpdated += " + " + slot[i]
         }
-
-        console.log("slotUpdated",slotUpdated);
-
         this.setState({
             slot:slotUpdated
         })
@@ -69,6 +66,7 @@ class Course extends Component {
     }
 
     render() {
+        const isLab = this.props.slot[0][0]==="L"
         let moodle
         if(this.props.showMoodle){
             moodle = (
@@ -79,7 +77,7 @@ class Course extends Component {
             )
         }
         let lab 
-        if(this.props.isLab){
+        if(isLab){
             lab = (
                 <View style={{
                     paddingVertical: "1%",
@@ -110,7 +108,9 @@ class Course extends Component {
         return (
             <View style={{marginVertical:"2%"}}>
                 <TouchableRipple
-                    onPress = {()=>{this.props.navigation.navigate("Courses", {course : this.state.course})}}
+                    onPress = {()=>{
+                        console.log("")
+                        this.props.navigation.navigate("Subject", {course : this.state.course})}}
                     rippleColor = "rgba(34, 54, 93, 0.32)"
                 >
                 <Card elevation={12} style={{borderRadius:10, paddingBottom:"5%", paddingTop:"5%", backgroundColor:"#22365d", paddingHorizontal:"5%"}}>
