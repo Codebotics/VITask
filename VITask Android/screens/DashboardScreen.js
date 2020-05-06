@@ -3,12 +3,14 @@ import {  View, ScrollView } from 'react-native'
 import { Headline, Caption } from "react-native-paper";
 import Timetable from '../components/Timetable/Timetable'
 import { connect } from 'react-redux';
+import LastSync  from "../components/LastSync/LastSync";
+
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const date = new Date()
 // const today = days[date.getDay()]
 // Just for Testing
-const today = "Friday"
+const today = "Thursday"
 class DashboardScreen extends Component {
     state = {
         day: today,
@@ -18,8 +20,6 @@ class DashboardScreen extends Component {
     }
     
     componentDidMount(){
-        console.log(Object.keys(this.props))
-        console.log(this.props.state.acadhistory)
         let totalClass = 0
         let totalLab = 0
         for(classes of this.state.timetable){
@@ -63,9 +63,7 @@ class DashboardScreen extends Component {
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
                     {timetable}
-                </View>
-                <View>
-
+                    <LastSync/>
                 </View>
             </View>
             </ScrollView>
@@ -75,14 +73,13 @@ class DashboardScreen extends Component {
 
 function mapStateToProps(state){
     return {
-        state : state.reducer
+        state: state.reducer
     }
 }
-
 const mapDispatchToProps = (dispatch) => {
     return {
-
     }
-}
+  }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen)

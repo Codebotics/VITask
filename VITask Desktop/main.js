@@ -109,14 +109,20 @@ const mainMenuTemplate = [
         label:'File',
         submenu:[
             {
-                label: 'Add Items',
+                label: 'Resync',
+                accelerator: process.platform == 'darwin' ? 'Command+S' : 'Ctrl+S',
                 click()
                 {
-                    createAddWindow();
+                    dashWindow.webContents.send('page:change','resync');
                 }
             },
             {
-                label: 'Clear Items'
+                label: 'Logout',
+                accelerator: process.platform == 'darwin' ? 'Command+L' : 'Ctrl+L',
+                click()
+                {
+                    dashWindow.webContents.send('page:change','logout');
+                }
             },
             {
                 label: 'Quit',
@@ -128,6 +134,54 @@ const mainMenuTemplate = [
         ]
     }
 ];
+
+mainMenuTemplate.push({
+    label:'Navigate',
+        submenu:[
+            {
+                label: 'Dashboard',
+                accelerator: process.platform == 'darwin' ? 'Command+D' : 'Ctrl+D',
+                click(){
+                    dashWindow.webContents.send('page:change','dashboard');
+                }
+            },
+            {
+                label: 'Academic History',
+                accelerator: process.platform == 'darwin' ? 'Command+H' : 'Ctrl+H',
+                click(){
+                    dashWindow.webContents.send('page:change','academics');
+                }
+            },
+            {
+                label: 'Attendance',
+                accelerator: process.platform == 'darwin' ? 'Command+W' : 'Ctrl+W',
+                click(){
+                    dashWindow.webContents.send('page:change','attendance');
+                }
+            },
+            {
+                label: 'Marks',
+                accelerator: process.platform == 'darwin' ? 'Command+M' : 'Ctrl+M',
+                click(){
+                    dashWindow.webContents.send('page:change','marks');
+                }
+            },
+            {
+                label: 'Moodle',
+                accelerator: process.platform == 'darwin' ? 'Command+O' : 'Ctrl+O',
+                click(){
+                    dashWindow.webContents.send('page:change','moodlelogin');
+                }
+            },
+            {
+                label: 'Timetable',
+                accelerator: process.platform == 'darwin' ? 'Command+T' : 'Ctrl+T',
+                click(){
+                    dashWindow.webContents.send('page:change','timetable');
+                }
+            }
+        ]
+    });
 
 //for mac add empty object
 if(process.platform=="darwin"){

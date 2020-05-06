@@ -32,7 +32,6 @@ class LoadingScreen extends Component {
     handleTextRef = ref => this.text = ref
     handleProcessRef = ref => this.process = ref
     componentDidMount(){
-        console.log(this.props.route.params)
         // First call login function
         // Change the dummy api calls in the ./actions/actions.js
         this.props.login(this.props.route.params.username, this.props.route.params.password)
@@ -71,15 +70,15 @@ class LoadingScreen extends Component {
             else if (state.status === "TIMETABLE_COMPLETE" && this.state.process !== "Getting your Attendances"){
                 // Timetable complete, call the attendance api
                 this.props.getAttendance()
+                // Marks and acadhistory can be updated 
                 this.props.getMarks()
-                this.props.getMoodle()
                 this.props.getAcadHistory()
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"
                 })
             }
-            else if (state.status === "ATTENDANCE_COMPLETE"){
+            else if (state.status === "ACADHISTORY_COMPLETE"){
                 // Attendance complete call the reformat api
                 this.props.reformat()
             }

@@ -1276,45 +1276,58 @@ button:focus+.design-container {
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Moodle Login");
                         
-                        let template = `<div class="row">
-                                            <div class="col-md-12">
-                                              <div class="card">
-                                                <div class="card-header card-header-danger" style="text-align: center;">
-                                                <div class="card card-profile bg-danger" style="box-shadow: none;">
-                                                    <div class="card-avatar">
-                                                      <a href="javascript:;">
-                                                        <img class="img" src="dashboard/assets/img/faces/moodle.png" />
-                                                      </a>
+                        data.findOne({ moodle: 'user-moodle' }, function(err, doc) { 
+                            if(doc != null)
+                                {
+                                    ipcRenderer.send('page:change','dashboard');
+                                }
+                            else{
+                                data.findOne({ profile: 'user-profile' }, function(err, doc) {
+                                let regno = doc.regno;
+
+                                let template = `<div class="row">
+                                                    <div class="col-md-12">
+                                                      <div class="card">
+                                                        <div class="card-header card-header-danger" style="text-align: center;">
+                                                        <div class="card card-profile bg-danger" style="box-shadow: none;">
+                                                            <div class="card-avatar">
+                                                              <a href="javascript:;">
+                                                                <img class="img" src="dashboard/assets/img/faces/moodle.png" />
+                                                              </a>
+                                                            </div>
+                                                        </div>
+                                                        <h4 class="card-title">Integrate Moodle</h4>
+                                                          <p class="card-category">Enter your Moodle Account Details for one-click integration.</p>
+                                                        </div>
+                                                        <div class="card-body">
+                                                          <form>
+                                                            <div class="row">
+                                                              <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                  <label class="bmd-label-floating"></label>
+                                                                  <input type="text" class="form-control" value="${regno}" id="moodle_username" readonly>
+                                                                </div>
+                                                              </div>
+                                                              <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                  <label class="bmd-label-floating">Moodle Password</label>
+                                                                  <input type="password" class="form-control" id="moodle_password">
+                                                                </div>
+                                                              </div>
+                                                              </div>
+                                                            <a class="btn btn-danger text-white pull-right" onclick="moodleauthenticate();">Authenticate</a>
+                                                            <div class="clearfix"></div>
+                                                          </form>
+                                                        </div>
+                                                      </div>
                                                     </div>
-                                                </div>
-                                                <h4 class="card-title">Integrate Moodle</h4>
-                                                  <p class="card-category">Enter your Moodle Account Details for one-click integration.</p>
-                                                </div>
-                                                <div class="card-body">
-                                                  <form>
-                                                    <div class="row">
-                                                      <div class="col-md-6">
-                                                        <div class="form-group">
-                                                          <label class="bmd-label-floating">Moodle Username</label>
-                                                          <input type="text" class="form-control" id="moodle_username">
-                                                        </div>
-                                                      </div>
-                                                      <div class="col-md-6">
-                                                        <div class="form-group">
-                                                          <label class="bmd-label-floating">Moodle Password</label>
-                                                          <input type="password" class="form-control" id="moodle_password">
-                                                        </div>
-                                                      </div>
-                                                      </div>
-                                                    <a class="btn btn-danger text-white pull-right" onclick="moodleauthenticate();">Authenticate</a>
-                                                    <div class="clearfix"></div>
-                                                  </form>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>`;
-                        $("#canvas").html(template);
-                         
+                                                  </div>`;
+
+                            $("#canvas").html(template);
+                             });
+                            }
+
+                        });  
                     }
                 else if(item=='resync')
                     {
