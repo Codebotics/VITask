@@ -20,7 +20,7 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="MoodleLogin">
       <Stack.Screen name="GpaCalculator" options= {{headerShown : false}}>
           {props =><GpaCalculator {...props} />}
         </Stack.Screen>        
@@ -36,7 +36,7 @@ function App() {
         <Stack.Screen name="About" options= {{headerShown : false}}>
           {props =><AboutUsScreen {...props} />}
         </Stack.Screen>
-        <Stack.Screen name="MoodelLogin" options= {{headerShown : false}}>
+        <Stack.Screen name="MoodleLogin" options= {{headerShown : false}}>
           {props =><MoodleScreen {...props} />}
         </Stack.Screen>
         <Stack.Screen name="Subject" options= {{headerShown : false}}>
