@@ -17519,7 +17519,7 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
 .card.bg-primary,
 .card.card-rotate.bg-primary .front,
 .card.card-rotate.bg-primary .back {
-  background: linear-gradient(60deg, #ab47bc, #8e24aa);
+  background-color: #f44336;
 }
 
 .card .card-header-info .card-icon,
@@ -17528,7 +17528,7 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
 .card.bg-info,
 .card.card-rotate.bg-info .front,
 .card.card-rotate.bg-info .back {
-  background: linear-gradient(60deg, #26c6da, #00acc1);
+  background-color: #f44336;
 }
 
 .card .card-header-success .card-icon,

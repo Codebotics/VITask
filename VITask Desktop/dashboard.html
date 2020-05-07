@@ -1265,6 +1265,102 @@ button:focus+.design-container {
                             
                         });
                     }
+
+                else if(item=="assignments")
+                {
+                  $("#dashnav").attr('class', 'nav-item');
+                  $("#acadnav").attr('class', 'nav-item');
+                  $("#marksnav").attr('class', 'nav-item');
+                  $("#moodlenav").attr('class', 'nav-item active ');
+                  $("#timetablenav").attr('class', 'nav-item');
+                  $("#resyncnav").attr('class', 'nav-item');
+                  $("#logoutnav").attr('class', 'nav-item');
+                  $("#topheading").html("Moodle Login");
+
+                  data.findOne({ moodle: 'user-moodle' }, function(err, doc) { 
+                    let assignment = doc.Assignments;
+                    let content = ``;
+                    let finalcontent = ``;
+                    let content2 = ``;
+                    let assignment_count = 1;
+                    for(i in assignment){
+
+                    let coursename = Object.values(assignment[i])[0];
+                    let deadline = Object.values(assignment[i])[2];
+                    
+                    content += `<tr id="assign${assignment_count}"> <td>${coursename}</td>
+                                  <td>${deadline}</td>
+                                  <td class="td-actions text-right">
+                                    <button onclick="hideme(${assignment_count})" type="button" rel="tooltip" title="Remove" class="btn1 btn1-round bg-danger text-white">
+                                      <span>Remove</span>
+                                    </button>
+                                  </td>
+                                </tr>`
+                                                
+                    content2 += `<tr id="removed${assignment_count}" style="display:none"> 
+                                  <td>${coursename}</td>
+                                  <td>${deadline}</td>
+                                  <td class="td-actions text-right">
+                                    <button type="button" onclick="showme(${assignment_count})" rel="tooltip" title="Remove" class="btn1 btn1-round bg-danger text-white">
+                                      <span>Move Back</span>
+                                    </button>
+                                  </td>
+                                </tr>`
+
+                    assignment_count++;
+                  }
+
+                                   finalcontent += `<div class="col-md-12">
+                                      <div class="card">
+                                        <div class="card-header card-header-tabs card-header-primary">
+                                          <div class="nav-tabs-navigation">
+                                            <div class="nav-tabs-wrapper">
+                                              <span class="nav-tabs-title"></span>
+                                              <ul class="nav nav-tabs" data-tabs="tabs">
+                                                <li class="nav-item">
+                                                  <a class="nav-link active" href="#profile" data-toggle="tab">
+                                                    <i class="material-icons">bug_report</i> Current Assignments
+                                                    <div class="ripple-container"></div>
+                                                  </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                  <a class="nav-link" href="#messages" data-toggle="tab">
+                                                    <i class="material-icons">code</i> Removed Assignments
+                                                    <div class="ripple-container"></div>
+                                                  </a>
+                                                </li>
+                                              </ul>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="card-body">
+                                          <div class="tab-content">
+                                            <div class="tab-pane active" id="profile">
+                                              <table class="table">
+                                                <tbody>
+                                                  <th>Name</th>
+                                                  <th>Deadline</th>
+                                                  <th></th>`+content+`</tbody>
+                                              </table>
+                                            </div>
+                                            <div class="tab-pane" id="messages">
+                                              <table class="table">
+                                                <tbody>
+                                                  <th>Name</th>
+                                                  <th>Deadline</th>
+                                                  <th></th>`+content2+` </tbody>
+                                              </table>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>`;
+
+                                    $("#canvas").html(finalcontent);
+
+                  }); 
+
+                }
                 else if(item=='moodlelogin')
                     {
                         $("#dashnav").attr('class', 'nav-item');
@@ -1279,7 +1375,7 @@ button:focus+.design-container {
                         data.findOne({ moodle: 'user-moodle' }, function(err, doc) { 
                             if(doc != null)
                                 {
-                                    ipcRenderer.send('page:change','dashboard');
+                                    ipcRenderer.send('page:change','assignments');                                                                      
                                 }
                             else{
                                 data.findOne({ profile: 'user-profile' }, function(err, doc) {
@@ -1326,7 +1422,6 @@ button:focus+.design-container {
                             $("#canvas").html(template);
                              });
                             }
-
                         });  
                     }
                 else if(item=='resync')
@@ -1377,8 +1472,24 @@ button:focus+.design-container {
             $(document).ready(function() {
                 $("#loading").fadeOut(); 
             })
-        
-        
+
+            function hideme(id)
+            {
+                let ass_id = "#assign"+String(id);
+                let removed = "#removed"+String(id);
+                $(ass_id).hide();
+                $(removed).attr("style","");
+            }
+
+            function showme(id)
+            {
+                let ass_id = "#assign"+String(id);
+                let removed = "#removed"+String(id);
+                $(removed).attr("style","display:none;");
+                $(ass_id).show();
+            }
+                    
+                    
             function Bunk_add(id){
                 let select_id = "#newid"+String(id);
                 let noselect_id = "#nobunk"+String(id);
@@ -2141,6 +2252,7 @@ function Attend_subtract(id)
     $window.on('load', check_if_in_view);
 
 </script>
+<script src="assign.js"></script>
 
 
     
