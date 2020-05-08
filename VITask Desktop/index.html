@@ -204,6 +204,12 @@
                     console.log('error:', error);
                   } else {
                     let result = JSON.parse(body);
+                    if(result.Error){
+                        $("#loading").fadeOut();
+                        $("#content").fadeIn(); 
+                        alert("Wrong Password.");
+                    }
+                    else{
                     result.profile = "user-profile";
                     result.regno = regno;
                     result.password = password;
@@ -227,6 +233,7 @@
                         });
                         
                     });
+                    }
                   }
                 });
                 

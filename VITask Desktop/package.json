@@ -1,7 +1,8 @@
 {
-  "name": "shoppinglist",
+  "name": "VITask",
+  "productName": "VITask",
   "version": "1.0.0",
-  "description": "",
+  "description": "The most powerful VTOP API server!",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
@@ -10,11 +11,19 @@
   "license": "MIT",
   "dependencies": {
     "electron": "^7.1.10",
+    "electron-google-analytics": "^0.2.2",
     "electron-json-storage": "^4.1.8",
+    "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.1",
+    "electron-winstaller": "^4.0.0",
     "jquery": "^3.5.0",
     "nedb": "^1.8.0",
     "nedb-promises": "^4.0.1",
-    "request": "^2.88.0"
+    "node-localstorage": "^2.1.6",
+    "request": "^2.88.0",
+    "universal-analytics": "^0.4.20"
+  },
+  "devDependencies": {
+    "electron-packager": "^14.2.1"
   }
 }

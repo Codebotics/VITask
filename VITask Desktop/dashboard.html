@@ -580,7 +580,6 @@ button:focus+.design-container {
                                       </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-danger pull-right">Settings</button>
                                     <div class="clearfix"></div>
                                   </form>
                                 </div>
@@ -1275,7 +1274,7 @@ button:focus+.design-container {
                   $("#timetablenav").attr('class', 'nav-item');
                   $("#resyncnav").attr('class', 'nav-item');
                   $("#logoutnav").attr('class', 'nav-item');
-                  $("#topheading").html("Moodle Login");
+                  $("#topheading").html("Moodle Assignments");
 
                   data.findOne({ moodle: 'user-moodle' }, function(err, doc) { 
                     let assignment = doc.Assignments;
@@ -1287,12 +1286,18 @@ button:focus+.design-container {
 
                     let coursename = Object.values(assignment[i])[0];
                     let deadline = Object.values(assignment[i])[2];
+                        
+                    let splitter = coursename.split("(");
+                    splitter[1] = splitter[1].substring(0, splitter[1].length - 1);
+                    let sendcourse = splitter.join(" ");
+                    sendcourse = sendcourse.split(" ");
+                    let sendtime = deadline.split(" ");
                     
                     content += `<tr id="assign${assignment_count}"> <td>${coursename}</td>
                                   <td>${deadline}</td>
                                   <td class="td-actions text-right">
-                                    <button onclick="hideme(${assignment_count})" type="button" rel="tooltip" title="Remove" class="btn1 btn1-round bg-danger text-white">
-                                      <span>Remove</span>
+                                    <a onclick="hideme(${assignment_count})" rel="tooltip" title="Remove" class="text-danger" style="cursor: pointer;">
+                                      <i class="material-icons">clear</i> 
                                     </button>
                                   </td>
                                 </tr>`
@@ -1301,9 +1306,9 @@ button:focus+.design-container {
                                   <td>${coursename}</td>
                                   <td>${deadline}</td>
                                   <td class="td-actions text-right">
-                                    <button type="button" onclick="showme(${assignment_count})" rel="tooltip" title="Remove" class="btn1 btn1-round bg-danger text-white">
-                                      <span>Move Back</span>
-                                    </button>
+                                    <a onclick="showme(${assignment_count})" rel="tooltip" title="Restore" class="text-success" style="cursor: pointer;">
+                                      <i class="material-icons">done</i> 
+                                    </a>
                                   </td>
                                 </tr>`
 
@@ -1311,50 +1316,50 @@ button:focus+.design-container {
                   }
 
                                    finalcontent += `<div class="col-md-12">
-                                      <div class="card">
-                                        <div class="card-header card-header-tabs card-header-primary">
-                                          <div class="nav-tabs-navigation">
-                                            <div class="nav-tabs-wrapper">
-                                              <span class="nav-tabs-title"></span>
-                                              <ul class="nav nav-tabs" data-tabs="tabs">
-                                                <li class="nav-item">
-                                                  <a class="nav-link active" href="#profile" data-toggle="tab">
-                                                    <i class="material-icons">bug_report</i> Current Assignments
-                                                    <div class="ripple-container"></div>
-                                                  </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                  <a class="nav-link" href="#messages" data-toggle="tab">
-                                                    <i class="material-icons">code</i> Removed Assignments
-                                                    <div class="ripple-container"></div>
-                                                  </a>
-                                                </li>
-                                              </ul>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="card-body">
-                                          <div class="tab-content">
-                                            <div class="tab-pane active" id="profile">
-                                              <table class="table">
-                                                <tbody>
-                                                  <th>Name</th>
-                                                  <th>Deadline</th>
-                                                  <th></th>`+content+`</tbody>
-                                              </table>
-                                            </div>
-                                            <div class="tab-pane" id="messages">
-                                              <table class="table">
-                                                <tbody>
-                                                  <th>Name</th>
-                                                  <th>Deadline</th>
-                                                  <th></th>`+content2+` </tbody>
-                                              </table>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>`;
+                                                      <div class="card">
+                                                        <div class="card-header card-header-tabs card-header-danger">
+                                                          <div class="nav-tabs-navigation">
+                                                            <div class="nav-tabs-wrapper">
+                                                              <span class="nav-tabs-title"></span>
+                                                              <ul class="nav nav-tabs" data-tabs="tabs">
+                                                                <li class="nav-item">
+                                                                  <a class="nav-link active" href="#profile" data-toggle="tab">
+                                                                    <i class="material-icons">playlist_add_check</i> Current Assignments
+                                                                    <div class="ripple-container"></div>
+                                                                  </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                  <a class="nav-link" href="#messages" data-toggle="tab">
+                                                                    <i class="material-icons">not_interested</i> Removed Assignments
+                                                                    <div class="ripple-container"></div>
+                                                                  </a>
+                                                                </li>
+                                                              </ul>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                          <div class="tab-content">
+                                                            <div class="tab-pane active" id="profile">
+                                                              <table class="table">
+                                                                <tbody>
+                                                                  <th>Name</th>
+                                                                  <th>Deadline</th>
+                                                                  <th></th>`+content+`</tbody>
+                                                              </table>
+                                                            </div>
+                                                            <div class="tab-pane" id="messages">
+                                                              <table class="table">
+                                                                <tbody>
+                                                                  <th>Name</th>
+                                                                  <th>Deadline</th>
+                                                                  <th></th>`+content2+` </tbody>
+                                                              </table>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>`;
 
                                     $("#canvas").html(finalcontent);
 
@@ -1472,22 +1477,6 @@ button:focus+.design-container {
             $(document).ready(function() {
                 $("#loading").fadeOut(); 
             })
-
-            function hideme(id)
-            {
-                let ass_id = "#assign"+String(id);
-                let removed = "#removed"+String(id);
-                $(ass_id).hide();
-                $(removed).attr("style","");
-            }
-
-            function showme(id)
-            {
-                let ass_id = "#assign"+String(id);
-                let removed = "#removed"+String(id);
-                $(removed).attr("style","display:none;");
-                $(ass_id).show();
-            }
                     
                     
             function Bunk_add(id){
@@ -1798,6 +1787,23 @@ function Attend_subtract(id)
                 window.close();
                 });
             }
+        
+            function hideme(id)
+            {
+                let ass_id = "#assign"+String(id);
+                let removed = "#removed"+String(id);
+                $(ass_id).hide();
+                $(removed).attr("style","");
+            }
+
+            function showme(id)
+            {
+                let ass_id = "#assign"+String(id);
+                let removed = "#removed"+String(id);
+                $(removed).attr("style","display:none;");
+                $(ass_id).show();
+            }
+              
         
             function login(regno,password,moodle_username=null,moodle_password=null,mode=null){
                 let url = 'https://vitask.me/authenticate?username='+regno+'&password='+password;
@@ -2252,7 +2258,6 @@ function Attend_subtract(id)
     $window.on('load', check_if_in_view);
 
 </script>
-<script src="assign.js"></script>
 
 
     
