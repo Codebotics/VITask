@@ -1,5 +1,5 @@
 # VITask
-_Still in Development Mode use with caution_
+_Moved into Internal Beta Testing Mode ([Desktop App](https://github.com/Codebotics/VITask/releases/tag/v1.0.0-DesktopWindowsBeta)). Mobile App will be in testing mode in few days. Stay Tuned!_
 
 VITask is a dynamic API server for VTOP. This repo contains code for Web(`Flask server`), Android App (`React-Native`), Desktop (`ElectronJS`). The code is still in development stage, use with caution.
 
