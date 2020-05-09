@@ -544,6 +544,11 @@ def home():
 def ourteam():
     return render_template('team.html')
 
+# Team Page
+@app.route('/downloads' , methods=['GET'])
+def downloads():
+    return render_template('downloads.html')
+
 # Sitemap
 @app.route('/sitemap.xml' , methods=['GET'])
 def sitemap():
@@ -680,7 +685,7 @@ def apiconsole():
     if(session['loggedin']==0):
         return redirect(url_for('index'))
     else:
-        return render_template('apiconsole.html',name = session['name'])
+        return redirect(url_for('profile'))
 
 """---------------------------------------------------------------
 
@@ -961,7 +966,7 @@ def logout():
     session.pop('acadhistory', 0)
     # session.pop('marks', 0)
     session.pop('loggedin',0)
-    return render_template('home.html')
+    return redirect(url_for('home'))
 
 
 

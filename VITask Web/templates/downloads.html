@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157430748-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-157430748-1');
+        </script>
+		<title>VITask | Downloads</title>
+		<meta charset="utf-8" />
+        <link href="{{ url_for('static', filename='home/images/logo_light.png') }}" rel="icon">
+        
+        <meta name="description" content="VITask allows seamless integration of useful VTOP features on all platforms(Web, Android, iOS, Windows,macOS, Linux). One-click authentication without captcha, open APIs to develop your VTOP applications/widgets, Moodle integration, and a beautiful UI are some of the core features which make it an enhancement over VTOP.">
+        <meta name="keywords" content="vitask,moodle,captcha,login,chennai,vit,vellore institute of technology,vtop,ffcs,vitask web,vitask app,vitask chennai,earthing,earthing in club penguin,technovit,vibrance,technovit chennai,vibrance chennai,vitask login,vitask moodle,vitask integration,vitask policies,vitask cloud">
+        <meta name="author" content="VITask Team">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='downloads/assets/css/main.css')}}" />
+		<noscript><link rel="stylesheet" href="{{ url_for('static', filename='downloads/assets/css/noscript.css')}}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+                            <img style='height: 100%; width: 100%; object-fit: contain' src="{{ url_for('static', filename='downloads/images/main-icon.png')}}">
+						</div>
+						<div class="content">
+							<div class="inner">
+								<h1>VITask Downloads</h1>
+								<p>Download the latest cross-platform VITask clients from here.</p>
+							</div>
+						</div>
+						<nav>
+							<ul>
+								<li><a href="#desktop">Desktop (ElectronJS)</a></li>
+								<li><a href="#android1">Android (React Native)</a></li>
+								<li><a href="#android2">Android (Flutter)</a></li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Intro -->
+							<article id="desktop">
+								<h2 class="major">VITask Desktop</h2>
+								<span class="image main"><img src="{{ url_for('static', filename='downloads/images/pic01.jpg')}}" alt="" /></span>
+								<blockquote>Protons give an atom its identity, electrons its personality.-Bill Bryson</blockquote>
+                                <a href="https://github.com/Codebotics/VITask/releases/download/v1.0.0-DesktopWindowsBeta/installer.rar" class="button primary">Download</a><br /><br />
+                                <h4>Steps to install VITask Desktop Client:</h4>
+                                <ul>
+                                    <li>Download <code>installer.rar</code> and extract it to a suitable location.</li>
+                                    <li>Run <code>VITaskSetup.msi</code> and complete the setup.</li>
+                                    <li>Now run <code>VITaskSetup.exe</code></li>
+                                    <li>VITask will be installed and a shortcut will be added to your Desktop.</li>
+                                </ul>
+							</article>
+
+						<!-- Work -->
+							<article id="android1">
+								<h2 class="major">VITask Android (React Native)</h2>
+								<h3>Coming Soon!</h3>
+							</article>
+
+						<!-- About -->
+							<article id="android2">
+								<h2 class="major">VITask Android (Flutter)</h2>
+								<h3>Coming Soon!</h3>
+							</article>
+
+						
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">Copyright &copy;2020 All rights reserved | <a href="{{ url_for('home') }}">VITask</a></p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="{{ url_for('static', filename='downloads/assets/js/jquery.min.js')}}"></script>
+			<script src="{{ url_for('static', filename='downloads/assets/js/browser.min.js')}}"></script>
+			<script src="{{ url_for('static', filename='downloads/assets/js/breakpoints.min.js')}}"></script>
+			<script src="{{ url_for('static', filename='downloads/assets/js/util.js')}}"></script>
+			<script src="{{ url_for('static', filename='downloads/assets/js/main.js')}}"></script>
+
+	</body>
+</html>

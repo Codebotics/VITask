@@ -776,6 +776,29 @@ textarea {
 /*--------------------------------------*/
 /* 8. Buttons --------------------------*/
 /*--------------------------------------*/ 
+
+.custom {
+    transition-duration: 0.4s;
+    background-color: white;
+    color: black;
+    display: inline-block;
+    height: 2.57rem;
+    margin-bottom: 15px;
+    padding: 0 1.5rem;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-clip: padding-box;
+    line-height: 2.57rem;
+    text-transform: uppercase;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.custom:hover {
+  background-color: #DB7093;
+  color: white;
+}
  
 .btn,
 .btn-large,
