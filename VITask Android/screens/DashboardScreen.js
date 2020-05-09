@@ -37,10 +37,6 @@ class DashboardScreen extends Component {
             totalClass,
             totalLab
         })
-        var dateos = new Date("Sunday May 10 2020 1:35:00 GMT+0530")
-        console.log("Date",dateos)
-        var dateU = new Date(Date.now())
-        console.log(dateU)
     }
 
 
