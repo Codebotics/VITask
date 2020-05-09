@@ -20,7 +20,7 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MoodleLogin">
+      <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="GpaCalculator" options= {{headerShown : false}}>
           {props =><GpaCalculator {...props} />}
         </Stack.Screen>        

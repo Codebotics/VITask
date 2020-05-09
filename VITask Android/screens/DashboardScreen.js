@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {  View, ScrollView } from 'react-native'
+import PushNotification from 'react-native-push-notification'
 import { Headline, Caption } from "react-native-paper";
 import Timetable from '../components/Timetable/Timetable'
 import { connect } from 'react-redux';
@@ -8,6 +9,7 @@ import LastSync  from "../components/LastSync/LastSync";
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const date = new Date()
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 // const today = days[date.getDay()]
 // Just for Testing
 const today = "Thursday"
@@ -18,6 +20,7 @@ class DashboardScreen extends Component {
         totalClass:0,
         totalLab:0
     }
+    
     
     componentDidMount(){
         let totalClass = 0
@@ -34,14 +37,22 @@ class DashboardScreen extends Component {
             totalClass,
             totalLab
         })
+        var dateos = new Date("Sunday May 10 2020 1:35:00 GMT+0530")
+        console.log("Date",dateos)
+        var dateU = new Date(Date.now())
+        console.log(dateU)
     }
 
 
     render() {
         let  moodleLogin = false
-        
-        
+
         let timetable=[]
+        // Sample String
+        // var dateString = days[date.getDay()] + " " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + "1:40:30 GMT+0530"
+        
+        // Constant part of string
+        var dateString = days[date.getDay()] + " " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear()
         for(let i=0;i<this.state.timetable.length;++i){
             timetable.push(
                 <Timetable
@@ -53,6 +64,34 @@ class DashboardScreen extends Component {
                     navigation = {this.props.navigation}
                 />
             )
+            // spliting time from ":"
+            var timeSplit = this.state.timetable[i]['startTime'].split(':')
+            // converting time to integer for further calculations
+            var time = parseInt(timeSplit[0])
+
+            if(time == 8 || time == 9 || time == 10 || time == 11 || time == 12){
+            var dateStringSchedule = dateString + " " + this.state.timetable[i]['startTime'] +" GMT+0530"
+            }else{
+                time = time+12
+                time = time.toString()
+                var dateStringSchedule = dateString + " " + time + ":" + timeSplit[1] +" GMT+0530"
+                console.log(dateStringSchedule)
+            }
+
+            // Scheduling Notifications
+            PushNotification.localNotificationSchedule({
+                autoCancel: true,
+                bigText:"Upcoming Class",
+                subText: this.state.timetable[i]['slot'],
+                title:"you have class in slot " + this.state.timetable[i]['slot'] + " at time " + this.state.timetable[i]['startTime'] + " - " + this.state.timetable[i]['endTime'],
+                message:"",
+                vibrate: true,
+                vibration: 300,
+                playSound: true,
+                soundName: 'default',
+                actions: '["Yes", "No"]',
+                date : new Date(dateStringSchedule)
+              })
             }
 
         return (
