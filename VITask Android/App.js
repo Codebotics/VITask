@@ -8,7 +8,7 @@ import LoadingScreen from "./screens/LoadingScreen";
 import  LoginScreen  from "./screens/LoginScreen";
 import  DashboardScreen from "./screens/DashboardScreen";
 import { SubjectScreen } from "./screens/SubjectScreen";
-import { MoodleScreen } from "./screens/MoodleScreen";
+import  MoodleScreen from "./screens/MoodleScreen";
 import CourseScreen from './screens/CourseScreen'
 import { AboutUsScreen } from "./screens/AboutUsScreen";
 import GpaCalculator from './screens/GpaCalculator'

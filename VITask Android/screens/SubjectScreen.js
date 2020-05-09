@@ -60,7 +60,7 @@ export class SubjectScreen extends Component {
                     <Subheading style={{color:"#FFF"}}>See your pending assignments</Subheading>
                     <Caption style={{color:"#FFF", paddingTop:"5%"}}>VITask can also show you assignments. Just Sign In Moodle and see your assignments here.</Caption>
                     <Card.Actions style={{justifyContent:"flex-end"}}>
-                    <Button mode="contained" color="#f90024" style={{marginTop:"1%", flex:1, maxWidth:"30%"}}>Log In</Button>
+                    <Button mode="contained" color="#f90024" style={{marginTop:"1%", flex:1, maxWidth:"30%"}} onPress={()=>{this.props.navigation.navigate("MoodleLogin")}}>Log In</Button>
                     </Card.Actions>
                     </Card>
                 </View>
