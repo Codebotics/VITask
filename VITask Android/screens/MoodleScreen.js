@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, StyleSheet, ToastAndroid, TouchableWithoutFeedback } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, ToastAndroid } from 'react-native'
 import { Caption, Subheading, Headline, TextInput, Button, ActivityIndicator } from "react-native-paper";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import * as Animatable from "react-native-animatable"
+import { connect } from 'react-redux';
 
-export class MoodleScreen extends Component {
+class MoodleScreen extends Component {
     state={
         password:"",
         display:"none"
@@ -26,6 +27,7 @@ export class MoodleScreen extends Component {
         }
     }
     render() {
+        console.log(Object.keys(this.props))
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
             <View style={styles.view}>
@@ -51,7 +53,7 @@ export class MoodleScreen extends Component {
                     <ActivityIndicator color="#f90024"/><Text style={{color:"white", paddingLeft:"5%"}}> Aligning Planets in order</Text>
             </Animatable.View>
             <Animatable.View style={{paddingTop:"7%"}} ref={ref => this.textInput = ref}>
-                <Caption style={{color:"white", paddingVertical:"5%"}}>You will be Signed as Apoorv Kansal 17BEC1162</Caption>
+                        <Caption style={{color:"white", paddingVertical:"5%"}}>You will be Signed as {this.props.state.userInfo.Name+" "+this.props.state.userInfo.RegNo }</Caption>
                 <TextInput 
                     label="Password" 
                     style={{marginTop:"5%"}} 
@@ -80,8 +82,18 @@ export class MoodleScreen extends Component {
         )
     }
 }
+function mapStateToProps(state){
+    return {
+        state: state.reducer
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+    }
+  }
 
-export default MoodleScreen
+
+export default connect(mapStateToProps, mapDispatchToProps)(MoodleScreen)
 
 const styles = StyleSheet.create({
     view : {

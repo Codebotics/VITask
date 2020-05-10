@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {  View, ScrollView } from 'react-native'
+import {  View, ScrollView,TouchableOpacity, Alert } from 'react-native'
+import PushNotification from 'react-native-push-notification'
 import { Headline, Caption } from "react-native-paper";
 import Timetable from '../components/Timetable/Timetable'
 import { connect } from 'react-redux';
@@ -8,6 +9,7 @@ import LastSync  from "../components/LastSync/LastSync";
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const date = new Date()
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 // const today = days[date.getDay()]
 // Just for Testing
 const today = "Thursday"
@@ -19,7 +21,23 @@ class DashboardScreen extends Component {
         totalLab:0
     }
     
+    createTwoButtonAlert = () =>
+    Alert.alert(
+      "Disclaimer",
+      `
+      This is the beta version of VITask. As you would know, beta versions are usually unstable and may be trouble to use. But don't worry, if you face any problem we are happy to help.
+    
+      Note that this version will expire in one week(17 May 2020). After that use Google Playstore to download the app.
+
+      Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.mex
+      `,
+      [
+        { text: "I understand", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
     componentDidMount(){
+        this.createTwoButtonAlert()
         let totalClass = 0
         let totalLab = 0
         for(classes of this.state.timetable){
@@ -39,9 +57,13 @@ class DashboardScreen extends Component {
 
     render() {
         let  moodleLogin = false
-        
-        
+
         let timetable=[]
+        // Sample String
+        // var dateString = days[date.getDay()] + " " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + "1:40:30 GMT+0530"
+        
+        // Constant part of string
+        var dateString = days[date.getDay()] + " " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear()
         for(let i=0;i<this.state.timetable.length;++i){
             timetable.push(
                 <Timetable
@@ -53,13 +75,42 @@ class DashboardScreen extends Component {
                     navigation = {this.props.navigation}
                 />
             )
+            // spliting time from ":"
+            var timeSplit = this.state.timetable[i]['startTime'].split(':')
+            // converting time to integer for further calculations
+            var time = parseInt(timeSplit[0])
+
+            if(time == 8 || time == 9 || time == 10 || time == 11 || time == 12){
+            var dateStringSchedule = dateString + " " + this.state.timetable[i]['startTime'] +" GMT+0530"
+            }else{
+                time = time+12
+                time = time.toString()
+                var dateStringSchedule = dateString + " " + time + ":" + timeSplit[1] +" GMT+0530"
+                console.log(dateStringSchedule)
+            }
+
+            // Scheduling Notifications
+            // PushNotification.localNotificationSchedule({
+            //     autoCancel: true,
+            //     bigText:"Upcoming Class",
+            //     subText: this.state.timetable[i]['slot'],
+            //     title:"you have class in slot " + this.state.timetable[i]['slot'] + " at time " + this.state.timetable[i]['startTime'] + " - " + this.state.timetable[i]['endTime'],
+            //     message:"",
+            //     vibrate: true,
+            //     vibration: 300,
+            //     playSound: true,
+            //     soundName: 'default',
+            //     actions: '["Yes", "No"]',
+            //     date : new Date(dateStringSchedule)
+            //   })
             }
 
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
-                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline>
+                    <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}>
+                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline></TouchableOpacity>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
                     {timetable}

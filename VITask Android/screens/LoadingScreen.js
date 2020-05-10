@@ -25,7 +25,7 @@ class LoadingScreen extends Component {
     }
     checkAndProceed(){
         if(this.state.process === "Click on above logo to continue."){
-            this.props.navigation.navigate("Dashboard")
+            this.props.navigation.jumpTo("Dashboard")
         }
     }
     handleLogoRef = ref => this.logo = ref
@@ -43,7 +43,7 @@ class LoadingScreen extends Component {
                 // SOME ERROR OCCURED
                 if(state.error === "Password / Username Incorrect"){
                     ToastAndroid.show("Password/ Registration Number is incorrect", ToastAndroid.LONG)
-                    this.props.navigation.navigate("Login", {error: "Password Incorrect"})
+                    this.props.navigation.jumpTo("Login", {error: "Password Incorrect"})
                 }
                 else {
                     // Connection error or Server Error
@@ -73,6 +73,7 @@ class LoadingScreen extends Component {
                 // Marks and acadhistory can be updated 
                 this.props.getMarks()
                 this.props.getAcadHistory()
+                this.props.getMoodle()
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"

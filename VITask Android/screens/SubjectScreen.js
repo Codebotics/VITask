@@ -12,7 +12,8 @@ export class SubjectScreen extends Component {
         ...this.props.route.params.course,
         bunk:0,
         color: "#00e6ac",
-        loading: true
+        loading: true,
+        attend: 0
     }
     
     onMiss(type){
@@ -41,8 +42,10 @@ export class SubjectScreen extends Component {
             ...course
         })
         if(course.percentage<75){
+            attend = (3*(course.total) - 4*(course.attended))
             this.setState({
-                color:"#ff6070"
+                color:"#ff6070",
+                attend
             })
         }
         else if(course.percentage>=75 && course.percentage<=80){
@@ -60,7 +63,7 @@ export class SubjectScreen extends Component {
                     <Subheading style={{color:"#FFF"}}>See your pending assignments</Subheading>
                     <Caption style={{color:"#FFF", paddingTop:"5%"}}>VITask can also show you assignments. Just Sign In Moodle and see your assignments here.</Caption>
                     <Card.Actions style={{justifyContent:"flex-end"}}>
-                    <Button mode="contained" color="#f90024" style={{marginTop:"1%", flex:1, maxWidth:"30%"}}>Log In</Button>
+                    <Button mode="contained" color="#f90024" style={{marginTop:"1%", flex:1, maxWidth:"30%"}} onPress={()=>{this.props.navigation.jumpTo("MoodleLogin")}}>Log In</Button>
                     </Card.Actions>
                     </Card>
                 </View>
@@ -95,7 +98,7 @@ export class SubjectScreen extends Component {
                             <Icon name="error" style={{fontSize:30, textAlign:"center"}} color="#ff6070"/>
                         </View>
                         <View style={{flex:7}}>
-                            <Caption >You're short by {75-this.state.percentage}%. You can make it up by attending ADDLOGICHERE classes</Caption>
+                            <Caption >You're short by {75-this.state.percentage}%. You can make it up by attending {this.state.attend} classes</Caption>
                         </View>
                     </View>
                 </Card>
