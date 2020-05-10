@@ -139,8 +139,11 @@ def parallel_timetable(sess, username, id):
     temp = ref.child("timetable").child('timetable-'+id).child(id).child('Timetable').get()
     if(temp is None):
         days = {}
-        days = get_timetable(sess, username, id)
-        session['timetable'] = 1
+        days, check_timetable = get_timetable(sess, username, id)
+        if(check_timetable == False):
+            session['timetable'] = 0
+        else:
+            session['timetable'] = 1
     
 def parallel_acadhistory(sess, username, id):
     ref = db.reference('vitask')
@@ -148,21 +151,30 @@ def parallel_acadhistory(sess, username, id):
     if(temp is None):
         acadHistory = {}
         curriculumDetails = {}
-        grades = get_acadhistory(sess,username,id)
-        acadHistory = grades['AcadHistory']
-        curriculumDetails = grades['CurriculumDetails']
-        session['acadhistory'] = 1
+        grades, check_grades = get_acadhistory(sess,username,id)
+        if(check_grades == False):
+            session['acadhistory'] = 0
+        else:
+            acadHistory = grades['AcadHistory']
+            curriculumDetails = grades['CurriculumDetails']
+            session['acadhistory'] = 1
         
 def parallel_attendance(sess, username, id):
     attend = {}
     q = {}
-    attend, q = get_attandance(sess, username, id)
-    session['classes'] = 1
+    attend, q, check_attendance = get_attandance(sess, username, id)
+    if(check_attendance == False):
+        session['classes'] = 0
+    else:
+        session['classes'] = 1
 
 def parallel_marks(sess, username, id):
     marksDict = {}
-    marksDict = get_marks(sess, username, id)
-    session['marks'] = 1
+    marksDict, check_marks = get_marks(sess, username, id)
+    if(check_marks == False):
+        session['marks'] = 0
+    else:
+        session['marks'] = 1
     
 def runInParallel(*fns):
     proc = []
@@ -237,11 +249,13 @@ def authenticate():
             else:
                 try:
                     profile = {}
-                    profile = get_student_profile(sess, username)
+                    profile, check_profile = get_student_profile(sess, username)
                     session['id'] = profile['appNo']
                     session['name'] = profile['name']
                     session['reg'] = profile['regNo']
                     session['loggedin'] = 1
+                    if(check_profile == False):
+                        return jsonify({"Error": "Internal Error in fetching profile.Please try again."}) 
                 finally:
                     name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
                     # Timetable,Attendance,Acadhistory and Marks fetching in parallel
@@ -592,7 +606,9 @@ def login():
             else:
                 try:
                     profile = {}
-                    profile = get_student_profile(sess, username)
+                    profile, check_profile = get_student_profile(sess, username)
+                    if(check_profile == False):
+                        return render_template('login.html',correct=False)
                     session['id'] = profile['appNo']
                     session['name'] = profile['name']
                     session['reg'] = profile['regNo']

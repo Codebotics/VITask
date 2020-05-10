@@ -114,6 +114,12 @@ class LoadingScreen extends Component {
                 // Timetable complete, call the attendance api
                 this.props.getAttendance()
                 // Marks and acadhistory can be updated 
+<<<<<<< HEAD
+=======
+                this.props.getMoodle()
+                this.props.getMarks()
+                this.props.getAcadHistory()
+>>>>>>> 6adb47aa952177a128e45945fd2197c569bdef89
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"

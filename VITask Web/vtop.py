@@ -98,8 +98,9 @@ def get_attandance(sess, username, id, semesterID="CH2019205"):
     }
     attendance = sess.post(ATTENDANCE, data=payload, headers=headers, verify=False)
     # Check for 200 CODE
+    check = True
     if attendance.status_code !=200:
-        raise ValueError("Could not fetch attendance")
+        check = False
     attendance_html = attendance.text
 
     # Parsing logic by Swapnil.
@@ -152,7 +153,7 @@ def get_attandance(sess, username, id, semesterID="CH2019205"):
         }
     })
 
-    return (attend, q)
+    return (attend, q, check)
 
 def get_timetable(sess, username, id, semesterID="CH2019205"):
     """
@@ -176,9 +177,10 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
         "x" : datetime.datetime.now(datetime.timezone.utc).strftime("%c GMT")   # GMT time
     }
     timetable_sess = sess.post(TIMETABLE, data=payload, headers=headers, verify=False)
+    check = True
     # Check for 200 CODE
     if timetable_sess.status_code !=200:
-        raise ValueError("Could not fetch TimeTable")
+        check = False
     timetable_html = timetable_sess.text
     
     # Parsing logic by Apratim
@@ -247,7 +249,7 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
         }
     })
     
-    return days
+    return (days, check)
 
 def get_acadhistory(sess,username,id):
     """
@@ -276,9 +278,10 @@ def get_acadhistory(sess,username,id):
         "nocache" : "@(new Date().getTime())"   
     }
     acad_sess = sess.post(ACADHISTORY, data=payload, headers=headers, verify=False)
+    check = True
     # Check for 200 CODE
     if acad_sess.status_code !=200:
-        raise ValueError("Could not fetch Academic History")
+        check = False
     acad_html = acad_sess.text
     
     # Parsing logic by Mayank.
@@ -336,7 +339,7 @@ def get_acadhistory(sess,username,id):
         }
     })
     
-    return grades
+    return (grades, check)
 
 def get_student_profile(sess,username):
     """
@@ -361,9 +364,10 @@ def get_student_profile(sess,username):
         "nocache" : "@(new Date().getTime())"   
     }
     profile_sess = sess.post(PROFILE, data=payload, headers=headers, verify=False)
+    check = True
     # Check for 200 CODE
     if profile_sess.status_code !=200:
-        raise ValueError("Could not fetch Profile Details Properly")
+        check = False
     profile_html = profile_sess.text
 
     # Parsing logic by Apratim.
@@ -415,7 +419,7 @@ def get_student_profile(sess,username):
         }
     })
 
-    return profile
+    return (profile, check)
 
 def get_marks(sess, username, id, semesterID="CH2019205"):
     """
@@ -439,9 +443,10 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
         "authorizedID" : username 
     }
     marks_sess = sess.post(MARKS, data=payload, headers=headers, verify=False)
+    check = True
     # Check for 200 CODE
     if marks_sess.status_code !=200:
-        raise ValueError("Could not fetch Marks Details Properly")
+        check = False
     marks_html = marks_sess.text
     
     # Parsing Logic by Mayank (modified by Apratim and Cherub).
@@ -484,5 +489,5 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
             'Marks': marksDict
         }
     })
-    return marksDict
+    return (marksDict, check)
 

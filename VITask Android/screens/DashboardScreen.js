@@ -57,6 +57,7 @@ class DashboardScreen extends Component {
 
     render() {
         let  moodleLogin = false
+        // PushNotification.cancelAllLocalNotifications()
 
         let timetable=[]
         // Sample String
@@ -122,15 +123,16 @@ class DashboardScreen extends Component {
             // Scheduling Notifications
 
               console.log("running loop",dateStringSchedule)
-            //   PushNotification.cancelAllLocalNotifications()
+              PushNotification.cancelAllLocalNotifications()
             }
 
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
-                    <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}>
-                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline></TouchableOpacity>
+                    {/* <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}> */}
+                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline>
+                {/* </TouchableOpacity> */}
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
                     {timetable}

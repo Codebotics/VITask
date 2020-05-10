@@ -35,14 +35,6 @@ const LoginStackScreen = ({navigation})=>(
   </LoginStack.Navigator>
 )
 
-// const LoadingStack = createStackNavigator()
-
-// const LoadingStackScreen = ({navigation})=>(
-//   <LoadingStack.Navigator>
-
-//   </LoadingStack.Navigator>
-// )
-
 
 const DashboardStack = createStackNavigator()
 
