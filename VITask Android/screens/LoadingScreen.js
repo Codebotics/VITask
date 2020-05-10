@@ -73,6 +73,7 @@ class LoadingScreen extends Component {
                 // Marks and acadhistory can be updated 
                 this.props.getMarks()
                 this.props.getAcadHistory()
+                this.props.getMoodle()
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"

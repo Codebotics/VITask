@@ -12,11 +12,11 @@ INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\An
 	android:name
 		INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
 manifest
-ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-81:12
-INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-81:12
-INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-81:12
-INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-81:12
-MERGED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-81:12
+ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+MERGED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
 MERGED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:8:1-18:12
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\fa9d249d56579007dba70f8ee4dd5b3f\flipper-network-plugin-0.33.1\AndroidManifest.xml:8:1-15:12
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\5a1065d4748ae359265a740b2069d44b\flipper-fresco-plugin-0.33.1\AndroidManifest.xml:8:1-15:12
@@ -103,13 +103,13 @@ INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\debug\A
 		INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	android:versionName
 		INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-		ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-81:12
+		ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
 		INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	xmlns:tools
 		ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:3:5-51
 	android:versionCode
 		INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-		ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-81:12
+		ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
 		INJECTED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	xmlns:android
 		ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:11-69
@@ -140,9 +140,9 @@ ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\Andro
 	android:name
 		ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:13:22-78
 application
-ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-79:19
-MERGED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-79:19
-MERGED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-79:19
+ADDED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
+MERGED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
+MERGED from V:\VITaskGit\VITask5\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
 MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\d69c378d3abe60a8b1bb3cdb371cd55a\jetified-react-native-0.62.2\AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\d69c378d3abe60a8b1bb3cdb371cd55a\jetified-react-native-0.62.2\AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.soloader:soloader:0.8.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\a682a4f61b53a5eb0b34ff17728f4b20\soloader-0.8.2\AndroidManifest.xml:11:5-20
