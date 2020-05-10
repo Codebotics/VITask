@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {  View, ScrollView,TouchableOpacity } from 'react-native'
+import {  View, ScrollView,TouchableOpacity, Alert } from 'react-native'
 import PushNotification from 'react-native-push-notification'
 import { Headline, Caption } from "react-native-paper";
 import Timetable from '../components/Timetable/Timetable'
@@ -21,8 +21,23 @@ class DashboardScreen extends Component {
         totalLab:0
     }
     
+    createTwoButtonAlert = () =>
+    Alert.alert(
+      "Disclaimer",
+      `
+      This is the beta version of VITask. As you would know, beta versions are usually unstable and may be trouble to use. But don't worry, if you face any problem we are happy to help.
     
+      Note that this version will expire in one week(17 May 2020). After that use Google Playstore to download the app.
+
+      Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.mex
+      `,
+      [
+        { text: "I understand", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
     componentDidMount(){
+        this.createTwoButtonAlert()
         let totalClass = 0
         let totalLab = 0
         for(classes of this.state.timetable){
@@ -94,7 +109,7 @@ class DashboardScreen extends Component {
             <ScrollView style={{backgroundColor:"#081631"}}>
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
-                    <TouchableOpacity onPress={()=>this.props.navigation.navigate('MoodleDisplay')}>
+                    <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}>
                 <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline></TouchableOpacity>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>

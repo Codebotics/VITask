@@ -21,7 +21,7 @@ export class AboutUsScreen extends Component {
                     <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>Who are we? We are students just like you who don't like to type Captcha in some box to check attendance.</Caption>
                     <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>We are just like you who used to set TimeTable as our wallpaper (please dont do this). So a bunch of students came together to make this amazing experience, VITask.</Caption>
                     <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>VITask tries to solve all the problems VITians face daily. We are just a group of VITians who love to contribute to our beautiful VITCC community.</Caption>
-                    <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>At the same time, we like to flaunt ourselves, so here I present you the brains behind this app, website, experience.</Caption>
+                    <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>Thank you for using this app and if you have any feedback or any feature to add please hit us up on Instagram @vitask.me</Caption>
             </View>
             </View>
             </ScrollView>
