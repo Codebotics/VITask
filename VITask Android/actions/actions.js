@@ -173,11 +173,7 @@ import {
     export const loginVTOP =(username, password) => {
         return dispatch=>{
             dispatch(loginVTOPRequest)
-<<<<<<< HEAD
             fetch(`https://vitask.me/authenticate?username=${username}&password=${password}`)
-=======
-            fetch('https://vitask.me/authenticate?username=' + username + '&password=' + password)
->>>>>>> 6adb47aa952177a128e45945fd2197c569bdef89
             .then(res => res.json())
             .then(res => {
                 // res = require("../authenticate.json")
@@ -242,13 +238,7 @@ import {
         return (dispatch, getState)=>{
             const state = getState()
             dispatch(fetchMoodleAssignmentsRequest)
-<<<<<<< HEAD
-            const username = state.reducer.userInfo.RegNo
-            const appNo = state.reducer.userInfo.AppNo
-            fetch('https://jsonplaceholder.typicode.com/posts')
-=======
-            fetch('https://vitask.me/moodleapi?token=' + state.reducer.userInfo.APItoken)
->>>>>>> 6adb47aa952177a128e45945fd2197c569bdef89
+            fetch(`https://vitask.me/moodleapi?username={username}&password={password}&appno={appNo}`)
             .then(res =>{
                 // res = require('../moodleapi.json')
                 return res.json()
