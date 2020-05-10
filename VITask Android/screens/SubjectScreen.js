@@ -15,7 +15,8 @@ export class SubjectScreen extends Component {
         bunk:0,
         color: "#00e6ac",
         loading: true,
-        attend: 0
+        attend: 0,
+        moodle: this.props.route.params.moodle
     }
     
     onMiss(type){
@@ -57,6 +58,7 @@ export class SubjectScreen extends Component {
         }
     }
     render() {
+        console.log(this.props.route.params.moodle, this.state.moodle)
         let assignments,marks, shortNotice
         if(!this.state.moodle){
             assignments = (
@@ -70,6 +72,28 @@ export class SubjectScreen extends Component {
                     </Card>
                 </View>
             )
+        }
+        else{
+            assignments=[]
+            for(let i=0;i<this.state.moodle.Assignments.length;++i){
+                if (this.state.moodle.Assignments[i].course.includes(this.state.code)){
+                    assignments.push(
+                        <Assignment
+                            title={this.state.moodle.Assignments[i].course}
+                            time ={this.state.moodle.Assignments[i].time}
+                            key={i}
+                        />
+                    )
+                }   
+            }
+            if (assignments.length===0){
+                assignments.push(
+                    <Assignment
+                    title="Currently No assignments"
+                    key="djfk"
+                    />
+                )
+            }
         }
         if(!this.state.marks){
             marks = (

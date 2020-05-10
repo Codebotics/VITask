@@ -13,10 +13,10 @@ export class Assignment extends Component {
                         <View style={{...styles.justifySpaceRow, marginTop:0}}>
                             <View style={{...styles.justifySpaceCol, marginTop:0, flex:7}}>
                                 <Subheading style={{color:"#FFF"}}>{this.props.title}</Subheading>
-                                <Caption style={{color:"#BBB"}} >{this.props.info}</Caption>
+                                <Caption style={{color:"#BBB"}} >Details about assignments would be visible in future version</Caption>
                                 <View style={{flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingTop:"2%"}}>
                                     <Icon name="attachment" size={15} style={{color:"#BBB"}} />
-                                    <Caption style={{color:"#BBB", paddingLeft:"2%"}}>{this.props.attachment}</Caption >
+                                    <Caption style={{color:"#BBB", paddingLeft:"2%"}}>Attachments will appear here</Caption >
                                 </View> 
                             </View>
                             <View style={{...styles.justifySpaceCol, marginTop:0, flex:3}}>

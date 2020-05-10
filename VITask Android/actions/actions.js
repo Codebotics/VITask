@@ -167,7 +167,7 @@ import {
     const ORIGINAL_ATTENDANCE = `https://vitask.me/classesapi?token={state.reducer.userInfo.APItoken}`
     const ORIGINAL_TIMETABLE = `https://vitask.me/timetableapi?token={state.reducer.userInfo.APItoken}`
     const ORIGINAL_MARKS = 'https://vitask.me/marksapi?token={state.reducer.userInfo.APItoken}'
-    const ORIGINAL_MOODLE = 'https://vitask.me/moodleapi?token={state.reducer.userInfo.APItoken}'
+    const ORIGINAL_MOODLE = `https://vitask.me/moodleapi?username={username}&password={password}&appno={appNo}`
     const ORIGINAL_ACADEMIC_HISTORY = "https://vitask.me/acadhistoryapi?token={state.reducer.userInfo.APItoken}"
     
     export const loginVTOP =(username, password) => {
@@ -176,7 +176,7 @@ import {
             fetch(`https://vitask.me/authenticate?username=${username}&password=${password}`)
             .then(res => res.json())
             .then(res => {
-                // res = require("../authenticate.json")
+                res = require("../authenticate.json")
                 if (res['Error']){
                 // Incorrect password
                 dispatch(loginVTOPError("Password / Username Incorrect"))
@@ -193,10 +193,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchAttendanceRequest)
-            fetch(`https://vitask.me/classesapi?token=${state.reducer.userInfo.APItoken}`)
+            fetch('https://jsonplaceholder.typicode.com/posts')
             .then(res => {
-                // res = require("../classesapi.json")
-                return res.json()})
+                res = require("../classesapi.json")
+                return res})
             .then(res =>{
                 dispatch(fetchAttendanceSuccess(res))
             })
@@ -208,10 +208,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchTimetableRequest)
-            fetch(`https://vitask.me/timetableapi?token=${state.reducer.userInfo.APItoken}`)
+            fetch('https://jsonplaceholder.typicode.com/posts')
             .then(res => {
-                // res = require("../timetableapi.json")
-                return res.json()})
+                res = require("../timetableapi.json")
+                return res})
             .then(res =>{
                 dispatch(fetchTimetableSuccess(res))
             })
@@ -223,10 +223,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchMarksRequest)
-            fetch(`https://vitask.me/marksapi?token=${state.reducer.userInfo.APItoken}`)
+            fetch('https://jsonplaceholder.typicode.com/posts')
             .then(res => {
-                // res = require("../marks.json")
-                return res.json()})
+                res = require("../marks.json")
+                return res})
             .then(res =>{
                 dispatch(fetchMarksSuccess(res))
             })
@@ -234,10 +234,12 @@ import {
         }
     }
 
-    export const fetchMoodleAssignments = ()=>{
+    export const fetchMoodleAssignments = (password)=>{
         return (dispatch, getState)=>{
             const state = getState()
             dispatch(fetchMoodleAssignmentsRequest)
+            const username = state.reducer.userInfo.RegNo
+            const appNo = state.reducer.userInfo.AppNo
             fetch('https://jsonplaceholder.typicode.com/posts')
             .then(res =>{
                 res = require('../moodleapi.json')
@@ -253,10 +255,10 @@ import {
         return(dispatch,getState) =>{
             const state = getState()
             dispatch(fetchAcadHistoryRequest)
-            fetch(`https://vitask.me/acadhistoryapi?token=${state.reducer.userInfo.APItoken}`)
+            fetch('https://jsonplaceholder.typicode.com/posts')
             .then(res =>{
-                // res = require('../acadhistory.json')
-                return res.json()
+                res = require('../acadhistory.json')
+                return res
             }).then(res =>{
                 dispatch(fetchAcadHistorySuccess(res))
             })

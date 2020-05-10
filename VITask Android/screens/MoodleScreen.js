@@ -4,6 +4,7 @@ import { Caption, Subheading, Headline, TextInput, Button, ActivityIndicator } f
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import * as Animatable from "react-native-animatable"
 import { connect } from 'react-redux';
+import {fetchMoodleAssignments} from "../actions/actions"
 
 class MoodleScreen extends Component {
     state={
@@ -23,11 +24,21 @@ class MoodleScreen extends Component {
                 display:"flex"
             })
             this.loading.fadeIn(800)
+            this.props.loginMoodle(this.state.password)
         })
         }
     }
+    componentDidUpdate(prevProps){
+        if(prevProps.state.status !== this.props.state.status){
+            const { state } = this.props
+            if(state.status === "MOODLE_ASSIGNMENTS_COMPLETE"){
+                // Moodle fetch complete
+                ToastAndroid.show("Logged into Moodle", ToastAndroid.SHORT)
+                this.props.navigation.jumpTo("Dashboard")
+            }
+        }
+    }
     render() {
-        console.log(Object.keys(this.props))
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
             <View style={styles.view}>
@@ -89,6 +100,9 @@ function mapStateToProps(state){
 }
 const mapDispatchToProps = (dispatch) => {
     return {
+        loginMoodle:(password)=>{
+            dispatch(fetchMoodleAssignments(password))
+        }
     }
   }
 

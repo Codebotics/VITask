@@ -109,8 +109,7 @@ class Course extends Component {
             <View style={{marginVertical:"2%"}}>
                 <TouchableRipple
                     onPress = {()=>{
-                        console.log("")
-                        this.props.navigation.navigate("Subject", {course : this.state.course})}}
+                        this.props.navigation.navigate("Subject", {course : this.state.course,  moodle: this.props.state.assignments})}}
                     rippleColor = "rgba(34, 54, 93, 0.32)"
                 >
                 <Card elevation={12} style={{borderRadius:10, paddingBottom:"5%", paddingTop:"5%", backgroundColor:"#22365d", paddingHorizontal:"5%"}}>

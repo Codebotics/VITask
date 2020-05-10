@@ -65,7 +65,7 @@ const MoodleLoginStack = createStackNavigator()
 
 const MoodleLoginStackScreen = ({navigation})=>(
   <MoodleLoginStack.Navigator>
-    <MoodleLoginStack.Screen name="MoodleLogin" component={MoodleScreen} options={{headerShown:false}} />
+    <MoodleLoginStack.Screen name="MoodleLogin" component={MoodleScreen} options={{headerShown:false}} drawerNavigate={navigation} />
   </MoodleLoginStack.Navigator>
 )
 
