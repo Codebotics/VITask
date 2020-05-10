@@ -11,9 +11,15 @@ export class Marks extends Component {
                     <View style={{...styles.justifySpaceRow, marginTop:0}}>
                         <View style={{...styles.justifySpaceCol, marginTop:0, flex:7}}>
                             <Subheading style={{color:"#FFF"}}>{this.props.title}</Subheading>
+                            <Subheading style={{color:"#BBB"}}>Max. Marks</Subheading>
+                            <Subheading style={{color:"#BBB"}}>Weightage %</Subheading>
+                            <Subheading style={{color:"#BBB"}}>Weightage Mark</Subheading>
                         </View>
                         <View style={{...styles.justifySpaceCol, marginTop:0, flex:3}}>
-                            <Subheading style={{textAlign:"center", color:"#FFF"}} >{this.props.marks}</Subheading>
+                            <Subheading style={{textAlign:"right", color:"#FFF"}} >{this.props.marks}</Subheading>
+                            <Subheading style={{textAlign:"right",color:"#BBB"}}>{this.props.max}</Subheading>
+                            <Subheading style={{textAlign:"right",color:"#BBB"}}>{this.props.weightagePercent}</Subheading>
+                            <Subheading style={{textAlign:"right",color:"#BBB"}}>{this.props.weightage}</Subheading>
                         </View>
                     </View>
                     <View>

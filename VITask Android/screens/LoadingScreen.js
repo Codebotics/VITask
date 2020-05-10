@@ -35,6 +35,7 @@ class LoadingScreen extends Component {
     componentDidMount(){
         // First call login function
         // Change the dummy api calls in the ./actions/actions.js
+        console.log(this.props.route.params.username, this.props.route.params.password)
         this.props.login(this.props.route.params.username, this.props.route.params.password)
     }
     storeStateIntoRedux = async (reduxState , reduxStatus) => {
@@ -75,7 +76,7 @@ class LoadingScreen extends Component {
         }
       }
       UNSAFE_componentWillMount(){
-          this._retrieveRedux()
+        //   this._retrieveRedux()
       }
 
     componentDidUpdate(prevProps){
@@ -85,7 +86,7 @@ class LoadingScreen extends Component {
                 // SOME ERROR OCCURED
                 if(state.error === "Password / Username Incorrect"){
                     ToastAndroid.show("Password/ Registration Number is incorrect", ToastAndroid.LONG)
-                    this.props.navigation.jumpTo("Login", {error: "Password Incorrect"})
+                    this.props.navigation.navigate("Login", {error: "Password Incorrect"})
                 }
                 else {
                     // Connection error or Server Error
@@ -113,12 +114,24 @@ class LoadingScreen extends Component {
                 // Timetable complete, call the attendance api
                 this.props.getAttendance()
                 // Marks and acadhistory can be updated 
-                this.props.getMarks()
-                this.props.getAcadHistory()
                 this.props.getMoodle()
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"
+                })
+            }
+            else if (state.status === "ATTENDANCE_COMPLETE" && this.state.process !== "Getting your Marks"){
+                this.props.getMarks()
+                this.setState({
+                    text:"Something we all hate...",
+                    process: "Getting your Marks"
+                })
+            }
+            else if (state.status === "MARKS_COMPLETE" && this.state.process !== "Getting your Academic History"){
+                this.props.getAcadHistory()
+                this.setState({
+                    text:"We all are haunted by our past...",
+                    process: "Getting your Academic History"
                 })
             }
             else if (state.status === "ACADHISTORY_COMPLETE"){
@@ -131,8 +144,11 @@ class LoadingScreen extends Component {
                 text:greetMsg,
                 process: "Click on above logo to continue."
             })
+            this.logo.stopAnimation()
+            this.text.stopAnimation()
+            this.process.stopAnimation()
             console.log("LOADINGSCREEN" , this.props.state)
-            this.storeStateIntoRedux(this.props.state , 1)
+            // this.storeStateIntoRedux(this.props.state , 1)
             }
         }
     }

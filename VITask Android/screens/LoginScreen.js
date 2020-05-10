@@ -33,7 +33,7 @@ class LoginScreen extends Component {
     UNSAFE_componentWillMount(){
         console.log('inside Component will mount of Login')
 
-          this._retrieveData();
+        //   this._retrieveData();
     }
     _storeData = async (reg , pass , status) => {
         let user_obj = {
@@ -63,7 +63,7 @@ class LoginScreen extends Component {
         }
         else{
             this._storeData(this.state.text,this.state.password,1)
-            this.props.navigation.navigate("Loading", {username: this.state.text, password: this.state.password})
+            this.props.navigation.push("Loading", {username: this.state.text, password: this.state.password})
         }
     }
     //TODO: Use regex statement for checking registration number

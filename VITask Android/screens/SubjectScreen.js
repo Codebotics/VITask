@@ -86,7 +86,10 @@ export class SubjectScreen extends Component {
                 marks.push(
                     <Marks 
                         title = {mark}
-                        marks = {this.state.marks[mark]}
+                        marks = {this.state.marks[mark].scored}
+                        max = {this.state.marks[mark].max}
+                        weightagePercent={this.state.marks[mark].weightagePercentage}
+                        weightage ={this.state.marks[mark].weightage}
                         key = {mark}
                     />
                 )

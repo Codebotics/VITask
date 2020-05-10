@@ -173,10 +173,10 @@ import {
     export const loginVTOP =(username, password) => {
         return dispatch=>{
             dispatch(loginVTOPRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch(`https://vitask.me/authenticate?username=${username}&password=${password}`)
             .then(res => res.json())
             .then(res => {
-                res = require("../authenticate.json")
+                // res = require("../authenticate.json")
                 if (res['Error']){
                 // Incorrect password
                 dispatch(loginVTOPError("Password / Username Incorrect"))
@@ -193,10 +193,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchAttendanceRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch(`https://vitask.me/classesapi?token=${state.reducer.userInfo.APItoken}`)
             .then(res => {
-                res = require("../classesapi.json")
-                return res})
+                // res = require("../classesapi.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchAttendanceSuccess(res))
             })
@@ -208,10 +208,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchTimetableRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch(`https://vitask.me/timetableapi?token=${state.reducer.userInfo.APItoken}`)
             .then(res => {
-                res = require("../timetableapi.json")
-                return res})
+                // res = require("../timetableapi.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchTimetableSuccess(res))
             })
@@ -223,10 +223,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchMarksRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch(`https://vitask.me/marksapi?token=${state.reducer.userInfo.APItoken}`)
             .then(res => {
-                res = require("../marks.json")
-                return res})
+                // res = require("../marks.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchMarksSuccess(res))
             })
@@ -253,10 +253,10 @@ import {
         return(dispatch,getState) =>{
             const state = getState()
             dispatch(fetchAcadHistoryRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch(`https://vitask.me/acadhistoryapi?token=${state.reducer.userInfo.APItoken}`)
             .then(res =>{
-                res = require('../acadhistory.json')
-                return res
+                // res = require('../acadhistory.json')
+                return res.json()
             }).then(res =>{
                 dispatch(fetchAcadHistorySuccess(res))
             })
