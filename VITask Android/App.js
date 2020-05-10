@@ -14,49 +14,25 @@ import CourseScreen from './screens/CourseScreen'
 import { AboutUsScreen } from "./screens/AboutUsScreen";
 import GpaCalculator from './screens/GpaCalculator'
 import MoodleDisplay from './screens/MoodleDisplay'
-
+import  DrawerContent  from "./screens/Drawer";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
+function customDrawer(props){
+  return (
+    <DrawerContent {...props}/>
+  )
+}
 
 function App() {
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator initialRouteName="Login">
-    //   <Stack.Screen name="MoodleDisplay" options= {{headerShown : false}}>
-    //       {props =><MoodleDisplay {...props} />}
-    //     </Stack.Screen> 
-    //   <Stack.Screen name="GpaCalculator" options= {{headerShown : false}}>
-    //       {props =><GpaCalculator {...props} />}
-    //     </Stack.Screen>        
-    //   <Stack.Screen name="Courses" options= {{headerShown : false}}>
-    //       {props =><CourseScreen {...props} />}
-    //     </Stack.Screen>
-    //   <Stack.Screen name="Loading" options= {{headerShown : false}}>
-    //       {props =><LoadingScreen {...props} />}
-    //     </Stack.Screen>
-    //     <Stack.Screen name="Dashboard" options= {{headerShown : false}}>
-    //       {props =><DashboardScreen {...props} />}
-    //     </Stack.Screen>
-    //     <Stack.Screen name="About" options= {{headerShown : false}}>
-    //       {props =><AboutUsScreen {...props} />}
-    //     </Stack.Screen>
-    //     <Stack.Screen name="MoodleLogin" options= {{headerShown : false}}>
-    //       {props =><MoodleScreen {...props} />}
-    //     </Stack.Screen>
-    //     <Stack.Screen name="Subject" options= {{headerShown : false}}>
-    //       {props =><SubjectScreen {...props} />}
-    //     </Stack.Screen>
-    //     <Stack.Screen name="Login" options= {{headerShown : false}}>
-    //       {props =><LoginScreen {...props} />}
-    //     </Stack.Screen>
-    //   </Stack.Navigator> 
-    // 
     <NavigationContainer>
-    <Drawer.Navigator>
-        <Drawer.Screen name="Login" component={LoginScreen} />
-        <Drawer.Screen name="Loading" component={LoadingScreen} />
+    <Drawer.Navigator drawerContent={customDrawer} drawerStyle={{
+      backgroundColor:"#081631"
+    }}>
+        <Drawer.Screen name="Login" component={LoginScreen} options={{swipeEnabled:false,gestureEnabled:false}}/>
+        <Drawer.Screen name="Loading" component={LoadingScreen}  options={{swipeEnabled:false,gestureEnabled:false}}/>
         <Drawer.Screen name="Dashboard" component={DashboardScreen} />
         <Drawer.Screen name="About" component={AboutUsScreen} />
         <Drawer.Screen name="MoodleLogin" component={MoodleScreen} />
