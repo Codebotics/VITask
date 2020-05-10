@@ -29,7 +29,7 @@ class DashboardScreen extends Component {
     
       Note that this version will expire in one week(17 May 2020). After that use Google Playstore to download the app.
 
-      Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.mex
+      Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.me
       `,
       [
         { text: "I understand", onPress: () => console.log("OK Pressed") }
