@@ -606,7 +606,9 @@ def login():
             else:
                 try:
                     profile = {}
-                    profile = get_student_profile(sess, username)
+                    profile, check_profile = get_student_profile(sess, username)
+                    if(check_profile == False):
+                        return render_template('login.html',correct=False)
                     session['id'] = profile['appNo']
                     session['name'] = profile['name']
                     session['reg'] = profile['regNo']
