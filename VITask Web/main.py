@@ -544,10 +544,15 @@ def home():
 def ourteam():
     return render_template('team.html')
 
-# Team Page
+# Downloads Page
 @app.route('/downloads' , methods=['GET'])
 def downloads():
     return render_template('downloads.html')
+
+# Privacy Policy Page
+@app.route('/policy' , methods=['GET'])
+def policy():
+    return render_template('policy.html')
 
 # Sitemap
 @app.route('/sitemap.xml' , methods=['GET'])
