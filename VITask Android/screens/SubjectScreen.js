@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Text, View, ScrollView, StyleSheet, Image } from 'react-native'
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Headline, Caption, Subheading,Card, Button } from "react-native-paper";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Assignment from '../components/Assignment/Assignment'
 import Marks from '../components/Marks/Marks'
@@ -112,7 +114,22 @@ export class SubjectScreen extends Component {
                         <Card elevation={12} style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}}>
                             <View style={{...styles.justifySpaceRow, marginTop:0}}>
                             <View style={{...styles.justifySpaceCol, marginTop:0, flex:1}}>
-                                <Headline style={{color:this.state.color, fontSize:57, paddingTop:"32%", textAlign:"center"}}>{this.state.percentage}%</Headline>
+                                {/* <Headline style={{color:this.state.color, fontSize:57, paddingTop:"32%", textAlign:"center"}}>{this.state.percentage}%</Headline> */}
+                                <AnimatedCircularProgress
+                                size={wp('40%')}
+                                width={4}
+                                fill={this.state.percentage}
+                                duration = {1500}
+                                tintColor="rgb(255,96,112)"
+                                backgroundColor="#22365d">
+                                {   
+                                    (percentage) => (
+                                    <Text style={{color:"#FFF",fontSize:wp('10%')}}>
+                                        { this.state.percentage }%
+                                    </Text>
+                                    )
+                                }
+                                </AnimatedCircularProgress>
                                 <Caption style={{color:"#BBB", textAlign:"center"}} >{this.state.attended} out of {this.state.total}</Caption>
                             </View>
                             <View style={{...styles.justifySpaceCol, marginTop:0, flex:1, justifyContent:"center", alignItems:"center"}}>

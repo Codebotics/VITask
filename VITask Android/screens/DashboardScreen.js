@@ -29,7 +29,7 @@ class DashboardScreen extends Component {
     
       Note that this version will expire in one week(17 May 2020). After that use Google Playstore to download the app.
 
-      Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.mex
+      Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.me
       `,
       [
         { text: "I understand", onPress: () => console.log("OK Pressed") }
@@ -57,6 +57,7 @@ class DashboardScreen extends Component {
 
     render() {
         let  moodleLogin = false
+        // PushNotification.cancelAllLocalNotifications()
 
         let timetable=[]
         // Sample String
@@ -89,28 +90,49 @@ class DashboardScreen extends Component {
                 console.log(dateStringSchedule)
             }
 
+            var count = new Date(dateStringSchedule).getTime();
+            var now = new Date().getTime();
+            var d = count - now;
+
+            var dayss = Math.floor(d/(1000*60*60*24));
+            var hours = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+            var minutes = Math.floor((d%(1000*60*60))/(1000*60));
+
+            // not to show missed notifications
+            if(dayss <0 || hours <0 || minutes <0){
+                var temp = 0 // anything
+            }else{
+            PushNotification.localNotificationSchedule({
+                autoCancel: true,
+                bigText:"Upcoming Class",
+                subText: this.state.timetable[i]['slot'],
+                title:"you have class in slot " + this.state.timetable[i]['slot'] + " at time " + this.state.timetable[i]['startTime'] + " - " + this.state.timetable[i]['endTime'],
+                message:"Classes",
+                largeIcon : 'icon',
+                smallIcon : 'icon',
+                vibrate: true,
+                vibration: 300,
+                playSound: true,
+                soundName: 'default',
+                date : new Date(dateStringSchedule),
+                repeatType : 'day',
+                fireDate: Date.now()
+            })                
+            }
+
             // Scheduling Notifications
-            // PushNotification.localNotificationSchedule({
-            //     autoCancel: true,
-            //     bigText:"Upcoming Class",
-            //     subText: this.state.timetable[i]['slot'],
-            //     title:"you have class in slot " + this.state.timetable[i]['slot'] + " at time " + this.state.timetable[i]['startTime'] + " - " + this.state.timetable[i]['endTime'],
-            //     message:"",
-            //     vibrate: true,
-            //     vibration: 300,
-            //     playSound: true,
-            //     soundName: 'default',
-            //     actions: '["Yes", "No"]',
-            //     date : new Date(dateStringSchedule)
-            //   })
+
+              console.log("running loop",dateStringSchedule)
+              PushNotification.cancelAllLocalNotifications()
             }
 
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
-                    <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}>
-                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline></TouchableOpacity>
+                    {/* <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}> */}
+                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline>
+                {/* </TouchableOpacity> */}
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
                     {timetable}

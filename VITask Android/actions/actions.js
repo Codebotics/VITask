@@ -25,6 +25,8 @@ import {
     FETCH_ACADHISTORY_SUCCESS,
     FETCH_ACADHISTORY_ERROR,
 
+    STORE_STATE_FROM_ASYNC,
+
     } from './types'
     
     
@@ -153,6 +155,13 @@ import {
             type : REFORMAT_DATA    
         }
     }
+
+    export const storeState = (rState)=>{
+        return{
+            type : STORE_STATE_FROM_ASYNC,
+            data : rState
+        }
+    }
     
     const ORIGINAL_VTOP_LOGIN = `https://vitask.me/authenticate?username={username}&password={password}`
     const ORIGINAL_ATTENDANCE = `https://vitask.me/classesapi?token={state.reducer.userInfo.APItoken}`
@@ -164,10 +173,10 @@ import {
     export const loginVTOP =(username, password) => {
         return dispatch=>{
             dispatch(loginVTOPRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch('https://vitask.me/authenticate?username=' + username + '&password=' + password)
             .then(res => res.json())
             .then(res => {
-                res = require("../authenticate.json")
+                // res = require("../authenticate.json")
                 if (res['Error']){
                 // Incorrect password
                 dispatch(loginVTOPError("Password / Username Incorrect"))
@@ -184,10 +193,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchAttendanceRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch('https://vitask.me/classesapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
-                res = require("../classesapi.json")
-                return res})
+                // res = require("../classesapi.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchAttendanceSuccess(res))
             })
@@ -199,10 +208,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchTimetableRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch('https://vitask.me/timetableapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
-                res = require("../timetableapi.json")
-                return res})
+                // res = require("../timetableapi.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchTimetableSuccess(res))
             })
@@ -214,10 +223,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchMarksRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch('https://vitask.me/marksapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
-                res = require("../marks.json")
-                return res})
+                // res = require("../marks.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchMarksSuccess(res))
             })
@@ -229,10 +238,10 @@ import {
         return (dispatch, getState)=>{
             const state = getState()
             dispatch(fetchMoodleAssignmentsRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch('https://vitask.me/moodleapi?token=' + state.reducer.userInfo.APItoken)
             .then(res =>{
-                res = require('../moodleapi.json')
-                return res
+                // res = require('../moodleapi.json')
+                return res.json()
             }).then(res =>{
                 dispatch(fetchMoodleAssignmentsSuccess(res))
             })
@@ -244,13 +253,19 @@ import {
         return(dispatch,getState) =>{
             const state = getState()
             dispatch(fetchAcadHistoryRequest)
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch('https://vitask.me/acadhistoryapi?token=' + state.reducer.userInfo.APItoken)
             .then(res =>{
-                res = require('../acadhistory.json')
-                return res
+                // res = require('../acadhistory.json')
+                return res.json()
             }).then(res =>{
                 dispatch(fetchAcadHistorySuccess(res))
             })
             .catch(err =>{dispatch((fetchAcadHistoryError(err)))})
+        }
+    }
+
+    export const storeRedux = (rState) =>{
+        return(dispatch,getState) =>{
+            dispatch(storeState(rState))
         }
     }

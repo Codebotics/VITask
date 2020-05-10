@@ -23,6 +23,8 @@ import {
     REFORMAT_DATA,
     FETCH_ACADHISTORY_REQUEST,
     FETCH_ACADHISTORY_SUCCESS,
+
+    STORE_STATE_FROM_ASYNC,
     } from '../actions/types'
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunkMiddleware from 'redux-thunk'
@@ -252,6 +254,11 @@ const reducer = (state = initialState, action)=>{
                 timetable,
                 coursesInfo,
                 status : "FORMAT_COMPLETE"
+            }
+        
+        case STORE_STATE_FROM_ASYNC:
+            return{
+                ...action.data
             }
 
         default :
