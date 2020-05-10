@@ -15,6 +15,7 @@ import { AboutUsScreen } from "./screens/AboutUsScreen";
 import GpaCalculator from './screens/GpaCalculator'
 import MoodleDisplay from './screens/MoodleDisplay'
 import  DrawerContent  from "./screens/Drawer";
+import { BetaOver } from "./screens/BetaOver";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -26,11 +27,17 @@ function customDrawer(props){
 }
 
 function App() {
+  let today = new Date()
+  let beta = new Date(2020,4,18)
+  let initial = "Login"
+  if (today>beta){
+    initial = "Beta"
+  }
   return (
     <NavigationContainer>
     <Drawer.Navigator drawerContent={customDrawer} drawerStyle={{
       backgroundColor:"#081631"
-    }}>
+    }} initialRouteName={initial}>
         <Drawer.Screen name="Login" component={LoginScreen} options={{swipeEnabled:false,gestureEnabled:false}}/>
         <Drawer.Screen name="Loading" component={LoadingScreen}  options={{swipeEnabled:false,gestureEnabled:false}}/>
         <Drawer.Screen name="Dashboard" component={DashboardScreen} />
@@ -40,6 +47,8 @@ function App() {
         <Drawer.Screen name="Courses" component={CourseScreen} />
         <Drawer.Screen name="GpaCalculator" component={GpaCalculator} />
         <Drawer.Screen name="MoodleDisplay" component={MoodleDisplay} />
+        <Drawer.Screen name="Beta" component={BetaOver} />
+
     </Drawer.Navigator>
     </NavigationContainer>
   );
