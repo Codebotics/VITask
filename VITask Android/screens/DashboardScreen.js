@@ -89,20 +89,40 @@ class DashboardScreen extends Component {
                 console.log(dateStringSchedule)
             }
 
+            var count = new Date(dateStringSchedule).getTime();
+            var now = new Date().getTime();
+            var d = count - now;
+
+            var dayss = Math.floor(d/(1000*60*60*24));
+            var hours = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+            var minutes = Math.floor((d%(1000*60*60))/(1000*60));
+
+            // not to show missed notifications
+            if(dayss <0 || hours <0 || minutes <0){
+                var temp = 0 // anything
+            }else{
+            PushNotification.localNotificationSchedule({
+                autoCancel: true,
+                bigText:"Upcoming Class",
+                subText: this.state.timetable[i]['slot'],
+                title:"you have class in slot " + this.state.timetable[i]['slot'] + " at time " + this.state.timetable[i]['startTime'] + " - " + this.state.timetable[i]['endTime'],
+                message:"Classes",
+                largeIcon : 'icon',
+                smallIcon : 'icon',
+                vibrate: true,
+                vibration: 300,
+                playSound: true,
+                soundName: 'default',
+                date : new Date(dateStringSchedule),
+                repeatType : 'day',
+                fireDate: Date.now()
+            })                
+            }
+
             // Scheduling Notifications
-            // PushNotification.localNotificationSchedule({
-            //     autoCancel: true,
-            //     bigText:"Upcoming Class",
-            //     subText: this.state.timetable[i]['slot'],
-            //     title:"you have class in slot " + this.state.timetable[i]['slot'] + " at time " + this.state.timetable[i]['startTime'] + " - " + this.state.timetable[i]['endTime'],
-            //     message:"",
-            //     vibrate: true,
-            //     vibration: 300,
-            //     playSound: true,
-            //     soundName: 'default',
-            //     actions: '["Yes", "No"]',
-            //     date : new Date(dateStringSchedule)
-            //   })
+
+              console.log("running loop",dateStringSchedule)
+            //   PushNotification.cancelAllLocalNotifications()
             }
 
         return (
