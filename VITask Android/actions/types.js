@@ -30,6 +30,7 @@ export const FETCH_ACADHISTORY_REQUEST = "FETCH_ACADHISTORY_REQUEST"
 export const FETCH_ACADHISTORY_SUCCESS = "FETCH_ACADHISTORY_SUCCESS"
 export const FETCH_ACADHISTORY_ERROR = "FETCH_ACADHISTORY_SUCCESS"
 
+export const STORE_STATE_FROM_ASYNC = "STORE_STATE_FROM_ASYNC"
 
 // These are only for using developement purpose to save api calls, instead api calls are done to dummy server
 export const DEV_LOAD_ATTENDANCE = "DEV_LOAD_ATTENDANCE"

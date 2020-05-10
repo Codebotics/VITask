@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Image, TouchableWithoutFeedback,ToastAndroid } from 'react-native'
+import {View, Image, TouchableWithoutFeedback,ToastAndroid, AsyncStorage } from 'react-native'
 import {Caption} from 'react-native-paper'
 import * as Animatable from  'react-native-animatable'
 import {connect} from 'react-redux'
@@ -10,7 +10,8 @@ import {
     reformatData,
     fetchMarks,
     fetchMoodleAssignments,
-    fetchAcadHistory
+    fetchAcadHistory,
+    storeState
 } from '../actions/actions'
 
 class LoadingScreen extends Component {
@@ -36,6 +37,47 @@ class LoadingScreen extends Component {
         // Change the dummy api calls in the ./actions/actions.js
         this.props.login(this.props.route.params.username, this.props.route.params.password)
     }
+    storeStateIntoRedux = async (reduxState , reduxStatus) => {
+       let reduxObj = {
+           reduxState : reduxState,
+           reduxStatus : reduxStatus
+       } 
+       console.log("Storing Redux State data in ASYNC",reduxObj)
+       try {
+        await AsyncStorage.setItem('VITask_reduxState', JSON.stringify(reduxObj));
+      } catch (error) {
+        // Error saving data
+        console.log(error)
+        await AsyncStorage.setItem('VITask_user', JSON.stringify({
+            reduxState : reduxState,
+            reduxStatus : 0
+        }))
+      }
+
+    }
+
+    _retrieveRedux = async () => {
+        console.log("Retirve called")
+        try {
+          const value = await AsyncStorage.getItem('VITask_reduxState');
+          console.log("FROM REDUX ASYNC",value)
+          const reduxObj = JSON.parse(value)
+          if (reduxObj.reduxStatus == 1) {
+            this.props.storeState(reduxObj.reduxState)
+            this.props.navigation.jumpTo("Dashboard")
+            // console.warn("dkljshbffffffffffffffffffffffffffffffffffffffffffffk")
+          }
+        //   else{
+//else for splash Screen
+        //   }
+        } catch (error) {
+             console.log(error)
+        }
+      }
+      UNSAFE_componentWillMount(){
+          this._retrieveRedux()
+      }
+
     componentDidUpdate(prevProps){
         if(prevProps.state.status !== this.props.state.status){
             const { state } = this.props
@@ -89,6 +131,8 @@ class LoadingScreen extends Component {
                 text:greetMsg,
                 process: "Click on above logo to continue."
             })
+            console.log("LOADINGSCREEN" , this.props.state)
+            this.storeStateIntoRedux(this.props.state , 1)
             }
         }
     }
@@ -197,6 +241,9 @@ const mapDispatchToProps = (dispatch) => {
       },
       reformat: ()=>{
           dispatch(reformatData())
+      },
+      storeState: (rState)=>{
+          dispatch(storeState(rState))
       }
     }
   }

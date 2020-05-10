@@ -28,6 +28,7 @@ class LoginScreen extends Component {
              console.log(error)
         }
       }
+      
 
     UNSAFE_componentWillMount(){
         console.log('inside Component will mount of Login')

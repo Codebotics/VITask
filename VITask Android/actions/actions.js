@@ -25,6 +25,8 @@ import {
     FETCH_ACADHISTORY_SUCCESS,
     FETCH_ACADHISTORY_ERROR,
 
+    STORE_STATE_FROM_ASYNC,
+
     } from './types'
     
     
@@ -153,6 +155,13 @@ import {
             type : REFORMAT_DATA    
         }
     }
+
+    export const storeState = (rState)=>{
+        return{
+            type : STORE_STATE_FROM_ASYNC,
+            data : rState
+        }
+    }
     
     const ORIGINAL_VTOP_LOGIN = `https://vitask.me/authenticate?username={username}&password={password}`
     const ORIGINAL_ATTENDANCE = `https://vitask.me/classesapi?token={state.reducer.userInfo.APItoken}`
@@ -252,5 +261,11 @@ import {
                 dispatch(fetchAcadHistorySuccess(res))
             })
             .catch(err =>{dispatch((fetchAcadHistoryError(err)))})
+        }
+    }
+
+    export const storeRedux = (rState) =>{
+        return(dispatch,getState) =>{
+            dispatch(storeState(rState))
         }
     }
