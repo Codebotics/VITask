@@ -108,7 +108,11 @@ def get_dashboard_json(sess, sess_key):
 
     dashboard_text = sess.post(DASHBOARD_URL, data = json.dumps(dashboard_payload), verify= False).text
     dashboard_json = json.loads(dashboard_text)
-    return dashboard_json[0]["data"]["events"]
+    try:
+        due_items = dashboard_json[0]["data"]["events"]
+    except:
+        due_items = None
+    return due_items
 # Functions for Moodle end here
 
 
@@ -426,21 +430,27 @@ def moodleapi():
         sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
         due_items = get_dashboard_json(sess, sess_key)
         
-        ref = db.reference('vitask')
-
         all_assignments = []
-
-        for item in due_items:
-            temp={}
-            temp["course"] = item["course"]["fullname"]
-            temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
-            temp["time"] = temp_time
+        
+        if(due_items is None):
+            temp = {}
+            temp["course"] = "No Assignments."
+            temp["time"] = "N/A"
+            temp["status"] = "yes"
             all_assignments.append(temp)
-            
+        else:
+            ref = db.reference('vitask')
+            for item in due_items:
+                temp={}
+                temp["course"] = item["course"]["fullname"]
+                temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+                temp["time"] = temp_time
+                all_assignments.append(temp)
+
         assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
-        
+
         yes_assignments = []
-        
+
         if(assignment is not None):
             for i in all_assignments:
                 for j in assignment:
@@ -450,18 +460,18 @@ def moodleapi():
                     elif(i["course"]==j["course"] and i["time"]==j["time"] and j["status"]=="no"):
                         i["status"]="no"
                         yes_assignments.append(i)
-                        
+
         elif(assignment is None):
             for item in due_items:
                 temp={}
                 temp["course"] = item["course"]["fullname"]
                 temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
                 temp["time"] = temp_time
-                
+
                 # Assignment Status to check whether it's actual or not,yes for actual and no for not.
                 temp["status"] = "yes"
                 yes_assignments.append(temp)
-            
+
 
         # Processing password before storing
         api_gen = moodle_password
@@ -752,19 +762,27 @@ def moodlelogin():
             moodle_password = request.form['password']
             sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
             due_items = get_dashboard_json(sess, sess_key)
-
+            
             all_assignments = []
-
-            for item in due_items:
-                temp={}
-                temp["course"] = item["course"]["fullname"]
-                temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
-                temp["time"] = temp_time
-                
-                # Assignment Status to check whether it's actual or not,yes for actual and no for not.
+            
+            if(due_items is None):
+                temp = {}
+                temp["course"] = "No Assignments."
+                temp["time"] = "N/A"
                 temp["status"] = "yes"
                 all_assignments.append(temp)
-                
+            
+            else:
+                for item in due_items:
+                    temp={}
+                    temp["course"] = item["course"]["fullname"]
+                    temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+                    temp["time"] = temp_time
+
+                    # Assignment Status to check whether it's actual or not,yes for actual and no for not.
+                    temp["status"] = "yes"
+                    all_assignments.append(temp)
+
             # Processing password before storing
             api_gen = moodle_password
             api_token = api_gen.encode('ascii')
@@ -926,15 +944,25 @@ def moodleresync():
         due_items = get_dashboard_json(sess, sess_key)
         
         assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
-
+        
         all_assignments = []
-
-        for item in due_items:
-            temp={}
-            temp["course"] = item["course"]["fullname"]
-            temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
-            temp["time"] = temp_time
+            
+        if(due_items is None):
+            temp = {}
+            temp["course"] = "No Assignments."
+            temp["time"] = "N/A"
+            temp["status"] = "yes"
             all_assignments.append(temp)
+
+        else:
+            for item in due_items:
+                temp={}
+                temp["course"] = item["course"]["fullname"]
+                temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
+                temp["time"] = temp_time
+                all_assignments.append(temp)
+
+        
             
         yes_assignments = []
             
