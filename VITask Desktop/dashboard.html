@@ -1810,6 +1810,7 @@ function Attend_subtract(id)
                 let timetable_ini_url = 'http://134.209.150.24/timetableapi?token=';
                 let acadhistory_ini_url = 'http://134.209.150.24/acadhistoryapi?token=';
                 let attendance_ini_url = 'http://134.209.150.24/classesapi?token=';
+                let marks_ini_url = 'https://vitask.me/marksapi?token='
                 let moodle_ini_url = 'http://134.209.150.24/moodleapi?appno=';
                 
                 $("#loading").show();
@@ -1841,9 +1842,11 @@ function Attend_subtract(id)
                                 timetable(doc.APItoken, function() {
                                     acadhistory(doc.APItoken, function(){
                                         attendance(doc.APItoken, function(){
-                                            moodlefetch(moodle_username,moodle_password,doc.AppNo, function(){
-                                                ipcRenderer.send('resync:new','resynced');
-                                                done(doc.APItoken);
+                                            marks(doc.APItoken, function(){
+                                                moodlefetch(moodle_username,moodle_password,doc.AppNo, function(){
+                                                    ipcRenderer.send('resync:new','resynced');
+                                                    done(doc.APItoken);
+                                                });
                                             });
                                         });
                                     });
@@ -1877,8 +1880,10 @@ function Attend_subtract(id)
                                 timetable(doc.APItoken, function() {
                                     acadhistory(doc.APItoken, function(){
                                         attendance(doc.APItoken, function(){
-                                            ipcRenderer.send('resync:new','resynced');
-                                            done(doc.APItoken);
+                                            marks(doc.APItoken, function(){
+                                                ipcRenderer.send('resync:new','resynced');
+                                                done(doc.APItoken);
+                                            });
                                         });
                                     });
                                 });
@@ -1904,6 +1909,25 @@ function Attend_subtract(id)
 
                             data.insert(result, function(err, doc) {
                             console.log('Inserted', doc.Assignments);
+                            callback();
+                            });
+                          }
+                    });
+                    
+                }
+                
+                
+                function marks(token, callback){
+                    let marks_url = marks_ini_url+token;
+                    request(marks_url, function (err, response, body) {
+                          if(err){
+                            console.log('error:', error);
+                          } else {
+                            let result = JSON.parse(body)
+                            result.marks = "user-marks"
+
+                            data.insert(result, function(err, doc) {
+                            console.log('Inserted', doc.Marks);
                             callback();
                             });
                           }
