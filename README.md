@@ -1,80 +1,35 @@
 # VITask
-_Moved into Internal Beta Testing Mode ([Desktop App](https://github.com/Codebotics/VITask/releases/tag/v1.0.0-DesktopWindowsBeta)). Mobile App will be in testing mode in few days. Stay Tuned!_
 
-VITask is a dynamic API server for VTOP. This repo contains code for Web(`Flask server`), Android App (`React-Native`), Desktop (`ElectronJS`). The code is still in development stage, use with caution.
+_Currently in Public Beta. Checkout our [Downloads](https://vitask.me/downloads) Page for downloading_ 
 
-Please make sure you install dependencies before running respective apps. If you are changing code, please read guidelines at the end of this file
+VITask is the solution for problems VITCC students face daily. VITask is complete environment solution containing Desktop, Mobile and WebApp. 
 
----
+VITask is an open-source and public project. We prefer full transperancy. We have carefully curated each piece of our apps. 
 
-## Web Application
+## Who are we?
 
-### Prerequisites
-You can check the preqrequistes in the `VITask Web/requirements.txt` file. You require `Python 3.2 or higher` and make sure `pip` and `python` are added in `PATH` variable successfully before running.
+We are a group of students who have come together to provide a different and unique experience to our VITCC community. Our students have great knowledge for developing various apps but still we lacked collge centered app.
 
-### Installation
+So a bunch of students decided to come together and develop an experience as best as we can. We are just like you who hate to type captcha everytime we want to check our attendance. It is a simple contribution to beautiful VITCC Community.
 
-1.Creating Virtual Environment and activating:
-* Open cmd
+Want to checkout a detailed story behind our existance? Read [this article]() by Apratim Shukla.
 
-* Change current directory to VITask Web. Using command `cd "VITask Web"`
-* Run this `py -3 -m venv venv` or `python3 -m venv venv` or if you have `virtualenv` set up use command `virtulalenv venv`.
-* To activate virtual environment, run this `venv\Scripts\activate` or if you are using bash terminal `source venv/Scripts/activate`
-* Now install `requirements.txt`
-    
-2.Installing from `requirements.txt`:
-* Activate virtual environment as told above.
-* Run this `pip install -r requirements.txt`
-     
-3.Next step is running `main.py` . But before do following steps.
+We hope you like this experience. Follow our insta page `@vitask.me`
 
-* For Windows users, authorize Firebase by saving `firebase.json` in a suitable location and then executing `set GOOGLE_APPLICATION_CREDENTIALS = path_to_your_firebase.json\firebase.json` in cmd.
-* For Linux Users, Authorize Firebase by saving `firebase.json` in a suitable location and then executing `export GOOGLE_APPLICATION_CREDENTIALS = path_to_your_firebase.json\firebase.json` in terminal.
-    
-4.Running `main.py`
+## That's cool, I want to contribute
 
-* Activate virtual environment and then make sure you have completed above steps.
-* Now run `py main.py` or `python main.py` or `python3 main.py` or `py3 main.py`
-* Open your Browser and then enter URL `http://localhost:5000/login` to enter your login details
-* Now Check the `main.py` for the `@app.route` and then head over to the page you want to check for example if you want to check page `xyz`    then it will have an app route as `@app.route('/xyz')`.Then use the URL `http://localhost:5000/xyz`
+Although we usually test our apps before deployment but there are still many bugs we don't know about or exceed our capability to fix.
 
----
-## For Desktop and React Native
+If you want to contribute, you may start by solving any Issues and submitting a Pull Request. Make sure you follow our [Contributing guidelines](Contributing.md). We would be happy to merge your pull request if it fixes a bug or implements a new feature. 
 
-### Dependencies
-For installing dependencies, make sure you are inside respective directories. Use command `yarn install` or `npm install` to install dependencies from `package.json`.
+## I have feature request
 
----
-## Contributing Guidelines
-While working on same project please make sure you follow these guidelines.
-
-* Always update your `master` branch using `git pull origin master`.
-* Create seperate branch while working and switch to that branch using `git checkout -b branch_name`
-* Make changes and commit changes to this branch.
-* Push branch to github using `git push -u origin branch_name`
-* While working on the branch, be sure to rebase with master to pull in mainline changes:
-  ```
-  git checkout master
-  git pull origin master
-  git checkout your_branch
-  git rebase master
-* Approve your Pull requests from GitHub or wait for approval.
-* For more information look into [this post](https://github.com/codepath/android_guides/wiki/Collaborating-on-Projects-with-Git).
-
-**While working on the project make sure you update and create `.gitignore` files in the directories if you create some personal and temperoray files.**
-
----
-## TODO
+We want to provide a complete solution to the problems students face. So, if you have any idea you would love to see in our app, submit an Issue with tag `Feature Request`. If it sounds too much work, you can always DM us on instagram `@vitask.me` 
 
 
-This Project is still in development phase and we have some TODO's we would like to do. Although these features are optional and may or may not be added. 
+## Oh...no, a bug
 
-- [ ] Add feature to add extra classes and remove cancelled classes
-- [ ] Option to see summary of DA's and assignments
-- [ ] Calculate CGPA based on grades
-- [ ] Predict class average, if enough people download the app.
-
-As, we add more features, the list may grew. We will tick the features that have been implemented. Stay tuned!
+There may be bugs in our app, we are only humans. We like to provide you a streamlined experience. You can report a bug by opening an Issue with tag `Bug` or DM us on instagram `@vitask.me`. Make sure to include screenshot of the bug and steps on creating that bug.
 
 
 ---
@@ -88,11 +43,10 @@ The team behind VITask is very dedicated and talented, all of the students write
 | ![apratimshukla6](/resources/apratimshukla.png)  | He is the real mind behind this project, watch out for his Python and Web Dev skills. He really does a good job as a leader and our root server. Check out [apratimshukla6](http://github.com/apratimshukla6)
 | ![yash-rajpal](/resources/yash-rajpal.png) | He knows about react-native and React. Ready to learn and collaborate, ask him how to scrape a website and he is ready. Likes to joke very much. Check out [yash-rajpal](http://github.com/yash-rajpal)|
 | ![mayanktolani19](/resources/mayanktolani19.png) | Problem with scraping a website? He is to the rescue. Loves good design and has a great sense of humour. He knows Web Dev, Flutter. Also likes ML. Check out [mayanktolani19](http://github.com/mayanktolani19)|
-| ![uragirii](/resources/uragirii.png)| He joined pretty late in the project. Loves cats and coding. Knows how to scrape the shit out of any website. He loves a good UI and UX.  Also likes ML. Check out [Uragirii](http://github.com/uragirii)
+| ![uragirii](/resources/uragirii.png)| He joined pretty late in the project. Loves cats and coding. Knows how to scrape the shit out of any website. Loves to create good UI and UX.  Have knowledge in Machine Learning and Data Science. Check out [Uragirii](http://github.com/uragirii)
 | ![soumaditya](/resources/soumaditya.jpeg)| He is a content-writer worth his salt. He can dig deep into any little shit out there. Check out [Soumaditya](https://github.com/soumaditya)
 
 
 
 
-_More team member details to be added soon. Stay with us._
-
+_Our team is not limited to above mentioned students. For a complete team list visit [Our Team](https://vitask.me/ourteam) page_
