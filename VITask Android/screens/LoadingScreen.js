@@ -49,7 +49,7 @@ class LoadingScreen extends Component {
       } catch (error) {
         // Error saving data
         console.log(error)
-        await AsyncStorage.setItem('VITask_user', JSON.stringify({
+        await AsyncStorage.setItem('VITask_user', JSON.stringify({ //Yash will see this after beta (reminder)
             reduxState : reduxState,
             reduxStatus : 0
         }))
@@ -76,7 +76,7 @@ class LoadingScreen extends Component {
         }
       }
       UNSAFE_componentWillMount(){
-        //   this._retrieveRedux()
+          this._retrieveRedux()
       }
 
     componentDidUpdate(prevProps){
@@ -114,12 +114,9 @@ class LoadingScreen extends Component {
                 // Timetable complete, call the attendance api
                 this.props.getAttendance()
                 // Marks and acadhistory can be updated 
-<<<<<<< HEAD
-=======
                 this.props.getMoodle()
                 this.props.getMarks()
                 this.props.getAcadHistory()
->>>>>>> 6adb47aa952177a128e45945fd2197c569bdef89
                 this.setState({
                     text:"And before we forget...",
                     process: "Getting your Attendance"
@@ -153,7 +150,7 @@ class LoadingScreen extends Component {
             this.text.stopAnimation()
             this.process.stopAnimation()
             console.log("LOADINGSCREEN" , this.props.state)
-            // this.storeStateIntoRedux(this.props.state , 1)
+            this.storeStateIntoRedux(this.props.state , 1)
             }
         }
     }

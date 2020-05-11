@@ -33,7 +33,7 @@ class LoginScreen extends Component {
     UNSAFE_componentWillMount(){
         console.log('inside Component will mount of Login')
 
-        //   this._retrieveData();
+          this._retrieveData();
     }
     _storeData = async (reg , pass , status) => {
         let user_obj = {

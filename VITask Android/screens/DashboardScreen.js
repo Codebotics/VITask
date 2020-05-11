@@ -7,12 +7,12 @@ import { connect } from 'react-redux';
 import LastSync  from "../components/LastSync/LastSync";
 
 
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const days = ['Monday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Monday']
 const date = new Date()
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-// const today = days[date.getDay()]
+const today = days[date.getDay()]
 // Just for Testing
-const today = "Thursday"
+// const today = "Thursday"
 class DashboardScreen extends Component {
     state = {
         day: today,

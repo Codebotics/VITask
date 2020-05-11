@@ -1,5 +1,5 @@
 import React, {Component } from 'react'
-import {  View, StyleSheet } from 'react-native'
+import {  View, StyleSheet,AsyncStorage } from 'react-native'
 import {
     Avatar,
     Title,
@@ -120,7 +120,21 @@ class Assignment extends Component {
                                   )}
                                   labelStyle={{color:"white"}}
                                   label="Logout"
-                                  onPress={() => {}}
+                                  onPress={ async () => {
+                                    try {
+                                        await AsyncStorage.removeItem("VITask_reduxState")
+                                    }
+                                    catch(err) {
+                                        console.log(err)
+                                    }
+                                    try {
+                                        await AsyncStorage.removeItem("VITask_user")
+                                    }
+                                    catch(err) {
+                                        console.log(err)
+                                    }
+                                    this.props.navigation.jumpTo('Login')
+                                  }}
                               />
               </Drawer.Section>
             </View>
