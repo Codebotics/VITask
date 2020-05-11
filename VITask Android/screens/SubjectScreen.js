@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, StyleSheet, Image } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, Image, StatusBar } from 'react-native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Headline, Caption, Subheading,Card, Button } from "react-native-paper";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -25,6 +25,7 @@ export class SubjectScreen extends Component {
         let total = this.state.total+1
         let attendance = Math.ceil((attended/total)*100)
         let color = "#00e6ac"
+        let toAttend = (3*total) - (4*attended)
         if(attendance<75){
             color = "#ff6070"
         }
@@ -37,6 +38,7 @@ export class SubjectScreen extends Component {
             total,
             bunk,
             color,
+            toAttend
         })
     }
     componentDidMount(){
@@ -127,7 +129,7 @@ export class SubjectScreen extends Component {
                             <Icon name="error" style={{fontSize:30, textAlign:"center"}} color="#ff6070"/>
                         </View>
                         <View style={{flex:7}}>
-                            <Caption >You're short by {75-this.state.percentage}%. You can make it up by attending {this.state.attend} classes</Caption>
+                            <Caption >You're short by {75-this.state.percentage}%. You can make it up by attending {this.state.toAttend} classes</Caption>
                         </View>
                     </View>
                 </Card>
@@ -135,6 +137,7 @@ export class SubjectScreen extends Component {
         }
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
+            <StatusBar backgroundColor="#081631" />
                 <View style={{backgroundColor:"#081631"}}>
                     <View>
                         <Headline style={{color:"#FFF", textAlign:"center", marginVertical:"5%"}}>{this.state.courseName}</Headline>
@@ -147,7 +150,8 @@ export class SubjectScreen extends Component {
                                 width={4}
                                 fill={this.state.percentage}
                                 duration = {1500}
-                                tintColor="rgb(255,96,112)"
+                                // tintColor="rgb(255,96,112)"
+                                tintColor = {this.state.color}
                                 backgroundColor="#22365d">
                                 {   
                                     (percentage) => (

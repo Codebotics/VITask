@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, StyleSheet, ToastAndroid } from 'react-native'
+import { Text, View, ScrollView, StyleSheet, ToastAndroid,StatusBar } from 'react-native'
 import { Caption, Subheading, Headline, TextInput, Button, ActivityIndicator } from "react-native-paper";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
 import * as Animatable from "react-native-animatable"
@@ -35,12 +35,16 @@ class MoodleScreen extends Component {
                 // Moodle fetch complete
                 ToastAndroid.show("Logged into Moodle", ToastAndroid.SHORT)
                 this.props.navigation.jumpTo("Dashboard")
+            }else if(state.status == "ERROR"){
+                ToastAndroid.show("Something went wrong", ToastAndroid.SHORT)
+                this.props.navigation.jumpTo("Dashboard") 
             }
         }
     }
     render() {
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
+            <StatusBar backgroundColor="#081631" />
             <View style={styles.view}>
             <View>
                 <Subheading style={{ paddingBottom:"3%", fontSize:20, color:"#BBB"}}>Sign In</Subheading>

@@ -174,7 +174,7 @@ import {
         return dispatch=>{
             dispatch(loginVTOPRequest)
             console.log(`https://vitask.me/authenticate?username=${username}&password=${password}`)
-            fetch(`https://vitask.me/authenticate?username=${username}&password=${password}`)
+            fetch(`http://134.209.150.24/authenticate?username=${username}&password=${password}`)
             .then(res => res.json())
             .then(res => {
                 // res = require("../authenticate.json")
@@ -194,7 +194,7 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchAttendanceRequest)
-            fetch('https://vitask.me/classesapi?token=' + state.reducer.userInfo.APItoken)
+            fetch('http://134.209.150.24/classesapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
                 // res = require("../classesapi.json")
                 return res.json()})
@@ -209,7 +209,7 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchTimetableRequest)
-            fetch('https://vitask.me/timetableapi?token=' + state.reducer.userInfo.APItoken)
+            fetch('http://134.209.150.24/timetableapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
                 // res = require("../timetableapi.json")
                 return res.json()})
@@ -224,7 +224,7 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchMarksRequest)
-            fetch('https://vitask.me/marksapi?token=' + state.reducer.userInfo.APItoken)
+            fetch('http://134.209.150.24/marksapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
                 // res = require("../marks.json")
                 return res.json()})
@@ -241,7 +241,7 @@ import {
             dispatch(fetchMoodleAssignmentsRequest)
             const username = state.reducer.userInfo.RegNo
             const appno = state.reducer.userInfo.AppNo
-            fetch(`https://vitask.me/moodleapi?username=${username}&password=${password}&appno=${appno}`   )
+            fetch(`http://134.209.150.24/moodleapi?username=${username}&password=${password}&appno=${appno}`   )
             .then(res =>{
                 // res = require('../moodleapi.json')
                 return res.json()
@@ -256,7 +256,7 @@ import {
         return(dispatch,getState) =>{
             const state = getState()
             dispatch(fetchAcadHistoryRequest)
-            fetch('https://vitask.me/acadhistoryapi?token=' + state.reducer.userInfo.APItoken)
+            fetch('http://134.209.150.24/acadhistoryapi?token=' + state.reducer.userInfo.APItoken)
             .then(res =>{
                 // res = require('../acadhistory.json')
                 return res.json()

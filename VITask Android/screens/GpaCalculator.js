@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {  View, ScrollView,Text,TouchableOpacity,StyleSheet } from 'react-native'
+import {  View, ScrollView,Text,TouchableOpacity,StyleSheet,StatusBar } from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Headline, Caption } from "react-native-paper";
 import Slider from '@react-native-community/slider';
@@ -32,6 +32,7 @@ class GpaCalculator extends React.Component{
         const grades = ["S","A","B","C","D","E","F"]
         return(
             <ScrollView style={{backgroundColor:'#081631'}}>
+                <StatusBar backgroundColor="#081631" />
                 <View style={{padding : '5%',paddingTop : '5%'}}>
                         <Text style={{color:'#FFF',fontSize:wp('10%')}}>
                             GPA Calculator

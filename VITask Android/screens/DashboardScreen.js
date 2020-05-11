@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {  View, ScrollView,TouchableOpacity, Alert } from 'react-native'
+import {  View, ScrollView,TouchableOpacity, Alert,StatusBar } from 'react-native'
 import PushNotification from 'react-native-push-notification'
 import { Headline, Caption } from "react-native-paper";
 import Timetable from '../components/Timetable/Timetable'
@@ -128,6 +128,7 @@ class DashboardScreen extends Component {
 
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
+                <StatusBar backgroundColor="#081631" />
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
                     {/* <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}> */}

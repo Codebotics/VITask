@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, ToastAndroid, Linking, Image,ScrollView,AsyncStorage } from 'react-native'
+import { View, StyleSheet, ToastAndroid, Linking, Image,ScrollView,AsyncStorage,StatusBar } from 'react-native'
 import { Headline,  TextInput, Button, Subheading, ActivityIndicator} from "react-native-paper";
 import * as Animatable from "react-native-animatable"
 
@@ -70,6 +70,7 @@ class LoginScreen extends Component {
     render() {
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
+            <StatusBar backgroundColor="#081631" />
             <View style={styles.view}>
             <Animatable.View animation="fadeIn" easing="ease-out" duration={1500}>
                 <Image

@@ -221,7 +221,7 @@ const reducer = (state = initialState, action)=>{
         case FETCH_MOODLE_ASSIGNMENTS_ERROR:
             return{
                 ...state,
-                staus : "ERROR",
+                status : "ERROR",
                 error : action.error
             }
 
