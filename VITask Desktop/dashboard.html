@@ -1806,11 +1806,11 @@ function Attend_subtract(id)
               
         
             function login(regno,password,moodle_username=null,moodle_password=null,mode=null){
-                let url = 'https://vitask.me/authenticate?username='+regno+'&password='+password;
-                let timetable_ini_url = 'https://vitask.me/timetableapi?token=';
-                let acadhistory_ini_url = 'https://vitask.me/acadhistoryapi?token=';
-                let attendance_ini_url = 'https://vitask.me/classesapi?token=';
-                let moodle_ini_url = 'https://vitask.me/moodleapi?appno=';
+                let url = 'http://134.209.150.24/authenticate?username='+regno+'&password='+password;
+                let timetable_ini_url = 'http://134.209.150.24/timetableapi?token=';
+                let acadhistory_ini_url = 'http://134.209.150.24/acadhistoryapi?token=';
+                let attendance_ini_url = 'http://134.209.150.24/classesapi?token=';
+                let moodle_ini_url = 'http://134.209.150.24/moodleapi?appno=';
                 
                 $("#loading").show();
                 $("#wrapper").hide(); 

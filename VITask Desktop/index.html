@@ -185,11 +185,11 @@
             function login(){
                 let regno = document.getElementById("regno").value.toUpperCase();
                 let password = document.getElementById("password").value;
-                let url = 'https://vitask.me/authenticate?username='+regno+'&password='+password;
-                let timetable_ini_url = 'https://vitask.me/timetableapi?token='
-                let acadhistory_ini_url = 'https://vitask.me/acadhistoryapi?token='
-                let attendance_ini_url = 'https://vitask.me/classesapi?token='
-                let marks_ini_url = 'https://vitask.me/marksapi?token='
+                let url = 'http://134.209.150.24/authenticate?username='+regno+'&password='+password;
+                let timetable_ini_url = 'http://134.209.150.24/timetableapi?token='
+                let acadhistory_ini_url = 'http://134.209.150.24/acadhistoryapi?token='
+                let attendance_ini_url = 'http://134.209.150.24/classesapi?token='
+                let marks_ini_url = 'http://134.209.150.24/marksapi?token='
                 
                 $("#loading").show();
                 $("#content").hide(); 

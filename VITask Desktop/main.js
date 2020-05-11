@@ -137,22 +137,6 @@ const mainMenuTemplate = [
         label:'File',
         submenu:[
             {
-                label: 'Resync',
-                accelerator: process.platform == 'darwin' ? 'Command+S' : 'Ctrl+S',
-                click()
-                {
-                    dashWindow.webContents.send('page:change','resync');
-                }
-            },
-            {
-                label: 'Logout',
-                accelerator: process.platform == 'darwin' ? 'Command+L' : 'Ctrl+L',
-                click()
-                {
-                    dashWindow.webContents.send('page:change','logout');
-                }
-            },
-            {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                 click(){
@@ -231,6 +215,8 @@ mainMenuTemplate.push({
 if(process.platform=="darwin"){
     mainMenuTemplate.unshift({});
 }
+
+
 
 function handleSquirrelEvent(application) {
     if (process.argv.length === 1) {
