@@ -12,7 +12,7 @@ We are a group of students who have come together to provide a different and uni
 
 So a bunch of students decided to come together and develop an experience as best as we can. We are just like you who hate to type captcha everytime we want to check our attendance. It is a simple contribution to beautiful VITCC Community.
 
-Want to checkout a detailed story behind our existance? Read [this article]() by Apratim Shukla.
+Want to checkout a detailed story behind our existance? Read [this article](https://medium.com/@apratimshukla6/vitask-an-api-server-for-vtop-bd07c8c3e3e5) by Apratim Shukla.
 
 We hope you like this experience. Follow our insta page `@vitask.me`
 
