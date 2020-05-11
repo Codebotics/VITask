@@ -8,7 +8,7 @@ VITask is an open-source and public project. We prefer full transperancy. We hav
 
 ## Who are we?
 
-We are a group of students who have come together to provide a different and unique experience to our VITCC community. Our students have great knowledge for developing various apps but still we lacked collge centered app.
+We are a group of students who have come together to provide a different and unique experience to our VITCC community. Our students have great knowledge for developing various apps but still we lacked college centered app.
 
 So a bunch of students decided to come together and develop an experience as best as we can. We are just like you who hate to type captcha everytime we want to check our attendance. It is a simple contribution to beautiful VITCC Community.
 
