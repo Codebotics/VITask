@@ -27,7 +27,7 @@ If you want to contribute, you may start by solving any Issues and submitting a 
 We want to provide a complete solution to the problems students face. So, if you have any idea you would love to see in our app, submit an Issue with tag `Feature Request`. If it sounds too much work, you can always DM us on instagram `@vitask.me` 
 
 
-## Oh...no, a bug
+## Something isn't right
 
 There may be bugs in our app, we are only humans. We like to provide you a streamlined experience. You can report a bug by opening an Issue with tag `Bug` or DM us on instagram `@vitask.me`. Make sure to include screenshot of the bug and steps on creating that bug.
 
