@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Image, TouchableWithoutFeedback,ToastAndroid, AsyncStorage } from 'react-native'
+import {View, Image, TouchableWithoutFeedback,ToastAndroid, AsyncStorage,StatusBar } from 'react-native'
 import {Caption} from 'react-native-paper'
 import * as Animatable from  'react-native-animatable'
 import {connect} from 'react-redux'
@@ -99,6 +99,8 @@ class LoadingScreen extends Component {
                     this.logo.stopAnimation()
                     this.text.stopAnimation()
                     this.process.stopAnimation()
+                    this.props.navigation.navigate("Login", {error: "Something went Wrong! Please, try again."})
+
                 }
             }
             else if (state.status === "VTOP_COMPLETE" && this.state.process !== "Getting your Timetable."){
@@ -167,6 +169,7 @@ class LoadingScreen extends Component {
         )
         return (
             <View style={{backgroundColor:"#081631", width:"100%", height:"100%", flexDirection:"column",justifyContent:"space-around"}}>
+                <StatusBar backgroundColor="#081631" />
                 <View>
                 <View style={{
                     flexDirection:"row", 

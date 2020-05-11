@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Image } from 'react-native'
+import { ScrollView, View, Image,StatusBar } from 'react-native'
 import { Headline,Caption } from "react-native-paper";
 import * as Animatable from "react-native-animatable"
 
@@ -9,6 +9,7 @@ export class AboutUsScreen extends Component {
     render() {
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
+            <StatusBar backgroundColor="#081631" />
             <View style={{backgroundColor:"#081631", height:"100%"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
                     <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"5%", fontFamily:"ProductSans", color:"#FFF"}}>About Us</Headline>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {  View, ScrollView,Text,TouchableOpacity } from 'react-native'
+import {  View, ScrollView,Text,TouchableOpacity,StatusBar } from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Headline, Caption } from "react-native-paper";
 import { connect } from 'react-redux';
@@ -34,6 +34,7 @@ class CourseScreen extends React.Component{
             }
         return(
             <ScrollView style={{backgroundColor:"#081631"}}>
+            <StatusBar backgroundColor="#081631" />
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
                 <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>Courses</Headline>
