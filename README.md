@@ -8,11 +8,11 @@ VITask is an open-source and public project. We prefer full transperancy. We hav
 
 ## Who are we?
 
-We are a group of students who have come together to provide a different and unique experience to our VITCC community. Our students have great knowledge for developing various apps but still we lacked collge centered app.
+We are a group of students who have come together to provide a different and unique experience to our VITCC community. Our students have great knowledge for developing various apps but still we lacked college centered app.
 
 So a bunch of students decided to come together and develop an experience as best as we can. We are just like you who hate to type captcha everytime we want to check our attendance. It is a simple contribution to beautiful VITCC Community.
 
-Want to checkout a detailed story behind our existance? Read [this article]() by Apratim Shukla.
+Want to checkout a detailed story behind our existance? Read [this article](https://medium.com/@apratimshukla6/vitask-an-api-server-for-vtop-bd07c8c3e3e5) by Apratim Shukla.
 
 We hope you like this experience. Follow our insta page `@vitask.me`
 
@@ -27,7 +27,7 @@ If you want to contribute, you may start by solving any Issues and submitting a 
 We want to provide a complete solution to the problems students face. So, if you have any idea you would love to see in our app, submit an Issue with tag `Feature Request`. If it sounds too much work, you can always DM us on instagram `@vitask.me` 
 
 
-## Oh...no, a bug
+## Something isn't right
 
 There may be bugs in our app, we are only humans. We like to provide you a streamlined experience. You can report a bug by opening an Issue with tag `Bug` or DM us on instagram `@vitask.me`. Make sure to include screenshot of the bug and steps on creating that bug.
 
