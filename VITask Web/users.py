@@ -11,6 +11,8 @@ for i in user_list:
     tempdict = user_list[i]
     for j in tempdict:
         user_info = tempdict[j]
-        print(user_info["Name"])
+        print(user_info["Name"]+"-"+user_info["RegNo"]+"("+user_info["AppNo"]+")")
+        
+
 
 print(len(user_list))
