@@ -15,16 +15,12 @@ import { AboutUsScreen } from "./screens/AboutUsScreen";
 import GpaCalculator from './screens/GpaCalculator'
 import MoodleDisplay from './screens/MoodleDisplay'
 import  DrawerContent  from "./screens/Drawer";
+import {DrawerHooks} from "./screens/DrawerHooks"
 import { BetaOver } from "./screens/BetaOver";
 import { WelcomeScreen } from "./screens/WelcomeScreen";
 
 const Drawer = createDrawerNavigator();
 
-function customDrawer(props){
-  return (
-    <DrawerContent {...props}/>
-  )
-}
 
 const LoginStack = createStackNavigator()
 
@@ -103,9 +99,9 @@ function App() {
   }
   return (
     <NavigationContainer>
-    <Drawer.Navigator drawerContent={customDrawer} drawerStyle={{
+    <Drawer.Navigator drawerContent={(props)=> <DrawerContent {...props}/>} drawerStyle={{
       backgroundColor:"#081631"
-    }} initialRouteName={initial}>
+    }} initialRouteName={initial} drawerType="slide">
         <Drawer.Screen name="Login" component={LoginStackScreen} options={{swipeEnabled:false,gestureEnabled:false}}/>
         <Drawer.Screen name="Welcome" component={WelcomeScreen} options={{swipeEnabled:false,gestureEnabled:false}}/>
         {/* <Drawer.Screen name="Loading" component={LoadingStackScreen}  options={{swipeEnabled:false,gestureEnabled:false}}/> */}

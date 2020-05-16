@@ -38,6 +38,8 @@ export const DEV_LOAD_PROFILE = "DEV_LOAD_PROFILE"
 export const DEV_LOAD_TIMETABLE = "DEV_LOAD_TIMETABLE"
 
 
+//Drawer state
+export const DRAWER_STATE = "DRAWER_STATE"
 // Formatting data, only called first time
 export const REFORMAT_DATA = "REFORMAT_DATA"
 // Will be called after Logging into Moodle

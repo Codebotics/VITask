@@ -13,16 +13,29 @@ import {
     DrawerItem
  } from "@react-navigation/drawer";
 import { connect } from 'react-redux';
+import { drawerState } from '../actions/actions';
 
-class Assignment extends Component {
+class DrawerContent extends Component {
+    componentDidUpdate(prevProps){
+        if(prevProps.state.history!==this.props.state.history){ 
+            console.log(Object.keys(this.props.state.history),"Drawer")
+            const isDrawerOpen = this.props.state.history.some(it => it.type === 'drawer');
+            console.log("Drawer State: " + isDrawerOpen);
+            // dispatch(drawerState(isDrawerOpen))
+            this.props.changeState(isDrawerOpen)
+        }
+        
+    }
     render() {
-        let info = this.props.state.userInfo
+        let info = this.props. state1.userInfo
         let name,reg,school
         if (info){
             name=  info.Name,
             reg = info.RegNo,
             school = info.School
         }
+        console.log(Object.keys(this.props.state))
+        console.log(Object.keys(this.props.descriptors))
         return (
             <View style={{flex:1}}>
               <DrawerContentScrollView {...this.props}>
@@ -67,7 +80,7 @@ class Assignment extends Component {
                                       />
                                   )}
                                   labelStyle={{color:"white"}}
-                                  label="Login Moodle"
+                                  label="Moodle"
                                   onPress={() => {this.props.navigation.navigate('MoodleLogin')}}
                               /><DrawerItem 
                               icon={({color, size}) => (
@@ -143,16 +156,17 @@ class Assignment extends Component {
 }
 function mapStateToProps(state){
     return {
-        state: state.reducer
+        state1: state.reducer
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
+        changeState : (state)=>{dispatch(drawerState(state))}
     }
   }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Assignment)
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent)
   const styles = StyleSheet.create({
     drawerContent: {
       flex: 1,
