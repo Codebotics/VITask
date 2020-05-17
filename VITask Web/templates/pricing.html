@@ -15,7 +15,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    VITask | Marks
+    VITask | Upgrade
   </title>
   <!-- Favicon -->
   <link href="{{ url_for('static', filename='assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
@@ -125,13 +125,13 @@
 
         <!-- Navigation -->
         <ul class="navbar-nav">
-          <li class="nav-item">
-          <a class=" nav-link" href="{{ url_for('profile') }}"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
+          <li class="nav-item active">
+          <a class=" nav-link active" href="{{ url_for('profile') }}"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('acadhistory') }}">
-              <i class="ni ni-hat-3 text-blue active"></i> Academic History
+            <a class="nav-link " href="{{ url_for('acadhistory') }}">
+              <i class="ni ni-hat-3 text-blue"></i> Academic History
             </a>
           </li>
           <li class="nav-item">
@@ -139,13 +139,13 @@
               <i class="ni ni-time-alarm text-orange"></i> Attendance
             </a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link active" href="{{ url_for('marks') }}">
+          <li class="nav-item">
+            <a class="nav-link " href="{{ url_for('marks') }}">
               <i class="ni ni-paper-diploma text-pink"></i> Marks
             </a>
           </li>
          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('moodle') }}">
+            <a class="nav-link " href="{{ url_for('moodle') }}">
               <i class="ni ni-books text-yellow"></i> Moodle
             </a>
           </li>
@@ -177,10 +177,10 @@
   </nav>
   <div class="main-content">
     <!-- Navbar -->
-     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+    <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('marks') }}">Marks</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ url_for('upgrade') }}">Upgrade</a>
         
         <!-- User -->
         <ul class="navbar-nav align-items-center d-none d-md-flex">
@@ -219,62 +219,121 @@
     </nav>
     <!-- End Navbar -->
     <!-- Header -->
-    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+    <div class="header bg-primary pb-6">
       <div class="container-fluid">
         <div class="header-body">
-          <!-- Header -->
-        </div>
-      </div>
-    </div>
-    <div class="container-fluid mt--7">
-      <!-- Table -->
-
-      <!-- Dark table -->
-      
-        
-    <div class="row mt-5" id="Monday">
-        <div class="col">
-            <div class="card bg-default shadow">
-                <div class="card-header bg-transparent border-0">
-                  <h3 class="text-white mb-0">Your Marks</h3>
-                </div>
+          <div class="row align-items-center py-4" style="color:black;">
+            <div class="col-lg-6 col-7">
+              <h6 class="h2 d-inline-block mb-0"></h6>
+              
             </div>
-        </div>
-    </div>
-
-    {% for i in marks %}
-    <div class="row">
-        <div class="col">
-          <div class="card bg-default shadow">
-            <div class="card-header bg-transparent border-0">
-              <h3 class="text-white mb-0">{{ i }}</h3>
+            <div class="col-lg-6 col-5 text-right">
+              <a href="#" class="btn btn-sm btn-neutral"></a>
+              <a href="#" class="btn btn-sm btn-neutral"></a>
             </div>
-            {% for j in marks[i] %}
-            <div class="table-responsive">
-              <table class="table align-items-center table-dark table-flush">
-                <thead class="thead-dark">
-                  <tr style="font-size: 40px;">
-                    <th scope="col" style="text-align: left;">{{ j }}</th>
-                    <th scope="col" style="text-align: right;">{{ marks[i][j]["scored"] }}</th>
-                  </tr>
-                </thead>
-                <tbody class="list">
-                </tbody>
-              </table>
-            </div>
-            {% endfor %}
-            <br>
           </div>
         </div>
       </div>
-        <br>
-      {% endfor %}
-        
-        
-      
-</div>
+    </div>
+    <!-- End Header -->
+    <!-- Page content -->
+    <br><br><br>
+    <div class="container-fluid mt--7">
+        <div class="row mt--5" style="color:black;">
+                <div class="col-md-10 ml-auto mr-auto">
+                  <div class="card card-upgrade">
+                    <div class="card-header text-center border-bottom-0" style="color:black;">
+                      <h4 class="card-title">VITask Upgrade</h4>
+                      <p class="card-category">Get an enhanced VITask experience for one low, monthly cost. Customize your account with a special badge, automatic outing, extra API calls, and more.</p>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive table-upgrade">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th class="text-center text-black">Free</th>
+                              <th class="text-center">Premium</th>
+                              <th class="text-center">Express</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>No Advertisments</td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                            </tr>
+                            <tr>
+                              <td>Notes Sharing</td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                            </tr>
+                            <tr>
+                              <td>Class Average Predictor</td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                            </tr>
+                            <tr>
+                              <td>Toggle Silent Mode</td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                            </tr>
+                            <tr>
+                              <td>Automatic Outing</td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                            </tr>
+                            <tr>
+                              <td>Theme Customization</td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                            </tr>
+                            <tr>
+                              <td>Widgets and VIT Email Integration</td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-fat-remove text-danger"></i></td>
+                              <td class="text-center"><i class="ni ni-check-bold text-success"></i></td>
+                            </tr>
+                            <tr>
+                              <td>API calls</td>
+                              <td class="text-center">100/month</td>
+                              <td class="text-center">1000/month</td>
+                              <td class="text-center">Unlimited</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td class="text-center">Free</td>
+                              <td class="text-center">Only &#8377;20/month</td>
+                              <td class="text-center">Only &#8377;50/month</td>
+                            </tr>
+                            <tr>
+                              <td class="text-center"></td>
+                              <td class="text-center">
+                                <a href="#" class="btn btn-round btn-default disabled">Current Version</a>
+                              </td>
+                              <td class="text-center">
+                                <a target="_blank" href="" class="btn btn-round btn-success">Explore Premium</a>
+                              </td>
+                              <td class="text-center">
+                                <a target="_blank" href="" class="btn btn-round btn-default">Explore Express</a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      <br>
+    </div>
   </div>
-
   <!--   Core   -->
   <script src="{{ url_for('static', filename='assets/js/plugins/jquery/dist/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -286,5 +345,3 @@
 </body>
 
 </html>
-
-      
