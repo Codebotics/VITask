@@ -2,12 +2,25 @@
 
 The APIs have been changed and currently run in beta mode. However this file contains on info on how to use new APIs. 
 
-First thing to note is that all the APIs are now `POST` requests as compared to previous `GET` requests. We now use `Headers` to check if you are authorised to use API or not. This secret value will not be disclosed here(duh!). If you want to know, contact Apratim or Apoorv.
+First thing to note is that all the APIs are now `POST` requests as compared to previous `GET` requests. We now use `Headers` to check if you are authorised to use API or not. 
+
+To obtain the secret key send a `POST` request to the route below in the given format:
+
+**Get Secret Key Route** 
+- Path : `/api/account`
+- Type : `POST`
+- Returns : JSON Object containing secret key, API Calls, current plan and other information.
+```
+{
+    "username" : <Your RegNo>,
+    "password" : <Password>
+}
+```
 
 **All APIs must contain header value defined below**
 ```
 {
-    X-VITASK-API : <secret value>
+    X-VITASK-API : <secret key>
 }
 ```
 

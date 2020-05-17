@@ -269,7 +269,16 @@
               </div>
               <div class="text-center">
                 <h3>
-                  {{ regno }}
+                  {{ regno }} 
+                {% if account_type == "Free" %}
+                <span class="badge badge-md badge-pill badge-primary">{{ account_type }}</span>
+                {% elif account_type == "Premium" %}
+                <span class="badge badge-md badge-pill badge-success">{{ account_type }}</span>
+                {% elif account_type == "Express" %}   
+                <span class="badge badge-md badge-pill badge-default">{{ account_type }}</span>
+                {% elif account_type == "Staff" %}
+                <span class="badge badge-md badge-pill badge-info">{{ account_type }}</span>
+                {% endif %}
                 </h3>
                 <div class="h5 font-weight-300">
                   

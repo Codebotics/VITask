@@ -28,9 +28,6 @@
   <!-- CSS Files -->
   <link href="{{ url_for('static', filename='assets/css/argon-dashboard.css')}}" rel="stylesheet" />
   <link href="{{ url_for('static', filename='assets/css/loader.css')}}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='assets/css/card.css')}}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='assets/css/api.css')}}" rel="stylesheet" >
-  <link href="{{ url_for('static', filename='assets/css/buttons.css')}}" rel="stylesheet" >
     <style>
 
 
@@ -245,7 +242,7 @@
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-lg-6 col-md-10 text-center-top">
-              <h1 class="display-2 text-white">Welcome to API Dashboard</h1>
+              <h1 class="display-2 text-white">Welcome to VITask API Dashboard!</h1>
             <p class="text-white mt-0 mb-5">Channel your own Application with the API we provide you.</p> 
           </div>
         </div>
@@ -253,70 +250,132 @@
     </div>  
 <!--Page Content-->
 
-    <div class="accordion">    
-<h1 class="accordion-1">Welcome to VITask API Dashboard</h1>
- <div class ="vitask_dashboard">      
-
-  <li class="vitask_label">
-    <input type="checkbox" checked>
-    <i></i>
-    <h2 class="accordion-2">What is VITask?</h2>
-    <p class="accordion-4">VITask is a platform Build by Developers,For Developers.</p>
-  </li>
-  <li class="vitask_label">
-    <input type="checkbox" checked>
-    <i></i>
-    <h2 class="accordion-2">How this works ?</h2>
-    <p class="accordion-4">We offer a wide range of APIs to help you create your own VTOP application with ease.Now you can easily create your own Timetable or Marks app with a few lines of code!</p>
-  </li>
-  <li class="vitask_label">
-    <input type="checkbox" checked>
-    <i></i>
-    <h2 class="accordion-2">JSON API</h2>
-    <p class="accordion-4">Our JSON API ensures that you can develop cross-platform VTOP applications.</p>
-  </li>
-
+    <div class="container-fluid mt--7">
+      <div class="row">
+        <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+          <div class="card card-profile shadow">
+            <div class="row justify-content-center">
+              <div class="col-lg-3 order-lg-2">
+                <div class="card-profile-image">
+                  <a href="">
+                    <img src="{{ url_for('static', filename='assets/img/theme/canada.png') }}" class="rounded-circle">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+              <div class="d-flex justify-content-between">
+                
+              </div>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                    <div>
+                      
+                    </div>
+                    <div>
+                      
+                    </div>
+                    <div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <h3>
+                  {{ regno }} 
+                {% if account_type == "Free" %}
+                <span class="badge badge-md badge-pill badge-primary">{{ account_type }}</span>
+                {% elif account_type == "Premium" %}
+                <span class="badge badge-md badge-pill badge-success">{{ account_type }}</span>
+                {% elif account_type == "Express" %}   
+                <span class="badge badge-md badge-pill badge-default">{{ account_type }}</span>
+                {% elif account_type == "Staff" %}
+                <span class="badge badge-md badge-pill badge-info">{{ account_type }}</span>
+                {% endif %}
+                </h3>
+                <div class="h5 font-weight-300">
+                  
+                </div>
+                <div class="h5 mt-4">
+                  {% if account_type == "Free" %}
+                  <i class="ni ni-atom mr-2 text-default"></i><b>API Usage:</b> {{ api_calls }} / 100
+                  {% elif account_type == "Premium" %}
+                  <i class="ni ni-atom mr-2 text-default"></i><b>API Usage:</b> {{ api_calls }} / 1000
+                  {% elif account_type == "Express" %}  
+                  <i class="ni ni-atom mr-2 text-default"></i><b>API Usage:</b> {{ api_calls }} / Unlimited
+                  {% elif account_type == "Staff" %}
+                  <i class="ni ni-atom mr-2 text-default"></i><b>API Usage:</b> {{ api_calls }} / Unlimited
+                  {% endif %}
+                </div>
+                <hr class="my-4" />
+                <a href="#">Upgrade</a>
+              </div>
+            </div>
+          </div>
         </div>
-    
-        <br>
-
-<input type="text" id="myInput" class="form-control form-control-alternative" value="{{ api }}" readonly>
-     
-<br>
-
-<button class="vitask_button2" onclick="myFunction()" onmouseout="outFunc()" id="tester">
-  <span class="tooltiptext" id="myTooltip">Copy API Token</span>
-</button>
-
-
-
-     
-
+        <div class="col-xl-8 order-xl-1">
+          <div class="card bg-secondary shadow">
+            <div class="card-header bg-white border-0">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">API Dashboard</h3>
+                </div>
+                <div class="col-4 text-right">
+                  <a href="#" class="btn btn-sm btn-primary">Upgrade</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <form>
+                <h6 class="heading-small text-muted mb-4">Plan Information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Plan Activation Date</label>
+                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Application Number" value="{{ start_date }}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">Plan Expiry Date</label>
+                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="{{ end_date }}" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <hr class="my-4" />
+                <!-- Address -->
+                <h6 class="heading-small text-muted mb-4">API information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-username">Secret Key</label>
+                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Proctor Name" value="{{ secret_key }}" readonly>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">API Token</label>
+                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="{{ api }}" readonly>
+                      </div>
+                    </div>
+                </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
+      </div>
+      <br>
     </div>
-        
-    
-    
-<script>
-function myFunction() {
-  var copyText = document.getElementById("myInput");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999);
-  document.execCommand("copy");
-  var tester = document.getElementById("tester");
-  var tooltip = document.getElementById("myTooltip");
-  tester.innerHTML = "Copied: " + copyText.value;
-}
-
-function outFunc() {
-  var tooltip = document.getElementById("myTooltip");
-  tester.innerHTML = "Copy API Token";
-}
-    
-
-</script>
-  
-
+  </div>
 
     
   <!--   Core   -->

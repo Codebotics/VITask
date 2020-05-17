@@ -37,6 +37,8 @@ from vtop import get_acadhistory
 from vtop import get_timetable
 from vtop import get_marks
 from multiprocessing import Process
+from crypto import magichash
+from crypto import magiccheck
 #For disabling warings this will save msecs..lol
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -145,7 +147,7 @@ def parallel_timetable(sess, username, id):
     if(temp is None):
         days = {}
         days, check_timetable = get_timetable(sess, username, id)
-        if(check_timetable == False):
+        if(check_timetable == "False"):
             session['timetable'] = 0
         else:
             session['timetable'] = 1
@@ -157,7 +159,7 @@ def parallel_acadhistory(sess, username, id):
         acadHistory = {}
         curriculumDetails = {}
         grades, check_grades = get_acadhistory(sess,username,id)
-        if(check_grades == False):
+        if(check_grades == "False"):
             session['acadhistory'] = 0
         else:
             acadHistory = grades['AcadHistory']
@@ -168,7 +170,7 @@ def parallel_attendance(sess, username, id):
     attend = {}
     q = {}
     attend, q, check_attendance = get_attandance(sess, username, id)
-    if(check_attendance == False):
+    if(check_attendance == "False"):
         session['classes'] = 0
     else:
         session['classes'] = 1
@@ -176,7 +178,7 @@ def parallel_attendance(sess, username, id):
 def parallel_marks(sess, username, id):
     marksDict = {}
     marksDict, check_marks = get_marks(sess, username, id)
-    if(check_marks == False):
+    if(check_marks == "False"):
         session['marks'] = 0
     else:
         session['marks'] = 1
@@ -211,6 +213,94 @@ def page_not_found(error):
                   New VITask APIs begin here.
 ---------------------------------------------------------------"""
 
+#/api/account 
+@app.route('/api/account', methods=['GET','POST'])
+def temp_getAccount():
+    """
+    API has been changed to accept only POST requests. Path of API has been changed.
+    Now the body of POST must be 
+    {
+        "username" : 17BECXXXX,
+        "password" : password
+    }
+    """
+    # First check if query is okay or not
+    data = json.loads(request.data)
+    username = data.get("username",None)
+    password = data.get("password",None)
+    
+    if username is None or password is None:
+        return jsonify({
+            "error" : "Incorrect API Request",
+            "code"  : "400" # Bad request
+        })
+    
+    # Now began actual work
+    username = username.upper()
+    
+    # This API is only to get user account information and the required header.
+    valid = True
+    try:
+        sess, valid = generate_session(username, password)
+    except Exception as e:
+        return jsonify({
+            "error" : "Something broke",
+            "code"  : "500"
+        })
+    if not valid:
+        # Password incorrect
+        return jsonify({
+            "error" : "Incorrect Password"
+        })
+    ref = db.reference('vitask')
+    try:
+        profile = {}
+        profile, check_profile = get_student_profile(sess, username)
+
+        if(check_profile == False):
+            return jsonify({"Error": "Internal Error.Please try again."})
+    finally:
+        appno = profile['appNo']
+        header_value = magichash(appno)
+        
+        temp = ref.child("account").child('account-'+appno).child(appno).get()
+
+        if(temp is None):
+            date = datetime.datetime.now()
+            current_date = date.strftime("%d/%m/%Y, %H:%M:%S")
+            tut_ref = ref.child("account")
+            new_ref = tut_ref.child('account-'+appno)
+            new_ref.set({
+                appno: {
+                    'X-VITASK-API': header_value,
+                    'Name': profile['name'],
+                    'RegNo': profile['regNo'],
+                    'Account-Type': 'Free',
+                    'API-Calls': 0,
+                    'Start-Date': current_date,
+                    'End-Date': 'N/A'
+                }
+            })
+            return jsonify({
+                'X-VITASK-API': header_value,
+                'Name': profile['name'],
+                'RegNo': profile['regNo'],
+                'Account-Type': 'Free',
+                'API-Calls': 0,
+                'Start-Date': current_date,
+                'End-Date': 'N/A'
+            }) 
+        else:
+            return jsonify({
+                'X-VITASK-API': temp['X-VITASK-API'],
+                'Name': temp['Name'],
+                'RegNo': temp['RegNo'],
+                'Account-Type': temp['Account-Type'],
+                'API-Calls': temp['API-Calls'],
+                'Start-Date': temp['Start-Date'],
+                'End-Date': temp['End-Date']
+            })
+
 #/api/gettoken 
 @app.route('/api/gettoken', methods=['GET','POST'])
 def temp_getToken():
@@ -218,7 +308,7 @@ def temp_getToken():
     API has been changed to accept only POST requests. Path of API has been changed.
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -231,12 +321,17 @@ def temp_getToken():
     username = data.get("username",None)
     password = data.get("password",None)
     
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25" or username is None or password is None:
+    if username is None or password is None:
         return jsonify({
             "error" : "Incorrect API Request",
             "code"  : "400" # Bad request
         })
-    
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
+        return jsonify({
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
+        })
     # Now began actual work
     username = username.upper()
     
@@ -263,7 +358,7 @@ def temp_getToken():
         session['name'] = profile['name']
         session['reg'] = profile['regNo']
         session['loggedin'] = 1
-        if(check_profile == False):
+        if(check_profile == "False"):
             return jsonify({"Error": "Internal Error in fetching profile.Please try again."})
     finally:
         name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
@@ -271,6 +366,22 @@ def temp_getToken():
         try:
             runInParallel(parallel_timetable(sess, username, session['id']), parallel_attendance(sess, username, session['id']), parallel_acadhistory(sess, username, session['id']), parallel_marks(sess, username, session['id'])) 
         finally:
+            # API Calls logging
+            temp = ref.child("account").child('account-'+appno).child(appno).get()
+            count = int(temp['API-Calls']) + 1
+            tut_ref = ref.child("account")
+            new_ref = tut_ref.child('account-'+appno)
+            new_ref.set({
+                appno: {
+                    'X-VITASK-API': temp['X-VITASK-API'],
+                    'Name': temp['Name'],
+                    'RegNo': temp['RegNo'],
+                    'Account-Type': 'Free',
+                    'API-Calls': count,
+                    'Start-Date': temp['Start-Date'],
+                    'End-Date': temp['End-Date']
+                }
+            })
             return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
 
 # /api/vtop/sync
@@ -282,7 +393,7 @@ def temp_sync():
     For creating a hard refresh (update the timetable, acad history) pass a parameter as compleeteRefresh true
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -298,7 +409,7 @@ def temp_sync():
     refresh = data.get("hardRefresh",None)
     user_token = data.get("token",None)
     # First check the headers
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25" or username is None or password is None:
+    if username is None or password is None:
         return jsonify({
             "error" : "Incorrect API Request",
             "code"  : "400" # Bad request
@@ -306,7 +417,13 @@ def temp_sync():
     if user_token is None:
         return jsonify({
             "error" : "Unauthorised. Get token from /api/getoken",
-            "error" : "403" #Unauthorised
+            "error" : "403" # Unauthorised
+        })
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
+        return jsonify({
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
         })
     
     username = username.upper()
@@ -342,6 +459,25 @@ def temp_sync():
             return jsonify({"Error": "Internal Error in fetching Attendance.Please try again."})
         if(check_marks == False):
             return jsonify({"Error": "Internal Error in fetching Marks.Please try again."})
+        
+        ref = db.reference('vitask')
+        # API Calls logging
+        temp = ref.child("account").child('account-'+key).child(key).get()
+        count = int(temp['API-Calls']) + 1
+        tut_ref = ref.child("account")
+        new_ref = tut_ref.child('account-'+key)
+        new_ref.set({
+            key: {
+                'X-VITASK-API': temp['X-VITASK-API'],
+                'Name': temp['Name'],
+                'RegNo': temp['RegNo'],
+                'Account-Type': 'Free',
+                'API-Calls': count,
+                'Start-Date': temp['Start-Date'],
+                'End-Date': temp['End-Date']
+            }
+        })
+        
         return jsonify({
             "attendance": attendance,
             "marks" : marks
@@ -384,6 +520,25 @@ def temp_sync():
             return jsonify({"Error": "Internal Error in fetching Grades.Please try again."})
         if(check_timetable == False):
             return jsonify({"Error": "Internal Error in fetching Timetable.Please try again."})
+        
+        ref = db.reference('vitask')
+        # API Calls logging
+        temp = ref.child("account").child('account-'+key).child(key).get()
+        count = int(temp['API-Calls']) + 1
+        tut_ref = ref.child("account")
+        new_ref = tut_ref.child('account-'+key)
+        new_ref.set({
+            key: {
+                'X-VITASK-API': temp['X-VITASK-API'],
+                'Name': temp['Name'],
+                'RegNo': temp['RegNo'],
+                'Account-Type': 'Free',
+                'API-Calls': count,
+                'Start-Date': temp['Start-Date'],
+                'End-Date': temp['End-Date']
+            }
+        })
+        
         return jsonify({
             "attendance": attendance,
             "marks" : marks,
@@ -402,7 +557,7 @@ def temp_timetable():
     Returns the timetable of the user according to token
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -412,10 +567,11 @@ def temp_timetable():
     data = json.loads(request.data)
     user_token = data.get("token",None)
     
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25":
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
         return jsonify({
-            "error" : "Incorrect API Request",
-            "code"  : "400" # Bad request
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
         })
     if user_token is None:
         return jsonify({
@@ -441,6 +597,23 @@ def temp_timetable():
     if(temp is not None):
         session['id'] = key
         days = temp
+        
+        # API Calls logging
+        temp = ref.child("account").child('account-'+key).child(key).get()
+        count = int(temp['API-Calls']) + 1
+        tut_ref = ref.child("account")
+        new_ref = tut_ref.child('account-'+key)
+        new_ref.set({
+            key: {
+                'X-VITASK-API': temp['X-VITASK-API'],
+                'Name': temp['Name'],
+                'RegNo': temp['RegNo'],
+                'Account-Type': 'Free',
+                'API-Calls': count,
+                'Start-Date': temp['Start-Date'],
+                'End-Date': temp['End-Date']
+            }
+        })
 
         return jsonify({'Timetable': days})
 
@@ -460,7 +633,7 @@ def temp_attendance():
     Returns the timetable of the user according to token
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -470,10 +643,11 @@ def temp_attendance():
     data = json.loads(request.data)
     user_token = data.get("token",None)
     
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25":
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
         return jsonify({
-            "error" : "Incorrect API Request",
-            "code"  : "400" # Bad request
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
         })
     if user_token is None:
         return jsonify({
@@ -509,6 +683,23 @@ def temp_attendance():
 
         for i in attend.keys():
             slots.append(i)
+            
+        # API Calls logging
+        temp = ref.child("account").child('account-'+key).child(key).get()
+        count = int(temp['API-Calls']) + 1
+        tut_ref = ref.child("account")
+        new_ref = tut_ref.child('account-'+key)
+        new_ref.set({
+            key: {
+                'X-VITASK-API': temp['X-VITASK-API'],
+                'Name': temp['Name'],
+                'RegNo': temp['RegNo'],
+                'Account-Type': 'Free',
+                'API-Calls': count,
+                'Start-Date': temp['Start-Date'],
+                'End-Date': temp['End-Date']
+            }
+        })
 
         return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
 
@@ -526,7 +717,7 @@ def temp_marks():
     This is developed for showing nice messages on loading screen. Use /api/sync
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -536,10 +727,11 @@ def temp_marks():
     data = json.loads(request.data)
     user_token = data.get("token",None)
     
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25":
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
         return jsonify({
-            "error" : "Incorrect API Request",
-            "code"  : "400" # Bad request
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
         })
     if user_token is None:
         return jsonify({
@@ -564,6 +756,23 @@ def temp_marks():
     if(temp is not None):
         session['id'] = key
         marksDict = temp
+        
+        # API Calls logging
+        temp = ref.child("account").child('account-'+key).child(key).get()
+        count = int(temp['API-Calls']) + 1
+        tut_ref = ref.child("account")
+        new_ref = tut_ref.child('account-'+key)
+        new_ref.set({
+            key: {
+                'X-VITASK-API': temp['X-VITASK-API'],
+                'Name': temp['Name'],
+                'RegNo': temp['RegNo'],
+                'Account-Type': 'Free',
+                'API-Calls': count,
+                'Start-Date': temp['Start-Date'],
+                'End-Date': temp['End-Date']
+            }
+        })
 
         return jsonify({'Marks': marksDict})
     
@@ -581,7 +790,7 @@ def temp_acadhistory():
     This is only made to show messages on Android App.
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -591,10 +800,11 @@ def temp_acadhistory():
     data = json.loads(request.data)
     user_token = data.get("token",None)
     
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25":
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
         return jsonify({
-            "error" : "Incorrect API Request",
-            "code"  : "400" # Bad request
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
         })
     if user_token is None:
         return jsonify({
@@ -619,6 +829,23 @@ def temp_acadhistory():
         session['id'] = key
         acadHistory = temp
         curriculumDetails = ref.child("acadhistory").child('acadhistory-'+session['id']).child(key).child("CurriculumDetails").get()
+        
+        # API Calls logging
+        temp = ref.child("account").child('account-'+key).child(key).get()
+        count = int(temp['API-Calls']) + 1
+        tut_ref = ref.child("account")
+        new_ref = tut_ref.child('account-'+key)
+        new_ref.set({
+            key: {
+                'X-VITASK-API': temp['X-VITASK-API'],
+                'Name': temp['Name'],
+                'RegNo': temp['RegNo'],
+                'Account-Type': 'Free',
+                'API-Calls': count,
+                'Start-Date': temp['Start-Date'],
+                'End-Date': temp['End-Date']
+            }
+        })
 
         return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
     
@@ -640,7 +867,7 @@ def temp_moodleLogin():
     It just updates the data on Firebase and send you data. 
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -654,10 +881,11 @@ def temp_moodleLogin():
     password = data.get("password",None)
     user_token = data.get("token",None)
     
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25" or username is None or password is None:
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
         return jsonify({
-            "error" : "Incorrect API Request",
-            "code"  : "400" # Bad request
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
         })
     if user_token is None:
         return jsonify({
@@ -721,6 +949,23 @@ def temp_moodleLogin():
             'Assignments': assignments 
         }
     })
+    
+    # API Calls logging
+    temp = ref.child("account").child('account-'+key).child(key).get()
+    count = int(temp['API-Calls']) + 1
+    tut_ref = ref.child("account")
+    new_ref = tut_ref.child('account-'+key)
+    new_ref.set({
+        key: {
+            'X-VITASK-API': temp['X-VITASK-API'],
+            'Name': temp['Name'],
+            'RegNo': temp['RegNo'],
+            'Account-Type': 'Free',
+            'API-Calls': count,
+            'Start-Date': temp['Start-Date'],
+            'End-Date': temp['End-Date']
+        }
+    })
     return jsonify({'Assignments': assignments})
 
 
@@ -732,7 +977,7 @@ def temp_moodleSync():
     This route assumes that you have already sign in using /api/moodle/login
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -744,10 +989,11 @@ def temp_moodleSync():
 
     # TODO: I'm against this, but since we only have users, cool 
     # Now we assume that you have already signed in moodle
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25":
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
         return jsonify({
-            "error" : "Incorrect API Request",
-            "code"  : "400" # Bad request
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
         })
     if user_token is None:
         return jsonify({
@@ -800,6 +1046,23 @@ def temp_moodleSync():
                     'Assignments': assignments 
                 }
             })
+            
+            # API Calls logging
+            temp = ref.child("account").child('account-'+session['id']).child(session['id']).get()
+            count = int(temp['API-Calls']) + 1
+            tut_ref = ref.child("account")
+            new_ref = tut_ref.child('account-'+session['id'])
+            new_ref.set({
+                session['id']: {
+                    'X-VITASK-API': temp['X-VITASK-API'],
+                    'Name': temp['Name'],
+                    'RegNo': temp['RegNo'],
+                    'Account-Type': 'Free',
+                    'API-Calls': count,
+                    'Start-Date': temp['Start-Date'],
+                    'End-Date': temp['End-Date']
+                }
+            })
             return jsonify({'Assignments' : assignments})
         else:
             for item in due_items:
@@ -834,6 +1097,24 @@ def temp_moodleSync():
                     'Assignments': assignments 
                 }
             })
+            
+            # API Calls logging
+            temp = ref.child("account").child('account-'+session['id']).child(session['id']).get()
+            count = int(temp['API-Calls']) + 1
+            tut_ref = ref.child("account")
+            new_ref = tut_ref.child('account-'+session['id'])
+            new_ref.set({
+                session['id']: {
+                    'X-VITASK-API': temp['X-VITASK-API'],
+                    'Name': temp['Name'],
+                    'RegNo': temp['RegNo'],
+                    'Account-Type': 'Free',
+                    'API-Calls': count,
+                    'Start-Date': temp['Start-Date'],
+                    'End-Date': temp['End-Date']
+                }
+            })
+            
             return jsonify({'Assignments' : assignments})
 
 
@@ -847,7 +1128,7 @@ def temp_assignmentToggleShow():
     I'm relying on Moodle and hoping that IDs are unique
     Headers must contain a value
     {
-        "X-VITASK-API": "2020_Mar_25"   (First commit date of VITask)
+        "X-VITASK-API": "Secret key"   (From /api/account)
     }
     Now the body of POST must be 
     {
@@ -860,7 +1141,13 @@ def temp_assignmentToggleShow():
     ids = data.get("ids",None)
     
     # Even if only one ID is there, pass it in array
-    if request.headers.get('X-VITASK-API') != "2020_Mar_25" or ids is None:
+    check_header = magiccheck(request.headers.get('X-VITASK-API'))
+    if(check_header == "False"):
+        return jsonify({
+            "error" : "Invalid Header",
+            "code"  : "403" # Unauthorised
+        })
+    if ids is None:
         return jsonify({
             "error" : "Incorrect API Request",
             "code"  : "400" # Bad request
@@ -900,6 +1187,23 @@ def temp_assignmentToggleShow():
             'Username': username,
             'Password': password,
             'Assignments': assignments 
+        }
+    })
+    
+    # API Calls logging
+    temp = ref.child("account").child('account-'+session['id']).child(session['id']).get()
+    count = int(temp['API-Calls']) + 1
+    tut_ref = ref.child("account")
+    new_ref = tut_ref.child('account-'+session['id'])
+    new_ref.set({
+        session['id']: {
+            'X-VITASK-API': temp['X-VITASK-API'],
+            'Name': temp['Name'],
+            'RegNo': temp['RegNo'],
+            'Account-Type': 'Free',
+            'API-Calls': count,
+            'Start-Date': temp['Start-Date'],
+            'End-Date': temp['End-Date']
         }
     })
     return jsonify({'Assignments' : assignments})
@@ -1348,7 +1652,9 @@ def profile():
         return redirect(url_for('index'))
     else:
         name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
-        return render_template('profile.html',name=name,school=school,branch=branch,program=program,regno=regno,email=email,proctoremail=proctoremail,proctorname=proctorname,appno=appno)
+        ref = db.reference('vitask')
+        temp = ref.child("account").child('account-'+session['id']).child(session['id']).get()
+        return render_template('profile.html',name=name,school=school,branch=branch,program=program,regno=regno,email=email,proctoremail=proctoremail,proctorname=proctorname,appno=appno,account_type=temp['Account-Type'])
 
 # Timetable route
 @app.route('/timetable')
@@ -1411,16 +1717,16 @@ def upgrade():
 ------------------------------------------------------------------"""
 
         
-# API Dashboard (by Harsh)
+# API Dashboard 
 @app.route('/apidashboard')
 def apidashboard():
     if(session['loggedin']==0):
         return redirect(url_for('index'))
     else:
+        name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
         ref = db.reference('vitask')
-        api = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('API').get()
-        name = session['name']
-        return render_template('api.html',name=name,api=api)
+        temp = ref.child("account").child('account-'+session['id']).child(session['id']).get()
+        return render_template('api.html',name=name,regno=regno,account_type=temp['Account-Type'],start_date=temp['Start-Date'],end_date=temp['End-Date'],secret_key=temp['X-VITASK-API'],api=api,api_calls=temp['API-Calls'])
 
 # API Console(Not ready yet)
 @app.route('/apiconsole', methods=['GET', 'POST'])

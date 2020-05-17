@@ -12,6 +12,7 @@ from utility import solve_captcha,TimeTable
 import firebase_admin
 from firebase_admin import db
 import base64
+from crypto import magichash
 
 
 #TODO: Make Constants file for storing all the constant URLs
@@ -98,9 +99,9 @@ def get_attandance(sess, username, id, semesterID="CH2019205"):
     }
     attendance = sess.post(ATTENDANCE, data=payload, headers=headers, verify=False)
     # Check for 200 CODE
-    check = True
+    check = "True"
     if attendance.status_code !=200:
-        check = False
+        check = "False"
     attendance_html = attendance.text
 
     # Parsing logic by Swapnil.
@@ -177,10 +178,10 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
         "x" : datetime.datetime.now(datetime.timezone.utc).strftime("%c GMT")   # GMT time
     }
     timetable_sess = sess.post(TIMETABLE, data=payload, headers=headers, verify=False)
-    check = True
+    check = "True"
     # Check for 200 CODE
     if timetable_sess.status_code !=200:
-        check = False
+        check = "False"
     timetable_html = timetable_sess.text
     
     # Parsing logic by Apratim
@@ -278,10 +279,10 @@ def get_acadhistory(sess,username,id):
         "nocache" : "@(new Date().getTime())"   
     }
     acad_sess = sess.post(ACADHISTORY, data=payload, headers=headers, verify=False)
-    check = True
+    check = "True"
     # Check for 200 CODE
     if acad_sess.status_code !=200:
-        check = False
+        check = "False"
     acad_html = acad_sess.text
     
     # Parsing logic by Mayank.
@@ -364,10 +365,10 @@ def get_student_profile(sess,username):
         "nocache" : "@(new Date().getTime())"   
     }
     profile_sess = sess.post(PROFILE, data=payload, headers=headers, verify=False)
-    check = True
+    check = "True"
     # Check for 200 CODE
     if profile_sess.status_code !=200:
-        check = False
+        check = "False"
     profile_html = profile_sess.text
 
     # Parsing logic by Apratim.
@@ -406,7 +407,7 @@ def get_student_profile(sess,username):
     new_ref = tut_ref.child('profile-'+tutorial_code[0])
     new_ref.set({
         tutorial_code[0]: {
-            'Name': (tutorial_code[1]),
+            'Name': tutorial_code[1],
             'Branch': tutorial_code[18],
             'Program': tutorial_code[17],
             'RegNo': tutorial_code[14],
@@ -418,6 +419,26 @@ def get_student_profile(sess,username):
             'API': token
         }
     })
+    
+    header_value = magichash(tutorial_code[0])
+    temp = ref.child("account").child('account-'+tutorial_code[0]).child(tutorial_code[0]).get()
+
+    if(temp is None):
+        date = datetime.datetime.now()
+        current_date = date.strftime("%d/%m/%Y, %H:%M:%S")
+        tut_ref = ref.child("account")
+        new_ref = tut_ref.child('account-'+tutorial_code[0])
+        new_ref.set({
+            tutorial_code[0]: {
+                'X-VITASK-API': header_value,
+                'Name': tutorial_code[1],
+                'RegNo': tutorial_code[14],
+                'Account-Type': 'Free',
+                'API-Calls': 0,
+                'Start-Date': current_date,
+                'End-Date': 'N/A'
+            }
+        })
 
     return (profile, check)
 
@@ -443,10 +464,10 @@ def get_marks(sess, username, id, semesterID="CH2019205"):
         "authorizedID" : username 
     }
     marks_sess = sess.post(MARKS, data=payload, headers=headers, verify=False)
-    check = True
+    check = "True"
     # Check for 200 CODE
     if marks_sess.status_code !=200:
-        check = False
+        check = "False"
     marks_html = marks_sess.text
     
     # Parsing Logic by Mayank (modified by Apratim and Cherub).
