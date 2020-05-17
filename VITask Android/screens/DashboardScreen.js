@@ -5,8 +5,6 @@ import { Headline, Caption } from "react-native-paper";
 import Timetable from '../components/Timetable/Timetable'
 import { connect } from 'react-redux';
 import LastSync  from "../components/LastSync/LastSync";
-import { useIsDrawerOpen } from '@react-navigation/drawer';
-import Hamburger from 'react-native-animated-hamburger';
 
 
 const days = ['Monday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Monday']
@@ -127,29 +125,17 @@ class DashboardScreen extends Component {
               console.log("running loop",dateStringSchedule)
               PushNotification.cancelAllLocalNotifications()
             }
-        console.log(this.props.state.drawerState, "dashboard")
+
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
                 <StatusBar backgroundColor="#081631" />
             <View style={{backgroundColor:"#081631"}}>
-                <View style={{padding:"2%", paddingTop:"5%", height:"100%"}}>
-                    <View style={{paddingLeft:"2%",flexDirection: "row", alignItems: "center", paddingVertical:"3%"}}>
-                    <Hamburger 
-                        type="cross" 
-                        active={this.props.state.drawerState} 
-                        onPress={() => {
-                                this.props.navigation.toggleDrawer()
-                            }}  
-                        color="white"
-                        underlayColor="transparent"
-                        >
-                    </Hamburger>
-                    <View style={{flex:1}}>
-                    <Headline style={{fontSize:30, textAlign:"center", color:"#FFF", marginRight:"5%"}}>{this.state.day}</Headline>
-                    </View>
-                    </View>
-                    <Caption style={{ paddingTop:"1%", color:"#FFF", textAlign:"center"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
-                    <Caption style={{ paddingTop:"1%", marginBottom:"5%", color:"#FFF", textAlign:"center"}}>Login Moodle to show assignments</Caption>
+                <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
+                    {/* <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}> */}
+                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline>
+                {/* </TouchableOpacity> */}
+                    <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
+                    <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
                     {timetable}
                     <LastSync/>
                 </View>

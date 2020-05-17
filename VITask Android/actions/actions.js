@@ -26,7 +26,6 @@ import {
     FETCH_ACADHISTORY_ERROR,
 
     STORE_STATE_FROM_ASYNC,
-    DRAWER_STATE,
 
     } from './types'
     
@@ -164,13 +163,6 @@ import {
         }
     }
     
-    export const drawerState = (state)=>{
-        return {
-            type : DRAWER_STATE,
-            state
-        }
-    }
-    
     const ORIGINAL_VTOP_LOGIN = `https://vitask.me/authenticate?username={username}&password={password}`
     const ORIGINAL_ATTENDANCE = `https://vitask.me/classesapi?token={state.reducer.userInfo.APItoken}`
     const ORIGINAL_TIMETABLE = `https://vitask.me/timetableapi?token={state.reducer.userInfo.APItoken}`
@@ -182,11 +174,10 @@ import {
         return dispatch=>{
             dispatch(loginVTOPRequest)
             console.log(`https://vitask.me/authenticate?username=${username}&password=${password}`)
-            const IP = `http://134.209.150.24/authenticate?username=${username}&password=${password}`
-            fetch("https://jsonplaceholder.typicode.com/posts")
-            .then(res => res)
+            fetch(`http://134.209.150.24/authenticate?username=${username}&password=${password}`)
+            .then(res => res.json())
             .then(res => {
-                res = require("../authenticate.json")
+                // res = require("../authenticate.json")
                 if (res['Error']){
                 // Incorrect password
                 dispatch(loginVTOPError("Password / Username Incorrect"))
@@ -203,11 +194,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchAttendanceRequest)
-            const IP = 'http://134.209.150.24/classesapi?token=' + state.reducer.userInfo.APItoken
-            fetch("https://jsonplaceholder.typicode.com/posts")
+            fetch('http://134.209.150.24/classesapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
-                res = require("../classesapi.json")
-                return res})
+                // res = require("../classesapi.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchAttendanceSuccess(res))
             })
@@ -219,11 +209,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchTimetableRequest)
-            const IP = 'http://134.209.150.24/timetableapi?token=' + state.reducer.userInfo.APItoken
-            fetch("https://jsonplaceholder.typicode.com/posts")
+            fetch('http://134.209.150.24/timetableapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
-                res = require("../timetableapi.json")
-                return res})
+                // res = require("../timetableapi.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchTimetableSuccess(res))
             })
@@ -235,11 +224,10 @@ import {
         return (dispatch, getState) =>{
             const state = getState()
             dispatch(fetchMarksRequest)
-            const IP = 'http://134.209.150.24/marksapi?token=' + state.reducer.userInfo.APItoken
-            fetch("https://jsonplaceholder.typicode.com/posts")
+            fetch('http://134.209.150.24/marksapi?token=' + state.reducer.userInfo.APItoken)
             .then(res => {
-                res = require("../marks.json")
-                return res})
+                // res = require("../marks.json")
+                return res.json()})
             .then(res =>{
                 dispatch(fetchMarksSuccess(res))
             })
@@ -253,11 +241,10 @@ import {
             dispatch(fetchMoodleAssignmentsRequest)
             const username = state.reducer.userInfo.RegNo
             const appno = state.reducer.userInfo.AppNo
-            const IP = `http://134.209.150.24/moodleapi?username=${username}&password=${password}&appno=${appno}`
-            fetch("https://jsonplaceholder.typicode.com/posts")
+            fetch(`http://134.209.150.24/moodleapi?username=${username}&password=${password}&appno=${appno}`   )
             .then(res =>{
-                res = require('../moodleapi.json')
-                return res
+                // res = require('../moodleapi.json')
+                return res.json()
             }).then(res =>{
                 dispatch(fetchMoodleAssignmentsSuccess(res))
             })
@@ -269,11 +256,10 @@ import {
         return(dispatch,getState) =>{
             const state = getState()
             dispatch(fetchAcadHistoryRequest)
-            const IP = 'http://134.209.150.24/acadhistoryapi?token=' + state.reducer.userInfo.APItoken
-            fetch("https://jsonplaceholder.typicode.com/posts")
+            fetch('http://134.209.150.24/acadhistoryapi?token=' + state.reducer.userInfo.APItoken)
             .then(res =>{
-                res = require('../acadhistory.json')
-                return res
+                // res = require('../acadhistory.json')
+                return res.json()
             }).then(res =>{
                 dispatch(fetchAcadHistorySuccess(res))
             })

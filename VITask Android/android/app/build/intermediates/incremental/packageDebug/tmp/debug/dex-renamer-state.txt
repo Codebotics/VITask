@@ -1,4 +1,4 @@
-#Thu May 14 20:02:32 IST 2020
-base.0=D\:\\Codes\\Personal Study\\VITask\\VITask Android\\android\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
-path.0=classes.dex
+#Tue May 12 00:31:42 IST 2020
+base.0=V\:\\VITaskGit\\VITask9\\VITask\\VITask Android\\android\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 renamed.0=classes.dex
+path.0=classes.dex

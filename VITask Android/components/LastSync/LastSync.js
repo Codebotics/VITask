@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import { Caption } from "react-native-paper";
 
 class LastSync extends Component {
-    state = {
-        time: this.millisecondsToStr((new Date().getTime())-(new Date(this.props.state.coursesInfo[0].updatedOn).getTime()))
-    }
     millisecondsToStr (milliseconds) {
         // Copied from https://stackoverflow.com/a/8212878/8077711
         // Thanks @Dan from Stackoverflow
@@ -34,7 +31,7 @@ class LastSync extends Component {
         }
         var minutes = Math.floor((temp %= 3600) / 60);
         if (minutes) {
-            return minutes + ' minute' + numberEnding(minutes) + ' ago';
+            return minutes + ' minutes' + numberEnding(minutes) + ' ago';
         }
         var seconds = temp % 60;
         if (seconds) {
@@ -42,18 +39,11 @@ class LastSync extends Component {
         }
         return 'Just Now'; //'just now' //or other string you like;
     }
-    componentDidMount(){
-        setInterval(()=>{
-            this.setState({
-                time: this.millisecondsToStr((new Date().getTime())-(new Date(this.props.state.coursesInfo[0].updatedOn).getTime()))
-            })
-        },10000)
-    }
     render() {
         return (
             <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center",marginBottom:"2%", paddingVertical:"5%"}}>
                         <Icon name="sync" size={15} style={{color:"#FFF"}} />
-                        <Caption style={{color:"#FFF", paddingLeft:"1%"}}>{this.state.time}</Caption >
+                        <Caption style={{color:"#FFF", paddingLeft:"1%"}}>{this.millisecondsToStr((new Date().getTime())-(new Date(this.props.state.coursesInfo[0].updatedOn).getTime()))}</Caption >
             </View>
         )
     }
