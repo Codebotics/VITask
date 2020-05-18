@@ -17,7 +17,7 @@ export class BetaOver extends Component {
                             source = {require("../assests/favicon.png")} 
                         />
                     </Animatable.View>
-                    <Caption style={{color:"#BBB", paddingLeft:"5%", paddingVertical:"3%"}}>This preview was valid till 17 May 2020.</Caption>
+                    <Caption style={{color:"#BBB", paddingLeft:"5%", paddingVertical:"3%"}}>This preview was valid till 31 May 2020.</Caption>
                     <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>We are sorry to say but this beta preview is now over. </Caption>
                     <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>Please use Google Playstore to download the latest beta or visit vitask.me for new apk</Caption>
                     <Caption style={{color:"white", paddingLeft:"5%", paddingVertical:"3%"}}>Thank you for participating in VITask Beta Testing Program. We hope you liked the experience.</Caption>

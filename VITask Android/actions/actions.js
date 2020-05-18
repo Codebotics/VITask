@@ -19,11 +19,18 @@ import {
     LOGIN_MOODLE_REQUEST,
     LOGIN_MOODLE_SUCCESS,
     LOGIN_MOODLE_ERROR,
-    FETCH_MOODLE_ASSIGNMENTS_SYNC,
 
     FETCH_ACADHISTORY_REQUEST,
     FETCH_ACADHISTORY_SUCCESS,
     FETCH_ACADHISTORY_ERROR,
+
+    SYNC_VTOP_REQUEST,
+    SYNC_VTOP_SUCCESS,
+    SYNC_VTOP_ERROR,
+
+    MOODLE_ASSIGNMENTS_SYNC_REQUEST,
+    MOODLE_ASSIGNMENTS_SYNC_SUCCESS,
+    MOODLE_ASSIGNMENTS_SYNC_ERROR
 
     STORE_STATE_FROM_ASYNC,
 
@@ -145,7 +152,7 @@ import {
 
     const fetchAcadHistoryError = (err) =>{
         return{
-            type : FETCH_ATTENDANCE_ERROR,
+            type : FETCH_ACADHISTORY_ERROR,
             error : err
         }
     }
@@ -186,13 +193,6 @@ import {
             }).then(res => res.json())
         }
     }
-    
-    const ORIGINAL_VTOP_LOGIN = `https://vitask.me/authenticate?username={username}&password={password}`
-    const ORIGINAL_ATTENDANCE = `https://vitask.me/classesapi?token={state.reducer.userInfo.APItoken}`
-    const ORIGINAL_TIMETABLE = `https://vitask.me/timetableapi?token={state.reducer.userInfo.APItoken}`
-    const ORIGINAL_MARKS = 'https://vitask.me/marksapi?token={state.reducer.userInfo.APItoken}'
-    const ORIGINAL_MOODLE = `https://vitask.me/moodleapi?username={username}&password={password}&appno={appNo}`
-    const ORIGINAL_ACADEMIC_HISTORY = "https://vitask.me/acadhistoryapi?token={state.reducer.userInfo.APItoken}"
     
     // New API structure for first time login:
     // Gettoken(similar to vtop login) -> Timetable -> Attendance -> marks -> history 
@@ -285,22 +285,7 @@ import {
         }
     }
 
-    export const fetchMoodleAssignments = (password)=>{
-        return (dispatch, getState)=>{
-            const state = getState()
-            dispatch(fetchMoodleAssignmentsRequest)
-            const username = state.reducer.userInfo.RegNo
-            const appno = state.reducer.userInfo.AppNo
-            fetch(`http://134.209.150.24/moodleapi?username=${username}&password=${password}&appno=${appno}`   )
-            .then(res =>{
-                // res = require('../moodleapi.json')
-                return res.json()
-            }).then(res =>{
-                dispatch(fetchMoodleAssignmentsSuccess(res))
-            })
-            .catch(err => dispatch(fetchMoodleAssignmentsError(err)))
-        }
-    }
+    
 
     export const storeRedux = (rState) =>{
         return(dispatch,getState) =>{
