@@ -16,9 +16,9 @@ import {
     FETCH_MARKS_SUCCESS,
     FETCH_MARKS_ERROR,
 
-    FETCH_MOODLE_ASSIGNMENTS_REQUEST,
-    FETCH_MOODLE_ASSIGNMENTS_SUCCESS,
-    FETCH_MOODLE_ASSIGNMENTS_ERROR,
+    LOGIN_MOODLE_REQUEST,
+    LOGIN_MOODLE_SUCCESS,
+    LOGIN_MOODLE_ERROR,
     FETCH_MOODLE_ASSIGNMENTS_SYNC,
 
     FETCH_ACADHISTORY_REQUEST,
@@ -110,22 +110,22 @@ import {
         }
     }
 
-    const fetchMoodleAssignmentsRequest = ()=>{
+    const loginMoodleRequest = ()=>{
         return{
-            type : FETCH_MOODLE_ASSIGNMENTS_REQUEST
+            type : LOGIN_MOODLE_REQUEST
         }
     }
 
-    const fetchMoodleAssignmentsSuccess = (assignments) =>{
+    const loginMoodleSuccess = (assignments) =>{
         return{
-            type : FETCH_MOODLE_ASSIGNMENTS_SUCCESS,
+            type : LOGIN_MOODLE_SUCCESS,
             data : assignments
         }
     }
 
-    const fetchMoodleAssignmentsError = (err) =>{
+    const loginMoodleError = (err) =>{
         return{
-            type : FETCH_MOODLE_ASSIGNMENTS_ERROR,
+            type : LOGIN_MOODLE_ERROR,
             error : err
         }
     }
@@ -175,7 +175,8 @@ import {
         READ_FROM_FILE = false
     
         if (READ_FROM_FILE){
-            return require(filename)
+            const file = require(filename)
+            return file
         }
         else{
             return fetch("https://vitask.me/api/"+route, {
@@ -193,68 +194,94 @@ import {
     const ORIGINAL_MOODLE = `https://vitask.me/moodleapi?username={username}&password={password}&appno={appNo}`
     const ORIGINAL_ACADEMIC_HISTORY = "https://vitask.me/acadhistoryapi?token={state.reducer.userInfo.APItoken}"
     
-    export const loginVTOP =(username, password) => {
-        return dispatch=>{
+    // New API structure for first time login:
+    // Gettoken(similar to vtop login) -> Timetable -> Attendance -> marks -> history 
+    export const getToken = (username, password) =>{
+        return dispatch => {
             dispatch(loginVTOPRequest)
-            console.log(`https://vitask.me/authenticate?username=${username}&password=${password}`)
-            fetch(`http://134.209.150.24/authenticate?username=${username}&password=${password}`)
-            .then(res => res.json())
-            .then(res => {
-                // res = require("../authenticate.json")
-                if (res['Error']){
-                // Incorrect password
-                dispatch(loginVTOPError("Password / Username Incorrect"))
-                }
-                else{
+            callAPI("gettoken", {
+                "username" : username,
+                "password" : password
+            }).then(res =>{
+                // This is the API Response in JSON Format
+                if (res['error']){
+                    dispatch(loginVTOPError("Password/ Username Incorrect"))
+                }else{
                     dispatch(loginVTOPSuccess(res))
                 }
-            })
-            .catch(err => dispatch(loginVTOPError(err)))
+            }).catch(err => dispatch(loginVTOPError(err)))
         }
     }
     
-    export const fetchAttendance = () => {
-        return (dispatch, getState) =>{
-            const state = getState()
+    export const firstAttendance = () => {
+        // This function is meant to be used first time only.
+        // While login
+        return (dispatch, getState) => {
             dispatch(fetchAttendanceRequest)
-            fetch('http://134.209.150.24/classesapi?token=' + state.reducer.userInfo.APItoken)
-            .then(res => {
-                // res = require("../classesapi.json")
-                return res.json()})
-            .then(res =>{
+            const state = getState()
+            state = state.reducer
+            callAPI("/vtop/attendance", {
+                "token": state.userInfo.APItoken
+            }).then(res => {
+                // This is the response in JSON format read function callAPI
+                // TODO: Handle errors
                 dispatch(fetchAttendanceSuccess(res))
-            })
-            .catch(err=> dispatch(fetchAttendanceError(err)))
+            }).catch(err => dispatch(fetchAttendanceError(err)))
         }
     }
     
-    export const fetchTimetable = () => {
-        return (dispatch, getState) =>{
-            const state = getState()
-            dispatch(fetchTimetableRequest)
-            fetch('http://134.209.150.24/timetableapi?token=' + state.reducer.userInfo.APItoken)
-            .then(res => {
-                // res = require("../timetableapi.json")
-                return res.json()})
-            .then(res =>{
+    export const firstTimetable = ()=>{
+        // Again this function is meant to be used first time only
+        return (dispatch, getState)=>{
+            dispatch(fetchTimetableRequest())
+            const state = getState().reducer
+            callAPI("/vtop/timetable", {
+                "token" : state.userInfo.APItoken
+            }).then(res => {
+                // res is the JSON object from api call
                 dispatch(fetchTimetableSuccess(res))
-            })
-            .catch(err=> dispatch(fetchTimetableError(err)))
+            }).catch(err => dispatch(fetchTimetableError(err)))
+        }
+    }
+
+    export const firstMarks = ()=>{
+        return (dispatch, getState)=>{
+            dispatch(fetchMarksRequest())
+            const state = getState().reducer
+            callAPI("/vtop/marks", {
+                "token" : state.userInfo.APItoken
+            }).then(res =>{
+                // Meh. Still JSON object from the API Call
+                dispatch(fetchMarksSuccess(res))
+            }).catch(err => dispatch(fetchMarksError(err)))
+        }
+    }
+
+    export const firstHistory = ()=>{
+        return (dispatch, getState)=>{
+            dispatch(fetchAcadHistoryRequest())
+            const state = getState().reducer
+            callAPI("/vtop/history", {
+                "token" : state.userInfo.APItoken
+            }).then(res =>{
+                // Meh. Still JSON object from the API Call
+                dispatch(fetchAcadHistorySuccess(res))
+            }).catch(err => dispatch(fetchAcadHistoryError(err)))
         }
     }
     
-    export const fetchMarks = () => {
+    export const moodleLogin = (password)=>{
         return (dispatch, getState) =>{
-            const state = getState()
-            dispatch(fetchMarksRequest)
-            fetch('http://134.209.150.24/marksapi?token=' + state.reducer.userInfo.APItoken)
-            .then(res => {
-                // res = require("../marks.json")
-                return res.json()})
-            .then(res =>{
-                dispatch(fetchMarksSuccess(res))
-            })
-            .catch(err=> dispatch(fetchMarksError(err)))
+            dispatch(loginMoodleRequest())
+            const state = getState().reducer
+            callAPI("/moodle/login", {
+                    "username" : state.userInfo.RegNo,
+                    "password" : password,
+                    "token" : state.userInfo.APItoken
+                }
+            ).then(res => {
+                dispatch(loginMoodleSuccess(res))
+            }).catch(err => dispatch(loginMoodleError(err)))
         }
     }
 
@@ -272,21 +299,6 @@ import {
                 dispatch(fetchMoodleAssignmentsSuccess(res))
             })
             .catch(err => dispatch(fetchMoodleAssignmentsError(err)))
-        }
-    }
-
-    export const fetchAcadHistory = () =>{
-        return(dispatch,getState) =>{
-            const state = getState()
-            dispatch(fetchAcadHistoryRequest)
-            fetch('http://134.209.150.24/acadhistoryapi?token=' + state.reducer.userInfo.APItoken)
-            .then(res =>{
-                // res = require('../acadhistory.json')
-                return res.json()
-            }).then(res =>{
-                dispatch(fetchAcadHistorySuccess(res))
-            })
-            .catch(err =>{dispatch((fetchAcadHistoryError(err)))})
         }
     }
 
