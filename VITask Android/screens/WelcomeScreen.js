@@ -4,6 +4,22 @@ import {  View , Image} from 'react-native'
 export class WelcomeScreen extends Component {
     componentDidMount(){
         // Make async request
+        // Checking for the fetch method
+        const headers = {
+            Accept : "application/json",
+            "Content-Type" : "application/json",
+            "X-VITASK-API" : "e95951eed941e60b6c8b95c0bddf6ab4339b563191038a3da296f9702e8270d4136ee26985a1c4b46fdf67436da5e89a9e24472ac4a4e6daba6dd0d9938b8ba8"
+        }
+
+        fetch("https://vitask.me/api/gettoken",{
+            method : "POST",
+            headers : headers,
+            body : JSON.stringify({
+                "username" : "17BEC1162",
+                "password" : "tempPass123@"
+            })
+        }).then(res=>res.json())
+        .then(res=>{console.log(res)})
     }
     render() {
         return (

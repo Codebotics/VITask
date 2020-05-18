@@ -162,6 +162,29 @@ import {
             data : rState
         }
     }
+
+    // Use this function to get the API calls
+    const callAPI = (route, body, filename)=>{
+        const headers = {
+            Accept : "application/json",
+        "Content-Type" : "application/json",
+        "X-VITASK-API" : "e95951eed941e60b6c8b95c0bddf6ab4339b563191038a3da296f9702e8270d4136ee26985a1c4b46fdf67436da5e89a9e24472ac4a4e6daba6dd0d9938b8ba8"
+        }
+    
+        // Set this variable as true for development purpose and save api calls
+        READ_FROM_FILE = false
+    
+        if (READ_FROM_FILE){
+            return require(filename)
+        }
+        else{
+            return fetch("https://vitask.me/api/"+route, {
+                method : "POST",
+                headers : headers,
+                body : JSON.stringify(body)
+            }).then(res => res.json())
+        }
+    }
     
     const ORIGINAL_VTOP_LOGIN = `https://vitask.me/authenticate?username={username}&password={password}`
     const ORIGINAL_ATTENDANCE = `https://vitask.me/classesapi?token={state.reducer.userInfo.APItoken}`

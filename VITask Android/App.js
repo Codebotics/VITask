@@ -96,8 +96,8 @@ const BetaStackScreen = ({navigation})=>(
 
 function App() {
   let today = new Date()
-  let beta = new Date(2020,4,18)
-  let initial = "Login"
+  let beta = new Date(2020,4,19)
+  let initial = "Welcome"
   if (today>beta){
     initial = "Beta"
   }
