@@ -2,62 +2,99 @@ import React, { Component } from 'react'
 import {  View , Image,AsyncStorage} from 'react-native'
 import {connect} from 'react-redux'
 import {
-    // loginVTOP,
-    // fetchAttendance,
-    // fetchTimetable,
-    // reformatData,
-    // fetchMarks,
-    // fetchMoodleAssignments,
-    // fetchAcadHistory,
-    // storeRedux,
     storeState,
-    getToken,
-    storeRedux
+    storeRedux,
+    softRefresh
 } from '../actions/actions'
 
 class WelcomeScreen extends Component {
 
     state={
-        isAsyncAvailable : false
+        isAsyncAvailable : false,
+        TimeTable : null,
+        AcadHistory : null,
+        UserInfo : null,
+        // Attendance : null,
+        CoursesInfo : null,
+        password : null,
     }
 
     storeToRedux =()=>{
-        this.props.storeState(this.state.userInfo)
-        this.props.storeState(this.state.timetable)
-        this.props.storeState(this.state.acadhistory)
-        console.log(this.state.timetable)
+        this.props.storeState(this.state.TimeTable)
+        this.props.storeState(this.state.AcadHistory)
+        this.props.storeState(this.state.UserInfo)
+        // this.props.storeState(this.state.Attendance)
+        this.props.storeState(this.state.CoursesInfo)
     }
 
-    _retrieveData = async () => {
+    _retrieveLogin = async () => {
         try {
-          const value = await AsyncStorage.getItem("VITask_reduxState");
-        //   console.log(value)
-          const reduxObj = JSON.parse(value)
-          if (reduxObj.reduxStatus == 1) {
-              this.setState({
-                isAsyncAvailable : true,
-                ...reduxObj.reduxState
-              })
-              console.log("REDUX", reduxObj.reduxState.timetable)
-            //   this.storeToRedux()
-            this.props.storeState(reduxObj.reduxState)
-            // this.props.storeRedux(reduxObj.reduxState)
+          const value = await AsyncStorage.getItem('VITask_user');
+          console.log(value)
+          const user_obj = JSON.parse(value)
+          if (user_obj.status == 1) {
+            this.setState({
+                password : user_obj.password
+            })
           }
+        //   else{
+//else for splash Screen
+        //   }
         } catch (error) {
              console.log(error)
         }
       }
 
+    _retrieveRedux = async () => {
+        try {
+          const value = await AsyncStorage.getItem("VITask_reduxState");
+          const reduxObj = JSON.parse(value)
+          if (reduxObj.reduxStatus == 1) {
+              var TIMETABLE = {
+                  timetable : reduxObj.reduxState.timetable
+              }
+              var ACADHISTORY = {
+                  acadhistory : reduxObj.reduxState.acadhistory
+              }
+              var USERINFO = {
+                  userInfo : reduxObj.reduxState.userInfo
+              }
+            //   var ATTENDANCE = {
+            //       attendance : reduxObj.reduxState.attendance
+            //   }
+              var COURSESINFO = {
+                  coursesInfo : reduxObj.reduxState.coursesInfo
+              }
+              this.setState({
+                isAsyncAvailable : true,
+                TimeTable : TIMETABLE,
+                AcadHistory : ACADHISTORY,
+                UserInfo : USERINFO,
+                // Attendance : ATTENDANCE,
+                CoursesInfo : COURSESINFO
+              })
+              this.storeToRedux()
+              this.props.softRefresh(this.state.password)
+              this.props.reformat()
+
+          }
+        } catch (error) {
+            //  console.log(error)
+        }
+      }
+
+
+
     componentDidMount(){
-        this._retrieveData()
-        // this.props.storeState(this.state)
+        this._retrieveLogin()
+        this._retrieveRedux()
         setTimeout(() => {
             if(this.state.isAsyncAvailable){
                 this.props.navigation.jumpTo("Dashboard")
             }else{
                 this.props.navigation.jumpTo("Login")
             }
-        }, 2000);
+        }, 2500);
     }
     render() {
         return (
@@ -102,8 +139,15 @@ function mapStateToProps(state){
 }
 const mapDispatchToProps = (dispatch) => {
     return{
-        storeState :(rstate)=>{dispatch(storeRedux(rstate))},
-
+        storeState: (rState)=>{
+            dispatch(storeState(rState))
+        },
+        reformat: ()=>{
+            dispatch(reformatData())
+        },
+        softRefresh : (password)=>{
+            dispatch(softRefresh(password))
+        }
     }
 }
 

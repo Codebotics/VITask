@@ -262,8 +262,11 @@ import {
                 "token" : state.userInfo.APItoken
             }).then(res => {
                 // res is the JSON object from api call
+                console.log("IN TIMETABLE",res)
                 dispatch(fetchTimetableSuccess(res))
-            }).catch(err => dispatch(fetchTimetableError(err)))
+            }).catch(err => {dispatch(fetchTimetableError(err))
+            console.log("TIMETABLE ERROR",err)
+            })
         }
     }
 
