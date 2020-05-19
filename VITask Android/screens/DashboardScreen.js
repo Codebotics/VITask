@@ -60,8 +60,11 @@ class DashboardScreen extends Component {
 
 
     render() {
-        let  moodleLogin = false
+        let  moodledetails = "Login Moodle to see pending assignments"
     //     // PushNotification.cancelAllLocalNotifications()
+        if (this.props.state.assignments){
+            moodledetails = `You have currently ${this.props.state.assignments.Assignments.length} assignments pending.`
+        }
 
         let timetable=[]
     //     // Sample String
@@ -77,7 +80,7 @@ class DashboardScreen extends Component {
                     slot = {this.state.timetable[i]['slot']}
                     time = {`${this.state.timetable[i]['startTime']} - ${this.state.timetable[i]['endTime']}`}
                     key = {i}
-                    showMoodle = {moodleLogin}
+                    showMoodle = {false}
                     isLab = {this.state.timetable[i]['slot'][0] === 'L'}
                     navigation = {this.props.navigation}
                 />
@@ -141,7 +144,7 @@ class DashboardScreen extends Component {
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
                 <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
-                    <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
+        <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>{moodledetails}</Caption>
                     {timetable}
                     <LastSync/>
                 </View>

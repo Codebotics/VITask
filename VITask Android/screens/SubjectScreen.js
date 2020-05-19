@@ -86,22 +86,24 @@ export class SubjectScreen extends Component {
                 }   
             }
             if (assignments.length===0){
-                assignments.push(
+                assignments = (
                     <View>
-                    <Card style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}} >
-                    <Subheading style={{marginVertical:"7%", marginHorizontal:"10%", textAlign:"center", color:"white"}}>Nothing to see here</Subheading>
-                    </Card>
-                </View>
+                        <Card style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}} >
+                        <Subheading style={{color:"#FFF"}}>No Assignments</Subheading>
+                        <Caption style={{color:"#FFF", paddingTop:"5%"}}>All clear. No pending assignments for this course.</Caption>
+                        </Card>
+                    </View>
                 )
             }
         }
         if(!this.state.marks){
             marks = (
                 <View>
-                    <Card style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}} >
-                    <Subheading style={{marginVertical:"10%", marginHorizontal:"20%", textAlign:"center", color:"white"}}>Nothing to see here</Subheading>
-                    </Card>
-                </View>
+                        <Card style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}} >
+                        <Subheading style={{color:"#FFF"}}>No Marks Info</Subheading>
+                        <Caption style={{color:"#FFF", paddingTop:"5%"}}>Faculty has not yet updated any marks for this course. </Caption>
+                        </Card>
+                    </View>
             )
         }
         else{
