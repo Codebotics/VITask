@@ -3679,8 +3679,9 @@ int[] styleable ViewStubCompat { 0x010100d0, 0x010100f2, 0x010100f3 }
 int styleable ViewStubCompat_android_id 0
 int styleable ViewStubCompat_android_layout 1
 int styleable ViewStubCompat_android_inflatedId 2
-int xml rn_dev_preferences 0x7f120000
-int xml standalone_badge 0x7f120001
-int xml standalone_badge_gravity_bottom_end 0x7f120002
-int xml standalone_badge_gravity_bottom_start 0x7f120003
-int xml standalone_badge_gravity_top_start 0x7f120004
+int xml file_provider_paths 0x7f120000
+int xml rn_dev_preferences 0x7f120001
+int xml standalone_badge 0x7f120002
+int xml standalone_badge_gravity_bottom_end 0x7f120003
+int xml standalone_badge_gravity_bottom_start 0x7f120004
+int xml standalone_badge_gravity_top_start 0x7f120005

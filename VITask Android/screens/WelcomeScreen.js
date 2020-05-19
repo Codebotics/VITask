@@ -15,7 +15,7 @@ import {
     storeRedux
 } from '../actions/actions'
 
-export class WelcomeScreen extends Component {
+class WelcomeScreen extends Component {
 
     state={
         isAsyncAvailable : false
@@ -41,7 +41,7 @@ export class WelcomeScreen extends Component {
               console.log("REDUX", reduxObj.reduxState.timetable)
             //   this.storeToRedux()
             this.props.storeState(reduxObj.reduxState)
-            this.props.dispatch(storeRedux(reduxObj.reduxState))
+            // this.props.storeRedux(reduxObj.reduxState)
           }
         } catch (error) {
              console.log(error)
@@ -102,10 +102,11 @@ function mapStateToProps(state){
 }
 const mapDispatchToProps = (dispatch) => {
     return{
-        storeState :(rstate)=>{dispatch(storeRedux(rstate))}
+        storeState :(rstate)=>{dispatch(storeRedux(rstate))},
+
     }
 }
 
 
 
-export default connect(mapDispatchToProps)(WelcomeScreen)
+export default connect(mapStateToProps,mapDispatchToProps)(WelcomeScreen)

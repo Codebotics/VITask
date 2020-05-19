@@ -15,10 +15,9 @@ import {
     FETCH_MARKS_REQUEST,
     FETCH_MARKS_ERROR,
 
-    FETCH_MOODLE_ASSIGNMENTS_REQUEST,
-    FETCH_MOODLE_ASSIGNMENTS_SUCCESS,
-    FETCH_MOODLE_ASSIGNMENTS_ERROR,
-    FETCH_MOODLE_ASSIGNMENTS_SYNC,
+    LOGIN_MOODLE_REQUEST,
+    LOGIN_MOODLE_SUCCESS,
+    LOGIN_MOODLE_ERROR,
 
     REFORMAT_DATA,
     FETCH_ACADHISTORY_REQUEST,
@@ -208,21 +207,21 @@ const reducer = (state = initialState, action)=>{
                 error : action.error
             }
         
-        case FETCH_MOODLE_ASSIGNMENTS_REQUEST:
+        case LOGIN_MOODLE_REQUEST:
             return{
                 ...state,
-                status : "REQUEST_MOODLE_ASSIGNMENTS",
+                status : "LOGIN_MOODLE_REQUEST",
                 error : ""
             }
 
-        case FETCH_MOODLE_ASSIGNMENTS_SUCCESS:
+        case LOGIN_MOODLE_SUCCESS:
             return{
                 ...state,
-                status : "MOODLE_ASSIGNMENTS_COMPLETE",
+                status : "LOGIN_MOODLE_SUCCESS",
                 assignments : action.data
             }
 
-        case FETCH_MOODLE_ASSIGNMENTS_ERROR:
+        case LOGIN_MOODLE_ERROR:
             return{
                 ...state,
                 status : "ERROR",

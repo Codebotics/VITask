@@ -15,7 +15,7 @@ class Timetable extends Component {
         loading: true
     }
     componentDidMount(){
-        const {coursesInfo} = this.props.state
+        const coursesInfo = this.props.state.coursesInfo
         let slot = this.props.slot.split('+')
         const courseInfo = coursesInfo.find(x => {return x.slot.includes(slot[0])})
         this.setState({

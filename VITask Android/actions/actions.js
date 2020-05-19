@@ -242,8 +242,7 @@ import {
         // While login
         return (dispatch, getState) => {
             dispatch(fetchAttendanceRequest)
-            const state = getState()
-            state = state.reducer
+            const state = getState().reducer
             callAPI("/vtop/attendance", {
                 "token": state.userInfo.APItoken
             }).then(res => {

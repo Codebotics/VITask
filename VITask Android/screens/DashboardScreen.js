@@ -18,68 +18,71 @@ class DashboardScreen extends Component {
     componentDidMount(){
         console.log("DashBoard" , this.props.state)
     }
-    // state = {
-    //     day: today,
-    //     // timetable : this.props.state.timetable[today],
-    //     totalClass:0,
-    //     totalLab:0
-    // }
+    state = {
+        day: today,
+        timetable : this.props.state.timetable[today],
+        totalClass:0,
+        totalLab:0
+    }
     
-    // createTwoButtonAlert = () =>
-    // Alert.alert(
-    //   "Disclaimer",
-    //   `
-    //   This is the beta version of VITask. As you would know, beta versions are usually unstable and may be trouble to use. But don't worry, if you face any problem we are happy to help.
+    createTwoButtonAlert = () =>
+    Alert.alert(
+      "Disclaimer",
+      `
+      This is the beta version of VITask. As you would know, beta versions are usually unstable and may be trouble to use. But don't worry, if you face any problem we are happy to help.
     
-    //   Note that this version will expire on 31 May 2020. After that use Google Playstore to download the app.
+      Note that this version will expire on 31 May 2020. After that use Google Playstore to download the app.
 
-    //   Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.me
-    //   `,
-    //   [
-    //     { text: "I understand", onPress: () => console.log("OK Pressed") }
-    //   ],
-    //   { cancelable: false }
-    // );
-    // componentDidMount(){
-    //     this.createTwoButtonAlert()
-    //     let totalClass = 0
-    //     let totalLab = 0
-    //     for(classes of this.state.timetable){
-    //         if (classes['slot'][0]!=="L"){
-    //             totalClass++;
-    //         }
-    //         else{
-    //             totalLab++;
-    //         }
-    //     }
-    //     this.setState({
-    //         totalClass,
-    //         totalLab
-    //     })
-    // }
+      Also, congrats! you get to test the latest VITask app. If you have any queries or feedback hit us up on instagram @vitask.me
+      `,
+      [
+        { text: "I understand", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
+    componentDidMount(){
+        this.createTwoButtonAlert()
+        let totalClass = 0
+        let totalLab = 0
+        // for(classes of this.state.timetable){
+        //     if (classes['slot'][0]!=="L"){
+        //         totalClass++;
+        //     }
+        //     else{
+        //         totalLab++;
+        //     }
+        // }
+        // this.setState({
+        //     totalClass,
+        //     totalLab
+        // })
+    }
 
 
     render() {
-    //     let  moodleLogin = false
+        let  moodleLogin = false
     //     // PushNotification.cancelAllLocalNotifications()
 
-    //     let timetable=[]
+        let timetable=[]
     //     // Sample String
     //     // var dateString = days[date.getDay()] + " " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + "1:40:30 GMT+0530"
         
     //     // Constant part of string
     //     var dateString = days[date.getDay()] + " " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear()
-    //     for(let i=0;i<this.state.timetable.length;++i){
-    //         timetable.push(
-    //             <Timetable
-    //                 slot = {this.state.timetable[i]['slot']}
-    //                 time = {`${this.state.timetable[i]['startTime']} - ${this.state.timetable[i]['endTime']}`}
-    //                 key = {i}
-    //                 showMoodle = {moodleLogin}
-    //                 isLab = {this.state.timetable[i]['slot'][0] === 'L'}
-    //                 navigation = {this.props.navigation}
-    //             />
-    //         )
+        console.log(this.state.timetable)
+        for(let i=0;i<this.state.timetable.length;++i){
+            console.log(this.state.timetable[i])
+            timetable.push(
+                <Timetable
+                    slot = {this.state.timetable[i]['slot']}
+                    time = {`${this.state.timetable[i]['startTime']} - ${this.state.timetable[i]['endTime']}`}
+                    key = {i}
+                    showMoodle = {moodleLogin}
+                    isLab = {this.state.timetable[i]['slot'][0] === 'L'}
+                    navigation = {this.props.navigation}
+                />
+            )
+            }
     //         // spliting time from ":"
     //         var timeSplit = this.state.timetable[i]['startTime'].split(':')
     //         // converting time to integer for further calculations
@@ -133,18 +136,18 @@ class DashboardScreen extends Component {
         return (
             <ScrollView style={{backgroundColor:"#081631"}}>
                 
-                {/* <StatusBar backgroundColor="#081631" /> */}
-            {/* <View style={{backgroundColor:"#081631"}}> */}
-                {/* <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}> */}
-                    {/* <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}> */}
-                {/* <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline> */}
-                {/* </TouchableOpacity> */}
-                    {/* <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption> */}
-                    {/* <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption> */}
-                    {/* {timetable} */}
-                    {/* <LastSync/> */}
-                {/* </View> */}
-            {/* </View> */}
+                <StatusBar backgroundColor="#081631" />
+            <View style={{backgroundColor:"#081631"}}>
+                <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
+                    <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}>
+                <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline>
+                </TouchableOpacity>
+                    <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
+                    <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
+                    {timetable}
+                    <LastSync/>
+                </View>
+            </View>
             </ScrollView>
         )
         }

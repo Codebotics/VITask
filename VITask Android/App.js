@@ -16,7 +16,7 @@ import GpaCalculator from './screens/GpaCalculator'
 import MoodleDisplay from './screens/MoodleDisplay'
 import  DrawerContent  from "./screens/Drawer";
 import { BetaOver } from "./screens/BetaOver";
-import { WelcomeScreen } from "./screens/WelcomeScreen";
+import  WelcomeScreen  from "./screens/WelcomeScreen";
 
 const Drawer = createDrawerNavigator();
 

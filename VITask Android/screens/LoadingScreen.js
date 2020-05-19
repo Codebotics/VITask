@@ -13,6 +13,11 @@ import {
     // fetchAcadHistory,
     storeState,
     getToken,
+    firstTimetable,
+    firstAttendance,
+    firstMarks,
+    firstHistory,
+    reformatData,
     storeRedux
 } from '../actions/actions'
 
@@ -246,19 +251,16 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(getToken(username, password))
       },
       getAttendance: ()=>{
-          dispatch(fetchAttendance())
+          dispatch(firstAttendance())
       },
       getTimetable: ()=>{
-          dispatch(fetchTimetable())
+          dispatch(firstTimetable())
       },
       getMarks:()=>{
-        dispatch(fetchMarks())
-      },
-      getMoodle:()=>{
-        dispatch(fetchMoodleAssignments())
+        dispatch(firstMarks())
       },
       getAcadHistory:()=>{
-          dispatch(fetchAcadHistory())
+          dispatch(firstHistory())
       },
       reformat: ()=>{
           dispatch(reformatData())
