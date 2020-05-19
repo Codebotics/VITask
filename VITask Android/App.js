@@ -17,6 +17,7 @@ import MoodleDisplay from './screens/MoodleDisplay'
 import  DrawerContent  from "./screens/Drawer";
 import { BetaOver } from "./screens/BetaOver";
 import  WelcomeScreen  from "./screens/WelcomeScreen";
+import  HistoryScreen  from "./screens/HistoryScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -117,6 +118,7 @@ function App() {
         <Drawer.Screen name="GpaCalculator" component={GPAStackScreen} />
         <Drawer.Screen name="MoodleDisplay" component={MoodleDisplay} />
         <Drawer.Screen name="Beta" component={BetaStackScreen} />
+        <Drawer.Screen name="History" component={HistoryScreen} />
 
     </Drawer.Navigator>
     </NavigationContainer>

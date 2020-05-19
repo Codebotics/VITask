@@ -96,6 +96,18 @@ class Assignment extends Component {
                               <DrawerItem 
                                   icon={({color, size}) => (
                                       <Icon 
+                                      name="import-contacts" 
+                                      style={{color:"white"}}
+                                      size={size}
+                                      />
+                                  )}
+                                  labelStyle={{color:"white"}}
+                                  label="Grade History"
+                                  onPress={() => {this.props.navigation.navigate('History')}}
+                              />
+                              <DrawerItem 
+                                  icon={({color, size}) => (
+                                      <Icon 
                                       name="developer-mode" 
                                       style={{color:"white"}}
                                       size={size}
