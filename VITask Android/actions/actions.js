@@ -30,7 +30,11 @@ import {
 
     MOODLE_ASSIGNMENTS_SYNC_REQUEST,
     MOODLE_ASSIGNMENTS_SYNC_SUCCESS,
-    MOODLE_ASSIGNMENTS_SYNC_ERROR
+    MOODLE_ASSIGNMENTS_SYNC_ERROR,
+
+    SOFT_REFRESH_REQUEST,
+    SOFT_REFRESH_SUCCESS,
+    SOFT_REFRESH_ERROR,
 
     STORE_STATE_FROM_ASYNC,
 
@@ -163,6 +167,26 @@ import {
         }
     }
 
+    export const softRefreshError = (err) =>{
+        return{
+            type : SOFT_REFRESH_ERROR,
+            error : err
+        }
+    }
+
+    export const softRefreshRequest = () =>{
+        return{
+            type : SOFT_REFRESH_REQUEST,
+        }
+    }
+
+    export const softRefreshSuccess = (data) =>{
+        return{
+            type : SOFT_REFRESH_SUCCESS,
+            data : data
+        }
+    }
+
     export const storeState = (rState)=>{
         return{
             type : STORE_STATE_FROM_ASYNC,
@@ -171,7 +195,7 @@ import {
     }
 
     // Use this function to get the API calls
-    const callAPI = (route, body, filename)=>{
+    const callAPI = (route, body)=>{
         const headers = {
             Accept : "application/json",
         "Content-Type" : "application/json",
@@ -182,8 +206,8 @@ import {
         READ_FROM_FILE = false
     
         if (READ_FROM_FILE){
-            const file = require(filename)
-            return file
+            // const file = require(filename)
+            // return file
         }
         else{
             return fetch("https://vitask.me/api/"+route, {
@@ -282,6 +306,25 @@ import {
             ).then(res => {
                 dispatch(loginMoodleSuccess(res))
             }).catch(err => dispatch(loginMoodleError(err)))
+        }
+    }
+
+    export const softRefresh = (password)=>{
+        return(dispatch, getState) =>{
+            dispatch(softRefreshRequest())
+            const state = getState().reducer
+            callAPI("/vtop/sync",{
+                "username" : state.userInfo.RegNo,
+                "password" : password,
+                "token" : state.userInfo.APItoken,
+                "hardRefresh" : false
+            }).then(res =>{
+                if(res['error']){
+                    dispatch(softRefreshError(res['error']))
+                }else{
+                    dispatch(softRefreshSuccess(res))
+                }
+            }).catch(err =>{ dispatch(softRefreshError(err)) })
         }
     }
 

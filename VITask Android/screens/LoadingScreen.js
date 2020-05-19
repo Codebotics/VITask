@@ -4,14 +4,16 @@ import {Caption} from 'react-native-paper'
 import * as Animatable from  'react-native-animatable'
 import {connect} from 'react-redux'
 import {
-    loginVTOP,
-    fetchAttendance,
-    fetchTimetable,
-    reformatData,
-    fetchMarks,
-    fetchMoodleAssignments,
-    fetchAcadHistory,
-    storeState
+    // loginVTOP,
+    // fetchAttendance,
+    // fetchTimetable,
+    // reformatData,
+    // fetchMarks,
+    // fetchMoodleAssignments,
+    // fetchAcadHistory,
+    storeState,
+    getToken,
+    storeRedux
 } from '../actions/actions'
 
 class LoadingScreen extends Component {
@@ -75,10 +77,10 @@ class LoadingScreen extends Component {
              console.log(error)
         }
       }
-      UNSAFE_componentWillMount(){
+    //   UNSAFE_componentWillMount(){
           
-          this._retrieveRedux()
-      }
+    //     //   this._retrieveRedux()
+    //   }
 
     componentDidUpdate(prevProps){
         if(prevProps.state.status !== this.props.state.status){
@@ -241,7 +243,7 @@ function mapStateToProps(state){
 const mapDispatchToProps = (dispatch) => {
     return {
       login: (username, password) => {
-        dispatch(loginVTOP(username, password))
+        dispatch(getToken(username, password))
       },
       getAttendance: ()=>{
           dispatch(fetchAttendance())

@@ -1,25 +1,63 @@
 import React, { Component } from 'react'
-import {  View , Image} from 'react-native'
+import {  View , Image,AsyncStorage} from 'react-native'
+import {connect} from 'react-redux'
+import {
+    // loginVTOP,
+    // fetchAttendance,
+    // fetchTimetable,
+    // reformatData,
+    // fetchMarks,
+    // fetchMoodleAssignments,
+    // fetchAcadHistory,
+    // storeRedux,
+    storeState,
+    getToken,
+    storeRedux
+} from '../actions/actions'
 
 export class WelcomeScreen extends Component {
-    componentDidMount(){
-        // Make async request
-        // Checking for the fetch method
-        const headers = {
-            Accept : "application/json",
-            "Content-Type" : "application/json",
-            "X-VITASK-API" : "e95951eed941e60b6c8b95c0bddf6ab4339b563191038a3da296f9702e8270d4136ee26985a1c4b46fdf67436da5e89a9e24472ac4a4e6daba6dd0d9938b8ba8"
-        }
 
-        fetch("https://vitask.me/api/gettoken",{
-            method : "POST",
-            headers : headers,
-            body : JSON.stringify({
-                "username" : "17BEC1162",
-                "password" : "tempPass123@"
-            })
-        }).then(res=>res.json())
-        .then(res=>{console.log(res)})
+    state={
+        isAsyncAvailable : false
+    }
+
+    storeToRedux =()=>{
+        this.props.storeState(this.state.userInfo)
+        this.props.storeState(this.state.timetable)
+        this.props.storeState(this.state.acadhistory)
+        console.log(this.state.timetable)
+    }
+
+    _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem("VITask_reduxState");
+        //   console.log(value)
+          const reduxObj = JSON.parse(value)
+          if (reduxObj.reduxStatus == 1) {
+              this.setState({
+                isAsyncAvailable : true,
+                ...reduxObj.reduxState
+              })
+              console.log("REDUX", reduxObj.reduxState.timetable)
+            //   this.storeToRedux()
+            this.props.storeState(reduxObj.reduxState)
+            this.props.dispatch(storeRedux(reduxObj.reduxState))
+          }
+        } catch (error) {
+             console.log(error)
+        }
+      }
+
+    componentDidMount(){
+        this._retrieveData()
+        // this.props.storeState(this.state)
+        setTimeout(() => {
+            if(this.state.isAsyncAvailable){
+                this.props.navigation.jumpTo("Dashboard")
+            }else{
+                this.props.navigation.jumpTo("Login")
+            }
+        }, 2000);
     }
     render() {
         return (
@@ -57,4 +95,17 @@ export class WelcomeScreen extends Component {
     }
 }
 
-export default WelcomeScreen
+function mapStateToProps(state){
+    return {
+        state: state.reducer
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return{
+        storeState :(rstate)=>{dispatch(storeRedux(rstate))}
+    }
+}
+
+
+
+export default connect(mapDispatchToProps)(WelcomeScreen)

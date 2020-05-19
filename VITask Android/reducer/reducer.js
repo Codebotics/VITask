@@ -24,6 +24,10 @@ import {
     FETCH_ACADHISTORY_REQUEST,
     FETCH_ACADHISTORY_SUCCESS,
 
+    SOFT_REFRESH_ERROR,
+    SOFT_REFRESH_SUCCESS,
+    SOFT_REFRESH_REQUEST,
+
     STORE_STATE_FROM_ASYNC,
     } from '../actions/types'
 import { createStore, applyMiddleware, combineReducers } from "redux";
@@ -255,9 +259,30 @@ const reducer = (state = initialState, action)=>{
                 coursesInfo,
                 status : "FORMAT_COMPLETE"
             }
+
+        case SOFT_REFRESH_ERROR:
+            return{
+                ...state,
+                status : "ERROR",
+                error : action.error
+            }
         
+        case SOFT_REFRESH_SUCCESS:
+            return{
+                ...state,
+                status : "SOFT_REFRESH_COMPLETE",
+                attendance : action.data.attendance,
+                marks : action.data.marks
+            }
+
+        case SOFT_REFRESH_REQUEST:
+            return{
+                ...state,
+                status : "REQUEST_SOFT_REFRESH"
+            }
         case STORE_STATE_FROM_ASYNC:
             return{
+                ...state,
                 ...action.data
             }
 
