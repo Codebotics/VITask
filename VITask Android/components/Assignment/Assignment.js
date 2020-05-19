@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View,StyleSheet,Linking } from 'react-native'
-import { Subheading,Card,  Button } from "react-native-paper";
+import { Subheading,Card,  Button, TouchableRipple } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons"
 import HTML from 'react-native-render-html';
 
@@ -9,7 +9,6 @@ export class Assignment extends Component {
     state = {
         ...this.props.data,
         timeRemain : null
-        // timeRemain:"15 days late"
     }
     millisecondsToStr (milliseconds) {
         // Copied from https://stackoverflow.com/a/8212878/8077711
@@ -65,11 +64,11 @@ export class Assignment extends Component {
     }
     render() {
         const data = this.state
-        console.log(data)
         if(!this.props.completed){
             return (
                 <View>
-                    <Card style={{margin:"3%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}} >
+                    <Card style={{margin:"5%", border:1, borderRadius: 10, marginVertical:"2%", backgroundColor:"#22365d"}} >
+                        <TouchableRipple style={{padding: "5%",}} onPress={()=>{}}>
                         <View style={{...styles.justifySpaceRow, marginTop:0}}>
                             <View style={{...styles.justifySpaceCol, marginTop:0}}>
                                 <Subheading style={{color:"#FFF"}}>{data.name}</Subheading>
@@ -81,6 +80,7 @@ export class Assignment extends Component {
                                 <Button onPress={()=>{Linking.openURL(data.url)}} color="#f90024" style={{marginTop:"5%"}} mode="contained">Open Assignment URL</Button> 
                             </View>
                         </View>
+                        </TouchableRipple>
                     </Card>
                 </View>
             )

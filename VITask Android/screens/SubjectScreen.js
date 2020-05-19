@@ -60,7 +60,6 @@ export class SubjectScreen extends Component {
         }
     }
     render() {
-        console.log(this.props.route.params.moodle, this.state.moodle)
         let assignments,marks, shortNotice
         if(!this.state.moodle){
             assignments = (
@@ -78,22 +77,21 @@ export class SubjectScreen extends Component {
         else{
             assignments=[]
             for(let i=0;i<this.state.moodle.Assignments.length;++i){
-                if (this.state.moodle.Assignments[i].course.includes(this.state.code)){
+                if (this.state.moodle.Assignments[i].course.includes(this.state.code) && this.state.moodle.Assignments[i].show){
                     assignments.push(
                         <Assignment
-                            title={this.state.moodle.Assignments[i].course}
-                            time ={this.state.moodle.Assignments[i].time}
-                            key={i}
+                            data = {this.state.moodle.Assignments[i]}
                         />
                     )
                 }   
             }
             if (assignments.length===0){
                 assignments.push(
-                    <Assignment
-                    title="Currently No assignments"
-                    key="djfk"
-                    />
+                    <View>
+                    <Card style={{margin:"5%", padding: "5%", border:1, borderRadius: 10, marginVertical:"1%", backgroundColor:"#22365d"}} >
+                    <Subheading style={{marginVertical:"7%", marginHorizontal:"10%", textAlign:"center", color:"white"}}>Nothing to see here</Subheading>
+                    </Card>
+                </View>
                 )
             }
         }

@@ -44,18 +44,18 @@ class DashboardScreen extends Component {
         this.createTwoButtonAlert()
         let totalClass = 0
         let totalLab = 0
-        // for(classes of this.state.timetable){
-        //     if (classes['slot'][0]!=="L"){
-        //         totalClass++;
-        //     }
-        //     else{
-        //         totalLab++;
-        //     }
-        // }
-        // this.setState({
-        //     totalClass,
-        //     totalLab
-        // })
+        for(const classes of this.state.timetable){
+            if (classes['slot'][0]!=="L"){
+                totalClass++;
+            }
+            else{
+                totalLab++;
+            }
+        }
+        this.setState({
+            totalClass,
+            totalLab
+        })
     }
 
 
@@ -139,9 +139,7 @@ class DashboardScreen extends Component {
                 <StatusBar backgroundColor="#081631" />
             <View style={{backgroundColor:"#081631"}}>
                 <View style={{padding:"5%", paddingTop:"10%", height:"100%"}}>
-                    <TouchableOpacity onPress={()=>this.props.navigation.jumpTo('MoodleDisplay')}>
                 <Headline style={{fontSize:50, padding:"5%", paddingTop:"7%", paddingLeft:"5%", paddingBottom:"2%", fontFamily:"ProductSans", color:"#FFF"}}>{this.state.day}</Headline>
-                </TouchableOpacity>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", color:"#FFF"}}>You have {this.state.totalClass} classes and {this.state.totalLab} labs</Caption>
                     <Caption style={{paddingLeft:"5%", paddingTop:"1%", marginBottom:"5%", color:"#FFF"}}>Login Moodle to show assignments</Caption>
                     {timetable}
