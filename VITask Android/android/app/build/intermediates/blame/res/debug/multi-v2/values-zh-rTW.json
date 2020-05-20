@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "V:\\VITaskGit\\VITask14\\VITask\\VITask Android\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh-rTW\\values-zh-rTW.xml",
+            "outputFile": "V:\\VITaskGit\\VITask15\\VITask\\VITask Android\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh-rTW\\values-zh-rTW.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Yash\\.gradle\\caches\\transforms-2\\files-2.1\\fb53e8c5dfe738204c5aef7a9a8f239e\\jetified-firebase-messaging-20.1.7\\res\\values-zh-rTW\\values.xml",

@@ -106,7 +106,7 @@ function App() {
     <NavigationContainer>
     <Drawer.Navigator drawerContent={customDrawer} drawerStyle={{
       backgroundColor:"#081631"
-    }} initialRouteName={initial}>
+    }} initialRouteName={initial} drawerType="slide">
         <Drawer.Screen name="Login" component={LoginStackScreen} options={{swipeEnabled:false,gestureEnabled:false}}/>
         <Drawer.Screen name="Welcome" component={WelcomeScreen} options={{swipeEnabled:false,gestureEnabled:false}}/>
         {/* <Drawer.Screen name="Loading" component={LoadingStackScreen}  options={{swipeEnabled:false,gestureEnabled:false}}/> */}

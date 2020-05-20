@@ -1,37 +1,37 @@
 -- Merging decision tree log ---
 permission#com.vitask.permission.C2D_MESSAGE
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:7:5-9:47
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:7:5-9:47
 	android:name
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
 uses-permission#com.vitask.permission.C2D_MESSAGE
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:10:5-79
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:10:5-79
 	android:name
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
 category#com.vitask
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:50:17-61
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:50:17-61
 	android:name
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
 manifest
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
-MERGED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+MERGED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
 MERGED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:8:1-18:12
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\fa9d249d56579007dba70f8ee4dd5b3f\flipper-network-plugin-0.33.1\AndroidManifest.xml:8:1-15:12
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\5a1065d4748ae359265a740b2069d44b\flipper-fresco-plugin-0.33.1\AndroidManifest.xml:8:1-15:12
-MERGED from [:react-native-community_art] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\art\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-community_masked-view] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-community_slider] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\slider\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-gesture-handler] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-push-notification] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-push-notification\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-reanimated] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-safe-area-context] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-safe-area-context\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-screens] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-svg] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-vector-icons] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-23:12
-MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6386b0c9676861169c622c7da1dbc3cf\jetified-react-native-0.62.2\AndroidManifest.xml:2:1-13:12
+MERGED from [:react-native-community_art] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\art\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_masked-view] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_slider] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\slider\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-gesture-handler] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-push-notification] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-push-notification\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-reanimated] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-safe-area-context] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-safe-area-context\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-screens] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-svg] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-vector-icons] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-23:12
+MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\66cf3fd1d4a76f3615d478c9bde69b2d\jetified-react-native-0.62.2\AndroidManifest.xml:2:1-13:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\055a171d10c43231a2795117ecd4c3fd\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [org.webkit:android-jsc:r245459] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\1ed26cdc1f47a6754ce1546799dd43a1\android-jsc-r245459\AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.fresco:flipper:2.0.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\c180792e3f393fe4453d9c695595b3ef\flipper-2.0.0\AndroidManifest.xml:2:1-9:12
@@ -95,28 +95,28 @@ MERGED from [me.leolin:ShortcutBadger:1.1.22] C:\Users\Yash\.gradle\caches\trans
 MERGED from [com.facebook.soloader:annotation:0.8.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\562a4d899b3a7a711a398f7636c8c187\annotation-0.8.2\AndroidManifest.xml:2:1-13:12
 MERGED from [com.facebook.fresco:fbcore:2.0.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\34cde0edbd05cd21565859c85ac9a816\jetified-fbcore-2.0.0\AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.android.datatransport:transport-api:2.2.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\a647dade89bf9de664ec6549e1dcdcc9\transport-api-2.2.0\AndroidManifest.xml:15:1-22:12
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:2:1-8:12
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:2:1-8:12
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:2:1-8:12
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:2:1-8:12
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:2:1-8:12
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:2:1-8:12
 	package
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:2:3-23
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:2:3-23
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:2:3-23
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:2:3-23
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	android:versionName
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	xmlns:tools
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:3:5-51
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:3:5-51
 	android:versionCode
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:1-82:12
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	xmlns:android
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:11-69
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:1:11-69
 uses-permission#android.permission.INTERNET
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:4:5-67
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:4:5-67
 MERGED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:15:5-67
 MERGED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:15:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:2.2.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\48818aac4137fd74d2fe608d16f22bb6\transport-backend-cct-2.2.0\AndroidManifest.xml:26:5-67
@@ -126,29 +126,29 @@ MERGED from [com.google.firebase:firebase-iid:20.1.7] C:\Users\Yash\.gradle\cach
 MERGED from [com.google.firebase:firebase-installations:16.3.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\3fe16f2b3b2dca159ea0febd7ee46ea3\firebase-installations-16.3.0\AndroidManifest.xml:11:5-67
 MERGED from [com.google.firebase:firebase-installations:16.3.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\3fe16f2b3b2dca159ea0febd7ee46ea3\firebase-installations-16.3.0\AndroidManifest.xml:11:5-67
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:4:22-64
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:4:22-64
 uses-permission#android.permission.WAKE_LOCK
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:6:5-68
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:6:5-68
 MERGED from [com.google.firebase:firebase-iid:20.1.7] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\79b51c5fee94fce9eb73f5ac2e6862d9\firebase-iid-20.1.7\AndroidManifest.xml:24:5-68
 MERGED from [com.google.firebase:firebase-iid:20.1.7] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\79b51c5fee94fce9eb73f5ac2e6862d9\firebase-iid-20.1.7\AndroidManifest.xml:24:5-68
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:6:22-65
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:6:22-65
 uses-permission#android.permission.VIBRATE
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:12:1-62
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:12:1-62
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:12:18-59
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:12:18-59
 uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:13:5-80
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:13:5-80
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:13:22-78
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:13:22-78
 application
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
-MERGED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
-MERGED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
-MERGED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:5-21:19
-MERGED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:5-21:19
-MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6386b0c9676861169c622c7da1dbc3cf\jetified-react-native-0.62.2\AndroidManifest.xml:11:5-20
-MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6386b0c9676861169c622c7da1dbc3cf\jetified-react-native-0.62.2\AndroidManifest.xml:11:5-20
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
+MERGED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
+MERGED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:16:5-80:19
+MERGED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:5-21:19
+MERGED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:5-21:19
+MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\66cf3fd1d4a76f3615d478c9bde69b2d\jetified-react-native-0.62.2\AndroidManifest.xml:11:5-20
+MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\66cf3fd1d4a76f3615d478c9bde69b2d\jetified-react-native-0.62.2\AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.soloader:soloader:0.8.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\a682a4f61b53a5eb0b34ff17728f4b20\soloader-0.8.2\AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.soloader:soloader:0.8.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\a682a4f61b53a5eb0b34ff17728f4b20\soloader-0.8.2\AndroidManifest.xml:11:5-20
 MERGED from [com.google.android.material:material:1.1.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\7b4521e09033db39989053c4a0984cc2\material-1.1.0\AndroidManifest.xml:22:5-20
@@ -188,159 +188,159 @@ MERGED from [com.facebook.soloader:annotation:0.8.2] C:\Users\Yash\.gradle\cache
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.1.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\4f509a65121478d6153615d7ef5b7c5f\core-1.1.0\AndroidManifest.xml:24:18-86
 	android:label
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:18:7-39
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:18:7-39
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:18:7-39
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:18:7-39
 	tools:ignore
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:7:75-114
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:7:75-114
 	android:roundIcon
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:20:7-39
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:20:7-39
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:20:7-39
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:20:7-39
 	tools:targetApi
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:7:54-74
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:7:54-74
 	android:icon
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:19:7-34
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:19:7-34
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:19:7-34
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:19:7-34
 	android:allowBackup
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:21:7-34
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:21:7-34
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:21:7-34
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:21:7-34
 	android:theme
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:22:7-38
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:22:7-38
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:22:7-38
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:22:7-38
 	android:usesCleartextTraffic
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:7:18-53
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:7:18-53
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:17:7-38
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:17:7-38
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:17:7-38
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:17:7-38
 activity#com.vitask.MainActivity
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:23:7-33:18
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:23:7-33:18
 	android:label
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:25:9-41
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:25:9-41
 	android:launchMode
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:27:9-40
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:27:9-40
 	android:windowSoftInputMode
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:28:9-51
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:28:9-51
 	android:configChanges
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:26:9-86
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:26:9-86
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:24:9-37
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:24:9-37
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:29:9-32:25
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:29:9-32:25
 action#android.intent.action.MAIN
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:30:13-65
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:30:13-65
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:30:21-62
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:30:21-62
 category#android.intent.category.LAUNCHER
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:31:13-73
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:31:13-73
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:31:23-70
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:31:23-70
 activity#com.facebook.react.devsupport.DevSettingsActivity
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:34:7-84
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:34:7-84
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:34:17-81
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:34:17-81
 meta-data#com.dieam.reactnativepushnotification.notification_channel_name
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:36:7-37:65
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:36:7-37:65
 	android:value
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:37:17-63
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:37:17-63
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:36:19-97
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:36:19-97
 meta-data#com.dieam.reactnativepushnotification.notification_channel_description
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:38:9-39:76
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:38:9-39:76
 	android:value
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:39:21-74
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:39:21-74
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:38:21-106
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:38:21-106
 meta-data#com.dieam.reactnativepushnotification.notification_color
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:41:9-42:62
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:41:9-42:62
 	android:resource
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:42:21-60
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:42:21-60
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:41:21-92
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:41:21-92
 receiver#com.google.android.gms.gcm.GcmReceiver
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:44:9-52:20
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:44:9-52:20
 	android:exported
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:46:13-36
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:46:13-36
 	android:permission
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:47:13-73
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:47:13-73
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:45:13-66
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:45:13-66
 intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:com.vitask
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:48:13-51:29
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:48:13-51:29
 action#com.google.android.c2dm.intent.RECEIVE
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:49:17-81
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:49:17-81
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:49:25-78
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:49:25-78
 receiver#com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:54:1-102
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:54:1-102
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:54:11-99
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:54:11-99
 receiver#com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:55:9-59:20
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:55:9-59:20
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:55:19-115
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:55:19-115
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:56:13-58:29
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:56:13-58:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:57:17-79
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:57:17-79
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:57:25-76
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:57:25-76
 service#com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:60:9-118
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:60:9-118
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:60:18-116
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:60:18-116
 service#com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerServiceGcm
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:62:9-68:19
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:62:9-68:19
 	android:exported
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:64:13-37
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:64:13-37
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:63:13-110
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:63:13-110
 intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:65:13-67:29
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:65:13-67:29
 service#com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:71:9-77:19
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:71:9-77:19
 	android:exported
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:73:13-37
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:73:13-37
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:72:13-107
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:72:13-107
 intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:74:13-76:29
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:74:13-76:29
 action#com.google.firebase.MESSAGING_EVENT
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:75:17-78
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:75:17-78
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:75:25-75
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml:75:25-75
 uses-sdk
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
 MERGED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\fa9d249d56579007dba70f8ee4dd5b3f\flipper-network-plugin-0.33.1\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\fa9d249d56579007dba70f8ee4dd5b3f\flipper-network-plugin-0.33.1\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\5a1065d4748ae359265a740b2069d44b\flipper-fresco-plugin-0.33.1\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\5a1065d4748ae359265a740b2069d44b\flipper-fresco-plugin-0.33.1\AndroidManifest.xml:11:5-13:41
-MERGED from [:react-native-community_art] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\art\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_art] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\art\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_masked-view] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_masked-view] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_slider] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\slider\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-community_slider] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\@react-native-community\slider\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-gesture-handler] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-gesture-handler] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-push-notification] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-push-notification\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-push-notification] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-push-notification\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-reanimated] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-reanimated] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-safe-area-context] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-safe-area-context\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-safe-area-context] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-safe-area-context\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-screens] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-screens] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-svg] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-svg] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-vector-icons] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-vector-icons] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6386b0c9676861169c622c7da1dbc3cf\jetified-react-native-0.62.2\AndroidManifest.xml:7:5-9:41
-MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6386b0c9676861169c622c7da1dbc3cf\jetified-react-native-0.62.2\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-community_art] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\art\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_art] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\art\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_masked-view] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_masked-view] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_slider] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\slider\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_slider] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\@react-native-community\slider\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-gesture-handler] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-gesture-handler] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-push-notification] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-push-notification\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-push-notification] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-push-notification\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-reanimated] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-reanimated] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-safe-area-context] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-safe-area-context\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-safe-area-context] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-safe-area-context\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-screens] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-screens] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-svg] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-svg] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-vector-icons] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-vector-icons] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\66cf3fd1d4a76f3615d478c9bde69b2d\jetified-react-native-0.62.2\AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.react:react-native:0.62.2] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\66cf3fd1d4a76f3615d478c9bde69b2d\jetified-react-native-0.62.2\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\055a171d10c43231a2795117ecd4c3fd\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\055a171d10c43231a2795117ecd4c3fd\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [org.webkit:android-jsc:r245459] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\1ed26cdc1f47a6754ce1546799dd43a1\android-jsc-r245459\AndroidManifest.xml:7:5-9:41
@@ -467,38 +467,38 @@ MERGED from [com.facebook.fresco:fbcore:2.0.0] C:\Users\Yash\.gradle\caches\tran
 MERGED from [com.facebook.fresco:fbcore:2.0.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\34cde0edbd05cd21565859c85ac9a816\jetified-fbcore-2.0.0\AndroidManifest.xml:5:5-7:41
 MERGED from [com.google.android.datatransport:transport-api:2.2.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\a647dade89bf9de664ec6549e1dcdcc9\transport-api-2.2.0\AndroidManifest.xml:18:5-20:41
 MERGED from [com.google.android.datatransport:transport-api:2.2.0] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\a647dade89bf9de664ec6549e1dcdcc9\transport-api-2.2.0\AndroidManifest.xml:18:5-20:41
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
-INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
+INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
-		INJECTED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\main\AndroidManifest.xml
+		INJECTED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml
 uses-permission#android.permission.SYSTEM_ALERT_WINDOW
-ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:5:5-77
+ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:5:5-77
 	android:name
-		ADDED from V:\VITaskGit\VITask14\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:5:22-75
+		ADDED from V:\VITaskGit\VITask15\VITask\VITask Android\android\app\src\debug\AndroidManifest.xml:5:22-75
 uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:16:5-76
 	android:name
 		ADDED from [com.facebook.flipper:flipper:0.33.1] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\6f6a82a38d53f8e2447477da4544ece2\jetified-flipper-0.33.1\AndroidManifest.xml:16:22-73
 provider#com.reactnativecommunity.webview.RNCWebViewFileProvider
-ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:12:9-20:20
+ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:12:9-20:20
 	android:grantUriPermissions
-		ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:16:13-47
+		ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:16:13-47
 	android:authorities
-		ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:14:13-64
+		ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:14:13-64
 	android:exported
-		ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:15:13-37
+		ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:15:13-37
 	android:name
-		ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:13:13-83
+		ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:13:13-83
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:17:13-19:63
+ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:17:13-19:63
 	android:resource
-		ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:19:17-60
+		ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:19:17-60
 	android:name
-		ADDED from [:react-native-webview] V:\VITaskGit\VITask14\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:18:17-67
+		ADDED from [:react-native-webview] V:\VITaskGit\VITask15\VITask\VITask Android\node_modules\react-native-webview\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:18:17-67
 service#com.google.firebase.messaging.FirebaseMessagingService
 ADDED from [com.google.firebase:firebase-messaging:20.1.7] C:\Users\Yash\.gradle\caches\transforms-2\files-2.1\fb53e8c5dfe738204c5aef7a9a8f239e\jetified-firebase-messaging-20.1.7\AndroidManifest.xml:28:9-34:19
 	android:exported

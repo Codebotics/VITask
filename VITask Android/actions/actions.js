@@ -36,6 +36,8 @@ import {
     SOFT_REFRESH_SUCCESS,
     SOFT_REFRESH_ERROR,
 
+    DRAWER_STATE,
+
     STORE_STATE_FROM_ASYNC,
 
     } from './types'
@@ -191,6 +193,14 @@ import {
         return{
             type : STORE_STATE_FROM_ASYNC,
             data : rState
+        }
+
+
+    }
+    export const drawerState = (state)=>{
+        return {
+            type : DRAWER_STATE,
+            state
         }
     }
 

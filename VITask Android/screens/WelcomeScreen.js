@@ -50,6 +50,7 @@ class WelcomeScreen extends Component {
           const value = await AsyncStorage.getItem("VITask_reduxState");
           const reduxObj = JSON.parse(value)
           if (reduxObj.reduxStatus == 1) {
+              console.log("CHECKING ASYNC ON WELCOME",reduxObj)
               var TIMETABLE = {
                   timetable : reduxObj.reduxState.timetable
               }
@@ -65,6 +66,7 @@ class WelcomeScreen extends Component {
               var COURSESINFO = {
                   coursesInfo : reduxObj.reduxState.coursesInfo
               }
+              console.log("TIMETABLE",TIMETABLE)
               this.setState({
                 isAsyncAvailable : true,
                 TimeTable : TIMETABLE,

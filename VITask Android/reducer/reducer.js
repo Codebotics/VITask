@@ -28,6 +28,7 @@ import {
     SOFT_REFRESH_REQUEST,
 
     STORE_STATE_FROM_ASYNC,
+    DRAWER_STATE
     } from '../actions/types'
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunkMiddleware from 'redux-thunk'
@@ -284,6 +285,11 @@ const reducer = (state = initialState, action)=>{
                 ...state,
                 ...action.data
             }
+        case DRAWER_STATE:
+            return {
+                ...state,
+                drawerState:action.state
+            } 
 
         default :
             return state

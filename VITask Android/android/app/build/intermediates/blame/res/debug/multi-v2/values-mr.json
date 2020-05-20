@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "V:\\VITaskGit\\VITask14\\VITask\\VITask Android\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mr\\values-mr.xml",
+            "outputFile": "V:\\VITaskGit\\VITask15\\VITask\\VITask Android\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mr\\values-mr.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Yash\\.gradle\\caches\\transforms-2\\files-2.1\\8ec173b572b2210441f89e5788263970\\jetified-play-services-basement-17.0.0\\res\\values-mr\\values.xml",

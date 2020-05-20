@@ -46,6 +46,7 @@ export const SOFT_REFRESH_REQUEST = "SOFT_REFRESH_REQUEST"
 export const SOFT_REFRESH_SUCCESS = "SOFT_REFRESH_SUCCESS"
 export const SOFT_REFRESH_ERROR = "SOFT_REFRESH_ERROR"
 
+export const DRAWER_STATE = "DRAWER_STATE"
 
 // Formatting data, only called first time
 export const REFORMAT_DATA = "REFORMAT_DATA"
