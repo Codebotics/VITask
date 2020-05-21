@@ -125,8 +125,8 @@
 
         <!-- Navigation -->
         <ul class="navbar-nav">
-          <li class="nav-item active">
-          <a class=" nav-link active" href="{{ url_for('profile') }}"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
+          <li class="nav-item">
+          <a class=" nav-link" href="{{ url_for('profile') }}"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
             </a>
           </li>
           <li class="nav-item">
@@ -171,6 +171,12 @@
               <i class="ni ni-palette"></i> API Console
             </a>
           </li>
+            <li class="nav-item active">
+              <a class="nav-link active" href="{{ url_for('upgrade') }}">
+                <i class="ni ni-send text-success"></i>
+                <span class="nav-link-text">Upgrade</span>
+              </a>
+            </li>
         </ul>
       </div>
     </div>
