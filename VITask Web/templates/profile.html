@@ -62,7 +62,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <!-- Brand -->
-      <a class="navbar-brand pt-0" href="../index.html">
+      <a class="navbar-brand pt-0" href="{{ url_for('profile') }}">
         <img src="{{ url_for('static', filename='assets/img/brand/blue.png') }}" class="navbar-brand-img" alt="...">
       </a>
       <!-- User -->
@@ -290,7 +290,11 @@
                   <i class="ni ni-hat-3 mr-2"></i>{{ school }}
                 </div>
                 <hr class="my-4" />
+                {% if account_type == "Staff" %}
+                <a href=""><span class="badge badge-lg badge-pill badge-default">Staff Panel</span></a>
+                {% else %}
                 <a href="{{ url_for('timetable') }}">My Timetable</a>
+                {% endif %}
               </div>
             </div>
           </div>
