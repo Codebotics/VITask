@@ -673,15 +673,6 @@ def temp_attendance():
     if(temp is not None):
         attend = ref.child("attendance").child('attendance-'+key).child(key).child('Attendance').get()
         q = ref.child("attendance").child('attendance-'+key).child(key).child('Track').get()
-
-        values = []
-        for i in attend.values():
-            values.append(i)
-
-        slots = []
-
-        for i in attend.keys():
-            slots.append(i)
             
         # API Calls logging
         temp = ref.child("account").child('account-'+key).child(key).get()
@@ -700,7 +691,7 @@ def temp_attendance():
             }
         })
 
-        return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
+        return jsonify({'attendance': attend})
 
     else:
         return jsonify({
