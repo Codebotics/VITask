@@ -553,7 +553,7 @@ def sync():
 
 # /api/vtop/timetable
 @app.route('/api/vtop/timetable', methods=['POST'])
-def timetable():
+def timetableapi():
     """
     POST Route
     This route is only helpful in Android App or Desktop App for getting TimeTable one time.
@@ -629,7 +629,7 @@ def timetable():
 
 # /api/vtop/attendance
 @app.route('/api/vtop/attendance', methods=['POST'])
-def attendance():
+def attendanceapi():
     """
     POST Route
     This is not meant to use again and again like Timetable API, use /api/aysnc to get data at one place.
@@ -706,7 +706,7 @@ def attendance():
 
 # /api/vtop/marks
 @app.route('/api/vtop/marks', methods=['POST'])
-def marks():
+def marksapi():
     """
     Just like other APIs, it is not meant to be used again and again. 
     This is developed for showing nice messages on loading screen. Use /api/sync
@@ -779,7 +779,7 @@ def marks():
 
 # /api/vtop/history
 @app.route('/api/vtop/history', methods=['POST'])
-def acadhistory():
+def acadhistoryapi():
     """
     This API is not meant to use again and is not updated. Use /api/vtop/sync with hardrefresh to get new data
     This is only made to show messages on Android App.
@@ -856,7 +856,7 @@ def acadhistory():
 
 # /api/moodle/login
 @app.route('/api/moodle/login', methods=['POST'])
-def moodleLogin():
+def moodleLoginapi():
     """
     This is meant to be used when logging into moodle for first time. Do not use this to sync data.
     It just updates the data on Firebase and send you data. 
@@ -966,7 +966,7 @@ def moodleLogin():
 
 # /api/moodle/sync
 @app.route('/api/moodle/sync', methods=['POST'])
-def moodleSync():
+def moodleSyncapi():
     """
     This function is used to sync data from moodle and then sends the live assignments info
     This route assumes that you have already sign in using /api/moodle/login
@@ -1115,7 +1115,7 @@ def moodleSync():
 
 # /api/moodle/toggleshow/
 @app.route('/api/moodle/toggleshow', methods=['POST'])
-def assignmentToggleShow():
+def assignmentToggleShowapi():
     """
     POST Request
     This API can be used in bulk and single manner. In bulk mode, pass multiple ids of assignements to be marked opposite
