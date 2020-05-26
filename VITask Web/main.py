@@ -375,7 +375,7 @@ def temp_getToken():
                     'X-VITASK-API': temp['X-VITASK-API'],
                     'Name': temp['Name'],
                     'RegNo': temp['RegNo'],
-                    'Account-Type': 'Free',
+                    'Account-Type': temp['Account-Type'],
                     'API-Calls': count,
                     'Start-Date': temp['Start-Date'],
                     'End-Date': temp['End-Date']
@@ -470,7 +470,7 @@ def temp_sync():
                 'X-VITASK-API': temp['X-VITASK-API'],
                 'Name': temp['Name'],
                 'RegNo': temp['RegNo'],
-                'Account-Type': 'Free',
+                'Account-Type': temp['Account-Type'],
                 'API-Calls': count,
                 'Start-Date': temp['Start-Date'],
                 'End-Date': temp['End-Date']
@@ -531,7 +531,7 @@ def temp_sync():
                 'X-VITASK-API': temp['X-VITASK-API'],
                 'Name': temp['Name'],
                 'RegNo': temp['RegNo'],
-                'Account-Type': 'Free',
+                'Account-Type': temp['Account-Type'],
                 'API-Calls': count,
                 'Start-Date': temp['Start-Date'],
                 'End-Date': temp['End-Date']
@@ -607,7 +607,7 @@ def temp_timetable():
                 'X-VITASK-API': temp['X-VITASK-API'],
                 'Name': temp['Name'],
                 'RegNo': temp['RegNo'],
-                'Account-Type': 'Free',
+                'Account-Type': temp['Account-Type'],
                 'API-Calls': count,
                 'Start-Date': temp['Start-Date'],
                 'End-Date': temp['End-Date']
@@ -684,7 +684,7 @@ def temp_attendance():
                 'X-VITASK-API': temp['X-VITASK-API'],
                 'Name': temp['Name'],
                 'RegNo': temp['RegNo'],
-                'Account-Type': 'Free',
+                'Account-Type': temp['Account-Type'],
                 'API-Calls': count,
                 'Start-Date': temp['Start-Date'],
                 'End-Date': temp['End-Date']
@@ -757,7 +757,7 @@ def temp_marks():
                 'X-VITASK-API': temp['X-VITASK-API'],
                 'Name': temp['Name'],
                 'RegNo': temp['RegNo'],
-                'Account-Type': 'Free',
+                'Account-Type': temp['Account-Type'],
                 'API-Calls': count,
                 'Start-Date': temp['Start-Date'],
                 'End-Date': temp['End-Date']
@@ -830,7 +830,7 @@ def temp_acadhistory():
                 'X-VITASK-API': temp['X-VITASK-API'],
                 'Name': temp['Name'],
                 'RegNo': temp['RegNo'],
-                'Account-Type': 'Free',
+                'Account-Type': temp['Account-Type'],
                 'API-Calls': count,
                 'Start-Date': temp['Start-Date'],
                 'End-Date': temp['End-Date']
@@ -950,7 +950,7 @@ def temp_moodleLogin():
             'X-VITASK-API': temp['X-VITASK-API'],
             'Name': temp['Name'],
             'RegNo': temp['RegNo'],
-            'Account-Type': 'Free',
+            'Account-Type': temp['Account-Type'],
             'API-Calls': count,
             'Start-Date': temp['Start-Date'],
             'End-Date': temp['End-Date']
@@ -1047,7 +1047,7 @@ def temp_moodleSync():
                     'X-VITASK-API': temp['X-VITASK-API'],
                     'Name': temp['Name'],
                     'RegNo': temp['RegNo'],
-                    'Account-Type': 'Free',
+                    'Account-Type': temp['Account-Type'],
                     'API-Calls': count,
                     'Start-Date': temp['Start-Date'],
                     'End-Date': temp['End-Date']
@@ -1098,7 +1098,7 @@ def temp_moodleSync():
                     'X-VITASK-API': temp['X-VITASK-API'],
                     'Name': temp['Name'],
                     'RegNo': temp['RegNo'],
-                    'Account-Type': 'Free',
+                    'Account-Type': temp['Account-Type'],
                     'API-Calls': count,
                     'Start-Date': temp['Start-Date'],
                     'End-Date': temp['End-Date']
@@ -1190,7 +1190,7 @@ def temp_assignmentToggleShow():
             'X-VITASK-API': temp['X-VITASK-API'],
             'Name': temp['Name'],
             'RegNo': temp['RegNo'],
-            'Account-Type': 'Free',
+            'Account-Type': temp['Account-Type'],
             'API-Calls': count,
             'Start-Date': temp['Start-Date'],
             'End-Date': temp['End-Date']
@@ -1729,6 +1729,43 @@ def apiconsole():
 """---------------------------------------------------------------
 
         Code for VITask API Dashboard and Console ends here
+
+------------------------------------------------------------------"""
+
+
+"""---------------------------------------------------------------
+
+                    Staff Components begin here
+
+------------------------------------------------------------------"""
+# Staff Dashboard
+@app.route('/staff', methods=['GET', 'POST'])
+def staff():
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        ref = db.reference('vitask')
+        temp = ref.child("account").child('account-'+session['id']).child(session['id']).get()
+        if (temp['Account-Type']=="Staff"):
+            user_list = ref.child("profile").get()
+            tempdict = {}
+            user_info = {}
+            display = {}
+            for i in user_list:
+                tempdict = user_list[i]
+                for j in tempdict:
+                    user_info = tempdict[j]
+                    display[user_info["AppNo"]] = user_info
+            users = len(user_list)
+            new_user_list = ref.child("account").get()
+            new_users = len(new_user_list)
+            return render_template('staff_home.html',name=session['name'],users=users,new_users=new_users,display=display)
+        else:
+            return redirect(url_for('profile'))
+
+"""---------------------------------------------------------------
+
+                    Staff Components end here
 
 ------------------------------------------------------------------"""
 

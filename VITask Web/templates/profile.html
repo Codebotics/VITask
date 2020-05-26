@@ -297,7 +297,7 @@
                 </div>
                 <hr class="my-4" />
                 {% if account_type == "Staff" %}
-                <a href=""><span class="badge badge-lg badge-pill badge-default">Staff Panel</span></a>
+                <a href="{{ url_for('staff') }}"><span class="badge badge-lg badge-pill badge-default text-white">Staff Panel</span></a>
                 {% else %}
                 <a href="{{ url_for('timetable') }}">My Timetable</a>
                 {% endif %}
