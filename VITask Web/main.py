@@ -208,13 +208,18 @@ def page_not_found(error):
 ---------------------------------------------------------------"""
 
 
+
 """---------------------------------------------------------------
-                  New VITask APIs begin here.
----------------------------------------------------------------"""
+                    VITask API code begins from here
+
+                Note: This code is the heart of VITask,
+                think twice before modifying anything ;)
+
+------------------------------------------------------------------"""
 
 #/api/account 
 @app.route('/api/account', methods=['GET','POST'])
-def temp_getAccount():
+def getAccount():
     """
     API has been changed to accept only POST requests. Path of API has been changed.
     Now the body of POST must be 
@@ -302,7 +307,7 @@ def temp_getAccount():
 
 #/api/gettoken 
 @app.route('/api/gettoken', methods=['GET','POST'])
-def temp_getToken():
+def getToken():
     """
     API has been changed to accept only POST requests. Path of API has been changed.
     Headers must contain a value
@@ -385,7 +390,7 @@ def temp_getToken():
 
 # /api/vtop/sync
 @app.route('/api/vtop/sync', methods=['POST'])
-def temp_sync():
+def sync():
     """
     POST Route
     This route will be used to sync all the details, like attendance and marks. Timetable is not required to updated.
@@ -548,7 +553,7 @@ def temp_sync():
 
 # /api/vtop/timetable
 @app.route('/api/vtop/timetable', methods=['POST'])
-def temp_timetable():
+def timetable():
     """
     POST Route
     This route is only helpful in Android App or Desktop App for getting TimeTable one time.
@@ -624,7 +629,7 @@ def temp_timetable():
 
 # /api/vtop/attendance
 @app.route('/api/vtop/attendance', methods=['POST'])
-def temp_attendance():
+def attendance():
     """
     POST Route
     This is not meant to use again and again like Timetable API, use /api/aysnc to get data at one place.
@@ -701,7 +706,7 @@ def temp_attendance():
 
 # /api/vtop/marks
 @app.route('/api/vtop/marks', methods=['POST'])
-def temp_marks():
+def marks():
     """
     Just like other APIs, it is not meant to be used again and again. 
     This is developed for showing nice messages on loading screen. Use /api/sync
@@ -774,7 +779,7 @@ def temp_marks():
 
 # /api/vtop/history
 @app.route('/api/vtop/history', methods=['POST'])
-def temp_acadhistory():
+def acadhistory():
     """
     This API is not meant to use again and is not updated. Use /api/vtop/sync with hardrefresh to get new data
     This is only made to show messages on Android App.
@@ -851,7 +856,7 @@ def temp_acadhistory():
 
 # /api/moodle/login
 @app.route('/api/moodle/login', methods=['POST'])
-def temp_moodleLogin():
+def moodleLogin():
     """
     This is meant to be used when logging into moodle for first time. Do not use this to sync data.
     It just updates the data on Firebase and send you data. 
@@ -961,7 +966,7 @@ def temp_moodleLogin():
 
 # /api/moodle/sync
 @app.route('/api/moodle/sync', methods=['POST'])
-def temp_moodleSync():
+def moodleSync():
     """
     This function is used to sync data from moodle and then sends the live assignments info
     This route assumes that you have already sign in using /api/moodle/login
@@ -1110,7 +1115,7 @@ def temp_moodleSync():
 
 # /api/moodle/toggleshow/
 @app.route('/api/moodle/toggleshow', methods=['POST'])
-def temp_assignmentToggleShow():
+def assignmentToggleShow():
     """
     POST Request
     This API can be used in bulk and single manner. In bulk mode, pass multiple ids of assignements to be marked opposite
@@ -1197,352 +1202,6 @@ def temp_assignmentToggleShow():
         }
     })
     return jsonify({'Assignments' : assignments})
-
-"""---------------------------------------------------------------
-                  New VITask APIs end here.
----------------------------------------------------------------"""
-
-
-
-"""---------------------------------------------------------------
-                    VITask API code begins from here
-
-                Note: This code is the heart of VITask,
-                think twice before modifying anything ;)
-
-------------------------------------------------------------------"""
-
-# API for login, to login and generate an API token send a GET request => /authenticate?username=yourusername&password=yourpassword
-@app.route('/authenticate', methods=['GET'])
-def authenticate():
-    ref = db.reference('vitask')
-    user_token = request.args.get('token')
-
-    if(user_token is not None):
-        # Decoding API token
-        temptoken = user_token.encode('ascii')
-        try:
-            appno = base64.b64decode(temptoken)
-        except:
-            return jsonify({'Error': 'Invalid API Token.'})
-        key = appno.decode('ascii')
-
-        temp = ref.child('profile').child('profile-'+key).child(key).get()
-
-        if(temp is not None):
-            session['id'] = key
-            name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
-            api = ref.child('profile').child('profile-'+session['id']).child(session['id']).child('API').get()
-
-            return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
-
-        else:
-            return jsonify({'Error': 'Invalid API Token.'})
-
-    else:
-        username = request.args.get('username').upper()
-        password = request.args.get('password')
-        try:
-            sess, valid = generate_session(username, password)
-        finally:
-            if( valid == False ):
-                return jsonify({'Error': 'Invalid Password.'})
-            else:
-                try:
-                    profile = {}
-                    profile, check_profile = get_student_profile(sess, username)
-                    session['id'] = profile['appNo']
-                    session['name'] = profile['name']
-                    session['reg'] = profile['regNo']
-                    session['loggedin'] = 1
-                    if(check_profile == False):
-                        return jsonify({"Error": "Internal Error in fetching profile.Please try again."}) 
-                finally:
-                    name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
-                    # Timetable,Attendance,Acadhistory and Marks fetching in parallel
-                    try:
-                        runInParallel(parallel_timetable(sess, username, session['id']), parallel_attendance(sess, username, session['id']), parallel_acadhistory(sess, username, session['id']), parallel_marks(sess, username, session['id'])) 
-                    finally:
-                        return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
-                                
-
-                                
-
-# Attendance API
-@app.route('/classesapi')
-def classesapi():
-    ref = db.reference('vitask')
-    user_token = request.args.get('token')
-
-    if(user_token is not None):
-        # Decoding API token
-        temptoken = user_token.encode('ascii')
-        try:
-            appno = base64.b64decode(temptoken)
-        except:
-            return jsonify({'Error': 'Invalid API Token.'})
-        key = appno.decode('ascii')
-
-        temp = ref.child('attendance').child('attendance-'+key).child(key).get()
-
-        #Checking if data is already there or not in firebase(if there then no need to acces Vtop again)
-        if(temp is not None):
-            attend = ref.child("attendance").child('attendance-'+key).child(key).child('Attendance').get()
-            q = ref.child("attendance").child('attendance-'+key).child(key).child('Track').get()
-
-            values = []
-            for i in attend.values():
-                values.append(i)
-
-            slots = []
-
-            for i in attend.keys():
-                slots.append(i)
-
-            return jsonify({'Attended': values,'Slots': slots, 'Track' : q})
-
-        else:
-            return jsonify({'Error': 'Invalid API Token.'})
-
-    else:
-        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
-    
-
-# Timetable API
-@app.route('/timetableapi')
-def timetableapi():
-    ref = db.reference('vitask')
-    user_token = request.args.get('token')
-
-    if(user_token is not None):
-        # Decoding API token
-        temptoken = user_token.encode('ascii')
-        try:
-            appno = base64.b64decode(temptoken)
-        except:
-            return jsonify({'Error': 'Invalid API Token.'})
-        key = appno.decode('ascii')
-
-        temp = ref.child("timetable").child('timetable-'+key).child(key).child("Timetable").get()
-
-        if(temp is not None):
-            session['id'] = key
-            days = temp
-
-            return jsonify({'Timetable': days})
-
-        else:
-            return jsonify({'Error': 'Invalid API Token.'})
-    else:
-        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
-
-# Academic History API
-@app.route('/acadhistoryapi')
-def acadhistoryapi():
-    ref = db.reference('vitask')
-    user_token = request.args.get('token')
-    if(user_token is not None):
-        # Decoding API token
-        temptoken = user_token.encode('ascii')
-        try:
-            appno = base64.b64decode(temptoken)
-        except:
-            return jsonify({'Error': 'Invalid API Token.'})
-        key = appno.decode('ascii')
-    
-        temp = ref.child("acadhistory").child('acadhistory-'+key).child(key).child("AcadHistory").get()
-        
-        if(temp is not None):
-            session['id'] = key
-            acadHistory = temp
-            curriculumDetails = ref.child("acadhistory").child('acadhistory-'+session['id']).child(key).child("CurriculumDetails").get()
-
-            return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
-        
-        else:
-            return jsonify({'Error': 'Invalid API Token.'})
-    else:
-        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
-
-# Marks API
-@app.route('/marksapi')
-def marksapi():
-    ref = db.reference('vitask')
-    user_token = request.args.get('token')
-    
-    if(user_token is not None):
-        # Decoding API token
-        temptoken = user_token.encode('ascii')
-        try:
-            appno = base64.b64decode(temptoken)
-        except:
-            return jsonify({'Error': 'Invalid API Token.'})
-        key = appno.decode('ascii')
-    
-        temp = ref.child("marks").child('marks-'+key).child(key).child("Marks").get()
-        
-        if(temp is not None):
-            session['id'] = key
-            marksDict = temp
-
-            return jsonify({'Marks': marksDict})
-        
-        else:
-            return jsonify({'Error': 'Invalid API Token.'})
-    else:
-        return jsonify({'Error': 'Please Authenticate first and enter an API Token in the request.'})
-        
-# Moodle API
-@app.route('/moodleapi')
-def moodleapi():
-    ref = db.reference('vitask')
-    user_token = request.args.get('token')
-    if(user_token is not None):
-        # Decoding API token
-        temptoken = user_token.encode('ascii')
-        try:
-            appno = base64.b64decode(temptoken)
-        except:
-            return jsonify({'Error': 'Invalid API Token.'})
-        key = appno.decode('ascii')
-
-        temp = ref.child("moodle").child('moodle-'+key).child(key).child('Username').get()
-        
-        
-        if(temp is not None):
-            session['id'] = key
-            assignment = ref.child("moodle").child('moodle-'+session['id']).child(key).child('Assignments').get()
-
-            return jsonify({'Assignments': assignment})
-        
-        else:
-            return jsonify({'Error': 'Invalid API Token.'})
-    else:
-        try:
-            session['id'] = request.args.get('appno')
-        except:
-            return jsonify({'Error': 'Please authenticate first.'})
-        moodle_username =  request.args.get('username')
-        moodle_password = request.args.get('password')
-        sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
-        due_items = get_dashboard_json(sess, sess_key)
-        
-        all_assignments = []
-        
-        if(due_items is None):
-            temp = {}
-            temp["course"] = "No Assignments."
-            temp["time"] = "N/A"
-            temp["status"] = "yes"
-            all_assignments.append(temp)
-        else:
-            ref = db.reference('vitask')
-            for item in due_items:
-                temp={}
-                temp["course"] = item["course"]["fullname"]
-                temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
-                temp["time"] = temp_time
-                all_assignments.append(temp)
-
-        assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
-
-        yes_assignments = []
-
-        if(assignment is not None):
-            for i in all_assignments:
-                for j in assignment:
-                    if(i["course"]==j["course"] and i["time"]==j["time"] and j["status"]=="yes"):
-                        i["status"]="yes"
-                        yes_assignments.append(i)
-                    elif(i["course"]==j["course"] and i["time"]==j["time"] and j["status"]=="no"):
-                        i["status"]="no"
-                        yes_assignments.append(i)
-
-        elif(assignment is None):
-            for item in due_items:
-                temp={}
-                temp["course"] = item["course"]["fullname"]
-                temp_time = time.strftime("%d-%m-%Y %H:%M", time.localtime(int(item["timesort"])))
-                temp["time"] = temp_time
-
-                # Assignment Status to check whether it's actual or not,yes for actual and no for not.
-                temp["status"] = "yes"
-                yes_assignments.append(temp)
-
-
-        # Processing password before storing
-        api_gen = moodle_password
-        api_token = api_gen.encode('ascii')
-        temptoken = base64.b64encode(api_token)
-        token = temptoken.decode('ascii')
-
-        tut_ref = ref.child("moodle")
-        new_ref = tut_ref.child("moodle-"+session['id'])
-        new_ref.set({
-            session['id']: {
-                'Username': moodle_username,
-                'Password': token,
-                'Assignments': yes_assignments   
-            }
-        })
-        assignment = ref.child("moodle").child("moodle-"+session['id']).child(session['id']).child('Assignments').get()
-        return jsonify({'Assignments': assignment})
-    
-
-# Update Moodle API assignment status.The course and time parameters should be joined via delimiter ~ while sending the request
-@app.route('/updatemoodleapi')
-def updatemoodleapi():
-    ref = db.reference('vitask')
-    user_token = request.args.get('token')
-    course_ini = request.args.get('course')
-    time_ini = request.args.get('time')
-    status = request.args.get('status')
-    
-    course = " ".join(course_ini.split("~"))
-    time = " ".join(time_ini.split("~")) 
-    
-    
-    if(user_token is not None and course_ini is not None and time_ini is not None and status is not None):
-        # Decoding API token
-        temptoken = user_token.encode('ascii')
-        try:
-            appno = base64.b64decode(temptoken)
-        except:
-            return jsonify({'Error': 'Invalid API Token.'})
-        key = appno.decode('ascii')
-
-        temp = ref.child("moodle").child('moodle-'+key).child(key).child('Username').get()
-        
-        
-        if(temp is not None):
-            session['id'] = key
-            assignment = ref.child("moodle").child('moodle-'+session['id']).child(key).child('Assignments').get()
-            moodle_username = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Username').get()
-            pass_token = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).child('Password').get()
-            
-            if(status!="yes" and status!="no"):
-                status = "yes"
-
-            for i in assignment:
-                if(i["course"] == course and i["time"] == time):
-                    i["status"] = status
-
-            tut_ref = ref.child("moodle")
-            new_ref = tut_ref.child("moodle-"+session['id'])
-            new_ref.set({
-                session['id']: {
-                    'Username': moodle_username,
-                    'Password': pass_token,
-                    'Assignments': assignment  
-                }
-            })
-
-            return jsonify({'Assignments': assignment})
-        
-        else:
-            return jsonify({'Error': 'Invalid API Token.'})
-    else:
-        return jsonify({'Error': 'Please Enter all the parameters.'})
         
 """---------------------------------------------------------------
                     VITask API code ends here
@@ -1630,11 +1289,7 @@ def login():
                        
     else:
         return redirect(url_for('index'))
-            
-                                    
-                                
-                                
-                            
+                                  
 # Profile route
 @app.route('/profile')
 def profile():
