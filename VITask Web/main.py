@@ -619,7 +619,7 @@ def timetableapi():
             }
         })
 
-        return jsonify({'Timetable': days})
+        return jsonify({'timetable': days})
 
     else:
         return jsonify({
@@ -769,7 +769,7 @@ def marksapi():
             }
         })
 
-        return jsonify({'Marks': marksDict})
+        return jsonify({'marks': marksDict})
     
     else:
         return jsonify({
@@ -842,7 +842,7 @@ def acadhistoryapi():
             }
         })
 
-        return jsonify({'AcadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
+        return jsonify({'acadHistory': acadHistory,'CurriculumDetails': curriculumDetails})
     
     else:
         return jsonify({
