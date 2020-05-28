@@ -1390,6 +1390,62 @@ def apiconsole():
 
 """---------------------------------------------------------------
 
+        Code for VITask Advertisements begins here
+
+------------------------------------------------------------------"""
+
+#Advertisement page
+@app.route('/ads')
+def adst():
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        return render_template("ads.html",name=session['name'])
+
+
+# Ads route
+@app.route('/advert', methods=['GET','POST'])
+def advert():
+    if(session['loggedin']==0):
+        return redirect(url_for('index'))
+    else:
+        if request.method == 'POST':
+            id = session['id']
+            evname = request.form["Eventname"]
+            evdesc = request.form["Eventdesc"]
+            evtime = request.form["Eventtiming"]
+
+            adsdetails = {}
+            adsdetails[0] = evname
+            adsdetails[1] = evdesc
+            adsdetails[2] = evtime
+            adsdetails[3] = session['reg']
+            adsdetails[4] = session['name']
+            adsdetails[5] = session['id']
+
+            # adsdetails = {'Event Name':evname,'Event Description': evdesc, 'Event Time': evtime}
+
+            ref = db.reference('vitask')
+            tut_ref = ref.child("advertisement")
+            new_ref = tut_ref.child('advertisement-'+id)
+            new_ref.set({
+                id: {
+                    'Details': adsdetails
+                }
+            })
+
+    return render_template('adssuccess.html',adsdetails = adsdetails,name=session['name'])
+
+
+"""---------------------------------------------------------------
+
+        Code for VITask Advertisements ends here
+
+------------------------------------------------------------------"""
+
+
+"""---------------------------------------------------------------
+
                     Staff Components begin here
 
 ------------------------------------------------------------------"""
