@@ -4,7 +4,7 @@ _Currently in Public Beta. Checkout our [Downloads](https://vitask.me/downloads)
 
 VITask is the solution for problems VITCC students face daily. VITask is complete environment solution containing Desktop, Mobile and WebApp. 
 
-VITask is a public API server. We prefer full transperancy. We have carefully curated each piece of our apps. 
+VITask is a public API server. We believe in collaborative software development. We have carefully curated each piece of our apps. 
 
 ## Who are we?
 
