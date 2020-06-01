@@ -627,7 +627,7 @@ button:focus+.design-container {
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Academic History");
                         data.findOne({ acad: 'user-acadhistory' }, function(err, doc) {
-                            let acadhistory = doc.AcadHistory;
+                            let acadhistory = doc.acadHistory;
                             let curriculumdetails = doc.CurriculumDetails;
                             let content = ``;
                             let course;
@@ -778,7 +778,7 @@ button:focus+.design-container {
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Attendance");
                         data.findOne({ classes: 'user-attendance' }, function(err, doc) {
-                          let attendancedict = doc.Attended;
+                          let attendancedict = doc.attendance;
                           let track = doc.Track;
                           let content = ``;
                           let current_course_count = 1;
@@ -865,8 +865,8 @@ button:focus+.design-container {
                         $("#resyncnav").attr('class', 'nav-item');
                         $("#logoutnav").attr('class', 'nav-item');
                         $("#topheading").html("Marks");
-                        data.findOne({ marks: 'user-marks' }, function(err, doc) {
-                            let marks = doc.Marks;
+                        data.findOne({ showmarks: 'user-marks' }, function(err, doc) {
+                            let marks = doc.marks;
                             let content = ``;
                             let course;
                             let exam;
@@ -958,7 +958,7 @@ button:focus+.design-container {
                         $("#topheading").html("Timetable");
                         
                         data.findOne({ tt: 'user-timetable' }, function(err, doc) {
-                            let tt = doc.Timetable;
+                            let tt = doc.timetable;
                             let content = ``;
                             let day;
                             let template = `<div class="row">
