@@ -821,11 +821,11 @@ def acadhistoryapi():
             'code' : "400" # bad request
         })
     key = appno.decode('ascii')
-    temp = ref.child("acadhistory").child('acadhistory-'+key).child(key).child("AcadHistory").get()
+    temp = ref.child("acadhistory").child('acadhistory-'+key).child(key).get()
         
     if(temp is not None):
         session['id'] = key
-        acadHistory = temp
+        acadHistory = temp["AcadHistory"]
         curriculumDetails = temp["CurriculumDetails"]
         # API Calls logging
         temp = ref.child("account").child('account-'+key).child(key).get()
