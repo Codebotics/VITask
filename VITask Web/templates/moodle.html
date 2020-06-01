@@ -238,6 +238,17 @@
     <div class="container-fluid mt--7">
         <div class="row">
             <div class="col-xl-8 order-xl-1">
+            {% if(error==True) %}
+            
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-icon"><i class="ni ni-spaceship"></i></span>
+                <span class="alert-text"><strong>Sorry!</strong> Invalid Password.</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            {% endif %}
               <div class="card bg-secondary shadow">
                 <div class="card-header bg-white border-0">
                   <div class="row align-items-center">

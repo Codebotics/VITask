@@ -79,11 +79,11 @@ def get_moodle_session(username, password):
         "anchor"   : ""
     }
 
-    #Using verify = False is deadly but moodle's a bitch
+    #Using verify = False is deadly but moodle is stupid
     login_text = sess.post(MOODLE_LOGIN_URL,data=payload, verify=False).text
 
     #TODO : Check is password is correct or not
-    #For finding session key. This is where moodle sucks lol. Didn't use useragent check and cookies. F U
+    #For finding session key. This is where moodle sucks lol.
     sess_key_index = login_text.find("sesskey")
     sess_key = login_text[sess_key_index+10:sess_key_index+20]
 
@@ -112,7 +112,10 @@ def get_dashboard_json(sess, sess_key):
     try:
         due_items = dashboard_json[0]["data"]["events"]
     except:
-        due_items = None
+        try:
+            due_items = dashboard_json[0]["exception"]["errorcode"]
+        except:
+            due_items = None
     return due_items
 # Functions for Moodle end here
 
@@ -676,8 +679,8 @@ def attendanceapi():
 
     #Checking if data is already there or not in firebase(if there then no need to acces VTOP again)
     if(temp is not None):
-        attend = ref.child("attendance").child('attendance-'+key).child(key).child('Attendance').get()
-        q = ref.child("attendance").child('attendance-'+key).child(key).child('Track').get()
+        attend = temp['Attendance']
+        q = temp['Track']
             
         # API Calls logging
         temp = ref.child("account").child('account-'+key).child(key).get()
@@ -823,8 +826,7 @@ def acadhistoryapi():
     if(temp is not None):
         session['id'] = key
         acadHistory = temp
-        curriculumDetails = ref.child("acadhistory").child('acadhistory-'+session['id']).child(key).child("CurriculumDetails").get()
-        
+        curriculumDetails = temp["CurriculumDetails"]
         # API Calls logging
         temp = ref.child("account").child('account-'+key).child(key).get()
         count = int(temp['API-Calls']) + 1
@@ -906,7 +908,12 @@ def moodleLoginapi():
     moodle_password = password
     sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
     due_items = get_dashboard_json(sess, sess_key)
+
     assignments = []
+    
+    if (due_items == "servicenotavailable"):
+        return jsonify({'error' : 'Invalid password.'})
+        
     if due_items is None:
         assignments.append({
             "course" : "No Assignments"
@@ -1007,7 +1014,7 @@ def moodleSyncapi():
     key = appno.decode('ascii')
 
     ref = db.reference('vitask')
-    temp = ref.child("moodle").child('moodle-'+key).child(key).child('Username').get()
+    temp = ref.child("moodle").child('moodle-'+key).child(key).get()
     
     
     if(temp is None):
@@ -1017,8 +1024,8 @@ def moodleSyncapi():
         })
     else:
         session['id'] = key
-        username = ref.child("moodle").child('moodle-'+session['id']).child(key).child('Username').get()
-        b64_password = ref.child("moodle").child('moodle-'+session['id']).child(key).child('Password').get()
+        username = temp['Username']
+        b64_password = temp['Password']
         # Now first decode the password
         temp_password = b64_password.encode('ascii')
 
@@ -1028,6 +1035,10 @@ def moodleSyncapi():
         sess, sess_key = get_moodle_session(username.lower(),password)
         due_items = get_dashboard_json(sess, sess_key)
         assignments = []
+        
+        if (due_items == "servicenotavailable"):
+            return jsonify({'error' : 'Invalid password.'})
+            
         if due_items is None:
             assignments.append({
                 "course" : "No Assignments"
@@ -1518,6 +1529,10 @@ def moodlelogin():
             sess, sess_key = get_moodle_session(moodle_username.lower(),moodle_password)
             due_items = get_dashboard_json(sess, sess_key)
             assignments = []
+            
+            if (due_items == "servicenotavailable"):
+                return render_template('moodle.html',name=session['name'],error=True) 
+                    
             if due_items is None:
                 assignments.append({
                     "course" : "No Assignments"
@@ -1701,6 +1716,10 @@ def moodleresync():
         sess, sess_key = get_moodle_session(moodle_username.lower(), moodle_password)
         due_items = get_dashboard_json(sess, sess_key)
         assignments = []
+        
+        if (due_items == "servicenotavailable"):
+            return render_template('moodle.html',name=session['name'],error=True)
+        
         if due_items is None:
             assignments.append({
                 "course" : "No Assignments"
