@@ -258,7 +258,34 @@
                 </thead>
                 <tbody>
                 
-                  {% for i in assignment %}  
+                  {% for i in assignment %}
+                    {% if i["course"] == "No Assignments" %}
+                    <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                            <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/moodle-icon.jpg') }}"> 
+                        </a>
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{ i["course"] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i> N/A
+                      </span>
+                    </td>
+                      
+                    <td class="text-right">
+                      <div class="dropdown">
+                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% else %}
                   <tr>
                     <th scope="row">
                       <div class="media align-items-center">
@@ -283,14 +310,14 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <form action="{{ url_for('removeassignment') }}" method="post">
-                                <input type="hidden" value='{{ i["course"] }}' name="course">
-                                <input type="hidden" value='{{ i["time"] }}' name="time">
+                                <input type="hidden" value='{{ i["id"] }}' name="id">
                                 <button type="submit" class="dropdown-item">Remove</button>
                             </form>
                         </div>
                       </div>
                     </td>
                   </tr>
+                 {% endif %}
                  {% endfor %}
                   
                 </tbody>

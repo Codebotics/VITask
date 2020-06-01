@@ -282,8 +282,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <form action="{{ url_for('restoreassignment') }}" method="post">
-                                <input type="hidden" value='{{ i["course"] }}' name="course">
-                                <input type="hidden" value='{{ i["time"] }}' name="time">
+                                <input type="hidden" value='{{ i["id"] }}' name="id">
                                 <button type="submit" class="dropdown-item">Restore</button>
                             </form>
                         </div>
