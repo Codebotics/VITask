@@ -254,7 +254,6 @@ if(process.platform=="darwin"){
 }
 
 
-
 function handleSquirrelEvent(application) {
     if (process.argv.length === 1) {
         return false;

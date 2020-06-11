@@ -1,13 +1,13 @@
 {
   "name": "VITask",
   "productName": "VITask",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The most powerful VTOP API server!",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "author": "Apratim Shukla",
+  "author": "VITask Team",
   "license": "MIT",
   "dependencies": {
     "electron": "^7.1.10",

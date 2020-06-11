@@ -212,7 +212,7 @@
                         console.log('error:', err);
                       } else {
                         let result = body;
-                        if(result.Error){
+                        if(result.error){
                             $("#loading").fadeOut();
                             $("#content").fadeIn(); 
                             alert("Wrong Password.");
@@ -224,23 +224,19 @@
 
                         data.insert(result, function(err, doc) {
                         console.log('Inserted', doc.Name);
-                        });
-
-                        data.findOne({ profile: 'user-profile' }, function(err, doc) {
-
-
                             timetable(doc.APItoken, function() {
-                                acadhistory(doc.APItoken, function(){
-                                    marks(doc.APItoken, function(){
-                                        attendance(doc.APItoken, function(){
-                                            ipcRenderer.send('login:new','loggedin');
-                                            done(doc.APItoken);
+                                    acadhistory(doc.APItoken, function(){
+                                        marks(doc.APItoken, function(){
+                                            attendance(doc.APItoken, function(){
+                                                ipcRenderer.send('login:new','loggedin');
+                                                done(doc.APItoken);
+                                            });
                                         });
                                     });
                                 });
-                            });
-
                         });
+
+                        
                         }
                     } 
                 });

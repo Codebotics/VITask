@@ -3,13 +3,15 @@ var electronInstaller = require('electron-winstaller');
 // In this case, we can use relative paths
 var settings = {
     // Specify the folder where the built app is located
-    appDirectory: './release-builds/VITask-win32-ia32',
+    appDirectory: './release-builds/VITask-win32-x64',
     // Specify the existing folder where 
     outputDirectory: './installer',
     // The name of the Author of the app (the name of your company)
     authors: 'VITask',
     // The name of the executable of your built
-    exe: './VITask.exe'
+    exe: './VITask.exe',
+    // Setup loading gif
+    loadingGif: './preview.gif'
 };
 
 resultPromise = electronInstaller.createWindowsInstaller(settings);

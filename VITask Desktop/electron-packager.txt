@@ -1,0 +1,1 @@
+electron-packager "C:\Users\aprat\Desktop\Github\VITask\VITask Desktop" --platform=win32 --arch=x64 --icon="./icons/win/icon.ico" --overwrite VITask
