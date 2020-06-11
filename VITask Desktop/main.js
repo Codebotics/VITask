@@ -6,6 +6,7 @@ const ua = require('universal-analytics');
 const analytics = ua('UA-157430748-1');
 
 const {app, BrowserWindow, Menu, ipcMain} = electron;
+const { dialog } = require('electron');
 
 let mainWindow;
 
@@ -46,8 +47,8 @@ function createMainWindow()
         icon: path.join(__dirname, 'icons/png/64x64.png')
     }));
     //Quit app when closed
-    mainWindow.on('closed',function(){
-        mainWindow = null;
+    mainWindow.on('window-all-closed', () => {
+        app.quit();
     });
     //Build Menu from template
     const mainMenu = Menu.buildFromTemplate(loginMenuTemplate);
@@ -70,8 +71,8 @@ function createDashboard(){
         slashes: true,
         icon: path.join(__dirname, 'icons/png/64x64.png')
     }));
-    dashWindow.on('closed',function(){
-        dashWindow = null;
+    dashWindow.on('window-all-closed', () => {
+        app.quit();
     });
     //Build Menu from template
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
@@ -137,6 +138,24 @@ const mainMenuTemplate = [
         label:'File',
         submenu:[
             {
+                label: 'About',
+                accelerator: process.platform == 'darwin' ? 'Command+1' : 'Ctrl+1',
+                click(){
+                    const options = {
+                        type: 'question',
+                        buttons: ['Cancel'],
+                        defaultId: 2,
+                        title: 'About VITask ',
+                        message: 'VITask Desktop V1.0.1',
+                        detail: 'VITask Desktop is built by the VITask Team. All rights reserved. To know more visit https://vitask.me',
+                    };
+                    dialog.showMessageBox(options)
+                }
+            },
+            {
+                role: 'reload'
+            },
+            {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                 click(){
@@ -152,6 +171,24 @@ const loginMenuTemplate = [
     {
         label:'File',
         submenu:[
+            {
+                label: 'About',
+                accelerator: process.platform == 'darwin' ? 'Command+1' : 'Ctrl+1',
+                click(){
+                    const options = {
+                        type: 'question',
+                        buttons: ['Cancel'],
+                        defaultId: 2,
+                        title: 'About VITask ',
+                        message: 'VITask Desktop V1.0.1',
+                        detail: 'VITask Desktop is built by the VITask Team. All rights reserved. To know more visit https://vitask.me',
+                    };
+                    dialog.showMessageBox(options)
+                }
+            },
+            {
+                role: 'reload'
+            },
             {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
@@ -214,42 +251,6 @@ mainMenuTemplate.push({
 //for mac add empty object
 if(process.platform=="darwin"){
     mainMenuTemplate.unshift({});
-}
-
-
-//add developer tools item if not in production
-if(process.env.NODE_ENV!=='production'){
-    mainMenuTemplate.push({
-        label: 'Developer Tools',
-        submenu: [
-            {
-                label: 'Toggle DevTools',
-                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
-                click(item, focusedWindow){
-                    focusedWindow.toggleDevTools();
-                }
-            },
-        {
-            role: 'reload'
-        }
-    ]
-    })
-
-    loginMenuTemplate.push({
-        label: 'Developer Tools',
-        submenu: [
-            {
-                label: 'Toggle DevTools',
-                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
-                click(item, focusedWindow){
-                    focusedWindow.toggleDevTools();
-                }
-            },
-        {
-            role: 'reload'
-        }
-    ]
-    })
 }
 
 

@@ -1284,16 +1284,12 @@ button:focus+.design-container {
                     let assignment_count = 1;
                     for(i in assignment){
 
-                    let coursename = Object.values(assignment[i])[0];
-                    let deadline = Object.values(assignment[i])[2];
-                        
-                    let splitter = coursename.split("(");
-                    splitter[1] = splitter[1].substring(0, splitter[1].length - 1);
-                    let sendcourse = splitter.join(" ");
-                    sendcourse = sendcourse.split(" ");
-                    let sendtime = deadline.split(" ");
+                    let coursename = assignment[i]["course"];
+                    let deadline = assignment[i]["time"];
+                    let courseinfo = assignment[i]["name"];
+                    let description = assignment[i]["description"];
                     
-                    content += `<tr id="assign${assignment_count}"> <td>${coursename}</td>
+                    content += `<tr id="assign${assignment_count}"> <td>${coursename} <i class="material-icons text-info" onclick="alert('Course Info: '+'${courseinfo}');">info</i></td>
                                   <td>${deadline}</td>
                                   <td class="td-actions text-right">
                                     <a onclick="hideme(${assignment_count})" rel="tooltip" title="Remove" class="text-danger" style="cursor: pointer;">
@@ -1807,8 +1803,6 @@ function Attend_subtract(id)
         
             function login(regno,password,moodle_username=null,moodle_password=null,mode=null){
                 let url = 'http://134.209.150.24/api/gettoken';
-                let timetable_ini_url = 'http://134.209.150.24/api/vtop/timetable'
-                let acadhistory_ini_url = 'http://134.209.150.24/api/vtop/history'
                 let attendance_ini_url = 'http://134.209.150.24/api/vtop/attendance'
                 let marks_ini_url = 'http://134.209.150.24/api/vtop/marks'
                 let moodle_ini_url = 'http://134.209.150.24/api/moodle/login';
@@ -1822,39 +1816,48 @@ function Attend_subtract(id)
                 
                 if(mode=='moodle_authenticate')
                     {
-                        request(url, function (err, response, body) {
-                          if(err){
-                            console.log('error:', error);
-                          } else {
-                            let result = JSON.parse(body);
-                            result.profile = "user-profile";
-                            result.regno = regno;
-                            result.password = password;
+                        request({
+                            headers: {
+                              'Content-Type': 'application/json; charset=UTF-8',
+                              'X-VITASK-API': '98e1e33a8e1964f073d2cc7a5c6bea755e862fe0e9041822e476d3b5b089a6a94f8343faf7b475c54cb1f490b762b8563144b64a914e06d421f8eed9d040ddd2'
+                            },
+                            uri: url,
+                            json: true,
+                            body: {"username" : regno,"password" : password},
+                            method: 'POST'
+                          }, function (err, res, body) {
+                                if(err){
+                                console.log('error:', err);
+                              } else {
+                                let result = body;
+                                /*console.log(result);*/
+                                if(result.Error){
+                                    $("#loading").fadeOut();
+                                    $("#content").fadeIn(); 
+                                    alert("Wrong Password.");
+                                }
+                                else{
+                                result.profile = "user-profile";
+                                result.regno = regno;
+                                result.password = password;
 
-                            data.insert(result, function(err, doc) {
-                            console.log('Inserted', doc.Name);
-                            });
+                                data.insert(result, function(err, doc) {
+                                    console.log('Inserted', doc.Name);
+                                });
 
-                            data.findOne({ profile: 'user-profile' }, function(err, doc) {
-
-
-
-                                timetable(doc.APItoken, function() {
-                                    acadhistory(doc.APItoken, function(){
-                                        attendance(doc.APItoken, function(){
+                                data.findOne({ profile: 'user-profile' }, function(err, doc) {  
+                                           attendance(doc.APItoken, function(){
                                             marks(doc.APItoken, function(){
-                                                moodlefetch(moodle_username,moodle_password,doc.AppNo, function(){
+                                                moodlefetch(moodle_username,moodle_password,doc.APItoken, function(){
                                                     ipcRenderer.send('resync:new','resynced');
                                                     done(doc.APItoken);
                                                 });
                                             });
                                         });
                                     });
-                                });
-
-                            });
-                          }
-                        }); 
+                                }
+                            } 
+                        });
                     }
                 
                 else if(mode=='no_moodle_authenticate')
@@ -1903,25 +1906,40 @@ function Attend_subtract(id)
             }
 
          
-                function moodlefetch(moodle_username,moodle_password,appno, callback){
-                    console.log(moodle_username+" "+moodle_password+" "+appno);
-                    let moodle_url = moodle_ini_url+appno+"&username="+moodle_username+"&password="+moodle_password;
-                    request(moodle_url, function (err, response, body) {
+                function moodlefetch(moodle_username,moodle_password,token, callback){
+                    console.log(moodle_username+" "+moodle_password+" "+token);
+                    
+                    request({
+                        headers: {
+                          'Content-Type': 'application/json; charset=UTF-8',
+                          'X-VITASK-API': '98e1e33a8e1964f073d2cc7a5c6bea755e862fe0e9041822e476d3b5b089a6a94f8343faf7b475c54cb1f490b762b8563144b64a914e06d421f8eed9d040ddd2'
+                        },
+                        uri: moodle_ini_url,
+                        json: true,
+                        body: {"username": moodle_username, "password": moodle_password, "token" : token},
+                        method: 'POST'
+                      }, function (err, response, body) {
                           if(err){
-                            console.log('error:', error);
+                            console.log('error:', err);
                           } else {
-                            let result = JSON.parse(body);
-                            result.moodle = "user-moodle";
-                            result.regno = moodle_username;
-                            result.password = moodle_password;
+                            let result = body;
+                            if(result.error){
+                                $("#loading").fadeOut();
+                                location.reload(true);
+                                alert("Wrong Moodle Password.");
+                            }
+                            else{
+                                result.moodle = "user-moodle";
+                                result.regno = moodle_username;
+                                result.password = moodle_password;
 
-                            data.insert(result, function(err, doc) {
-                            console.log('Inserted', doc.Assignments);
-                            callback();
-                            });
+                                data.insert(result, function(err, doc) {
+                                console.log('Inserted', doc.Assignments);
+                                callback();
+                                });
+                            }
                           }
                     });
-                    
                 }
   
                 
@@ -2019,8 +2037,6 @@ function Attend_subtract(id)
   <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
   <!-- Library for adding dinamically elements -->
   <script src="dashboard/assets/js/plugins/arrive.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   <!-- Chartist JS -->
   <script src="dashboard/assets/js/plugins/chartist.min.js"></script>
   <!--  Notifications Plugin    -->
