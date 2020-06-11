@@ -1806,11 +1806,11 @@ function Attend_subtract(id)
               
         
             function login(regno,password,moodle_username=null,moodle_password=null,mode=null){
-                let url = 'http://134.209.150.24/authenticate?username='+regno+'&password='+password;
-                let timetable_ini_url = 'http://134.209.150.24/timetableapi?token=';
-                let acadhistory_ini_url = 'http://134.209.150.24/acadhistoryapi?token=';
-                let attendance_ini_url = 'http://134.209.150.24/classesapi?token=';
-                let marks_ini_url = 'https://vitask.me/marksapi?token='
+                let url = 'http://134.209.150.24/api/gettoken';
+                let timetable_ini_url = 'http://134.209.150.24/api/vtop/timetable'
+                let acadhistory_ini_url = 'http://134.209.150.24/api/vtop/history'
+                let attendance_ini_url = 'http://134.209.150.24/api/vtop/attendance'
+                let marks_ini_url = 'http://134.209.150.24/api/vtop/marks'
                 let moodle_ini_url = 'http://134.209.150.24/api/moodle/login';
                 
                 $("#loading").show();
@@ -1859,39 +1859,47 @@ function Attend_subtract(id)
                 
                 else if(mode=='no_moodle_authenticate')
                     {
+                        request({
+                            headers: {
+                              'Content-Type': 'application/json; charset=UTF-8',
+                              'X-VITASK-API': '98e1e33a8e1964f073d2cc7a5c6bea755e862fe0e9041822e476d3b5b089a6a94f8343faf7b475c54cb1f490b762b8563144b64a914e06d421f8eed9d040ddd2'
+                            },
+                            uri: url,
+                            json: true,
+                            body: {"username" : regno,"password" : password},
+                            method: 'POST'
+                          }, function (err, res, body) {
+                                if(err){
+                                console.log('error:', err);
+                              } else {
+                                let result = body;
+                                /*console.log(result);*/
+                                if(result.Error){
+                                    $("#loading").fadeOut();
+                                    $("#content").fadeIn(); 
+                                    alert("Wrong Password.");
+                                }
+                                else{
+                                result.profile = "user-profile";
+                                result.regno = regno;
+                                result.password = password;
 
-                        request(url, function (err, response, body) {
-                          if(err){
-                            console.log('error:', error);
-                          } else {
-                            let result = JSON.parse(body);
-                            result.profile = "user-profile";
-                            result.regno = regno;
-                            result.password = password;
-
-                            data.insert(result, function(err, doc) {
-                            console.log('Inserted', doc.Name);
-                            });
-
-                            data.findOne({ profile: 'user-profile' }, function(err, doc) {
-
-
-
-                                timetable(doc.APItoken, function() {
-                                    acadhistory(doc.APItoken, function(){
-                                        attendance(doc.APItoken, function(){
-                                            marks(doc.APItoken, function(){
-                                                ipcRenderer.send('resync:new','resynced');
-                                                done(doc.APItoken);
-                                            });
-                                        });
-                                    });
+                                data.insert(result, function(err, doc) {
+                                    console.log('Inserted', doc.Name);
                                 });
 
-                            });
-                          }
+                                data.findOne({ profile: 'user-profile' }, function(err, doc) {  
+                                            marks(doc.APItoken, function(){
+                                                attendance(doc.APItoken, function(){
+                                                    ipcRenderer.send('resync:new','resynced');
+                                                    done(doc.APItoken);
+                                                });
+                                            });
 
-                    });
+                                        });
+                                }
+                            } 
+                        });
             }
 
          
@@ -1915,57 +1923,27 @@ function Attend_subtract(id)
                     });
                     
                 }
-                
+  
                 
                 function marks(token, callback){
-                    let marks_url = marks_ini_url+token;
-                    request(marks_url, function (err, response, body) {
+                    request({
+                        headers: {
+                          'Content-Type': 'application/json; charset=UTF-8',
+                          'X-VITASK-API': '98e1e33a8e1964f073d2cc7a5c6bea755e862fe0e9041822e476d3b5b089a6a94f8343faf7b475c54cb1f490b762b8563144b64a914e06d421f8eed9d040ddd2'
+                        },
+                        uri: marks_ini_url,
+                        json: true,
+                        body: {"token" : token},
+                        method: 'POST'
+                      }, function (err, response, body) {
                           if(err){
-                            console.log('error:', error);
+                            console.log('error:', err);
                           } else {
-                            let result = JSON.parse(body)
-                            result.marks = "user-marks"
+                            let result = body;
+                            result.showmarks = "user-marks";
 
                             data.insert(result, function(err, doc) {
-                            console.log('Inserted', doc.Marks);
-                            callback();
-                            });
-                          }
-                    });
-                    
-                }
-                
-                
-                
-                function timetable(token, callback){
-                    let timetable_url = timetable_ini_url+token;
-                    request(timetable_url, function (err, response, body) {
-                          if(err){
-                            console.log('error:', error);
-                          } else {
-                            let result = JSON.parse(body)
-                            result.tt = "user-timetable"
-
-                            data.insert(result, function(err, doc) {
-                            console.log('Inserted', doc.Timetable);
-                            callback();
-                            });
-                          }
-                    });
-                    
-                }
-                
-                function acadhistory(token, callback){
-                    let acadhistory_url = acadhistory_ini_url+token;
-                    request(acadhistory_url, function (err, response, body) {
-                          if(err){
-                            console.log('error:', error);
-                          } else {
-                            let result = JSON.parse(body)
-                            result.acad = "user-acadhistory"
-
-                            data.insert(result, function(err, doc) {
-                            console.log('Inserted', doc.AcadHistory);
+                            console.log('Inserted', doc.marks);
                             callback();
                             });
                           }
@@ -1975,16 +1953,24 @@ function Attend_subtract(id)
                 
                 
                 function attendance(token, callback){
-                    let attendance_url = attendance_ini_url+token;
-                    request(attendance_url, function (err, response, body) {
+                    request({
+                        headers: {
+                          'Content-Type': 'application/json; charset=UTF-8',
+                          'X-VITASK-API': '98e1e33a8e1964f073d2cc7a5c6bea755e862fe0e9041822e476d3b5b089a6a94f8343faf7b475c54cb1f490b762b8563144b64a914e06d421f8eed9d040ddd2'
+                        },
+                        uri: attendance_ini_url,
+                        json: true,
+                        body: {"token" : token},
+                        method: 'POST'
+                      }, function (err, response, body) {
                           if(err){
-                            console.log('error:', error);
+                            console.log('error:', err);
                           } else {
-                            let result = JSON.parse(body)
-                            result.classes = "user-attendance"
+                            let result = body;
+                            result.classes = "user-attendance";
 
                             data.insert(result, function(err, doc) {
-                            console.log('Inserted', doc.Attended);
+                            console.log('Inserted', doc.attendance);
                             callback();
                             });
                           }
