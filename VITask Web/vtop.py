@@ -240,17 +240,43 @@ def get_timetable(sess, username, id, semesterID="CH2019205"):
         days[i]=l2+l1
         l1 = []
         l2 = []
+        
+    # Credits fetching for CGPA calculator begins here
+    code_soup1 = soup.find_all('td', {'style': lambda s: 'vertical-align: middle; border: 1px solid #b2b2b2; padding: 5px;' in s})
+    list_soup1 = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
+    #print(code_soup)
+    list_course = [i.getText() for i in list_soup1]
+    #print(list_course)
+    code_course = [i.getText() for i in code_soup1]
+    hold_course = []
+
+    for i in code_course:
+        if(code_course.index(i)%11==2):
+            i=i[len(i)-2:len(i)-1]
+            hold_course.append(i)
+    course_credits = dict(zip(list_course, hold_course))
+
+    final_dict = {}
+
+    for i in course_credits:
+        temp_arr = i.split("-")
+        prep_string = temp_arr[0]+"-"+temp_arr[1]
+        if prep_string not in final_dict:
+            final_dict[prep_string] = int(course_credits[i])
+        else:
+            final_dict[prep_string] = int(final_dict[prep_string])+int(course_credits[i])
             
     ref = db.reference('vitask')
     tut_ref = ref.child("timetable")
     new_ref = tut_ref.child('timetable-'+id)
     new_ref.set({
         id: {
-            'Timetable': days
+            'Timetable': days,
+            'Credits': final_dict
         }
     })
     
-    return (days, check)
+    return (days, check, final_dict)
 
 def get_acadhistory(sess,username,id):
     """

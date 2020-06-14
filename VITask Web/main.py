@@ -148,7 +148,7 @@ def parallel_timetable(sess, username, id):
     temp = ref.child("timetable").child('timetable-'+id).child(id).child('Timetable').get()
     if(temp is None):
         days = {}
-        days, check_timetable = get_timetable(sess, username, id)
+        days, check_timetable, courses = get_timetable(sess, username, id)
         if(check_timetable == "False"):
             session['timetable'] = 0
         else:
@@ -518,7 +518,7 @@ def sync():
         attendance, q, check_attendance = get_attandance(sess, username, key)
         marks, check_marks = get_marks(sess, username, key)
         acadHistory, check_grades = get_acadhistory(sess,username,key)
-        days, check_timetable = get_timetable(sess, username, key)
+        days, check_timetable, courses = get_timetable(sess, username, key)
         if(check_attendance == False):
             return jsonify({"Error": "Internal Error in fetching Attendance.Please try again."})
         if(check_marks == False):
@@ -550,7 +550,8 @@ def sync():
             "attendance": attendance,
             "marks" : marks,
             "acadHistory" : acadHistory,
-            "timetable" : days
+            "timetable" : days,
+            "courses": courses
         })
 
 
@@ -599,11 +600,12 @@ def timetableapi():
         })
     key = appno.decode('ascii')
 
-    temp = ref.child("timetable").child('timetable-'+key).child(key).child("Timetable").get()
+    temp = ref.child("timetable").child('timetable-'+key).child(key).get()
 
     if(temp is not None):
         session['id'] = key
-        days = temp
+        days = temp["Timetable"]
+        courses = temp["Credits"]
         
         # API Calls logging
         temp = ref.child("account").child('account-'+key).child(key).get()
@@ -622,7 +624,7 @@ def timetableapi():
             }
         })
 
-        return jsonify({'timetable': days})
+        return jsonify({'timetable': days, 'courses': courses})
 
     else:
         return jsonify({
