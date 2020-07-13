@@ -235,7 +235,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Fall Semester</h5>
                       <span class="h2 font-weight-bold mb-0" id="Montext">Monday</span>
                     </div>
                     <div class="col-auto">
@@ -256,7 +256,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Fall Semester</h5>
                       <span class="h2 font-weight-bold mb-0" id="Tuetext">Tuesday</span>
                     </div>
                     <div class="col-auto">
@@ -277,7 +277,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Fall Semester</h5>
                       <span class="h2 font-weight-bold mb-0" id="Wedtext">Wednesday</span>
                     </div>
                     <div class="col-auto">
@@ -298,7 +298,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Fall Semester</h5>
                       <span class="h2 font-weight-bold mb-0" id="Thutext">Thursday</span>
                     </div>
                     <div class="col-auto">
@@ -314,12 +314,12 @@
                 </div>
               </div>
             </div>
-               <div class="col-xl-2 col-lg-6">
+            <div class="col-xl-2 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0" id="Fristyle">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Winter Semester</h5>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Fall Semester</h5>
                       <span class="h2 font-weight-bold mb-0" id="Fritext">Friday</span>
                     </div>
                     <div class="col-auto">
@@ -330,6 +330,27 @@
                   </div>
                   <p class="mt-3 mb-0 text-muted text-sm">
                     <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Friday"]|length }} classes</span>
+                    <span class="text-nowrap"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-2 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0" id="Satstyle">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Fall Semester</h5>
+                      <span class="h2 font-weight-bold mb-0" id="Sattext">Saturday</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-info text-white rounded-circle shadow" onclick="Saturday()">
+                        <i class="fa fa-puzzle-piece"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-cubes"></i> {{ tt["Saturday"]|length }} classes</span>
                     <span class="text-nowrap"></span>
                   </p>
                 </div>
@@ -349,7 +370,7 @@
       <!-- Dark table -->
       
         
-          <div class="row mt-5" id="Monday">
+      <div class="row mt-5" id="Monday">
         <div class="col">
           <div class="card bg-default shadow">
             <div class="card-header bg-transparent border-0">
@@ -695,7 +716,7 @@
         </div>
       </div>
         
-          <div class="row mt-5" id="Friday">
+      <div class="row mt-5" id="Friday">
         <div class="col">
           <div class="card bg-default shadow">
             <div class="card-header bg-transparent border-0">
@@ -715,6 +736,91 @@
                 </thead>
                 <tbody>
                 {% for i in tt["Friday"] %}
+                    
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                    {% if i['code'][:3:1]=="MAT" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sas.jpg') }}">
+                    {% elif i['code'][:3:1]=="CSE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/cse.jpg') }}">
+                    {% elif i['code'][:3:1]=="EEE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/eee.jpg') }}">
+                    {% elif i['code'][:3:1]=="ECE" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ece.jpg') }}">
+                    {% elif i['code'][:3:1]=="ECM" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/ecm.jpg') }}">
+                    {% elif i['code'][:3:1]=="MEC" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/mec.jpg') }}">
+                    {% elif i['code'][:3:1]=="CIV" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/civ.jpg') }}">
+                    {% elif i['code'][:3:1]=="STS" %}
+                    <img alt="Image placeholder" src="{{ url_for('static', filename='assets/img/theme/sts.jpg') }}">
+                    {% endif %}
+                          
+                        </a>
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{ i['courseName'] }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      {{ i['code'] }}
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-success"></i> {{ i['startTime'] }}-{{ i['endTime'] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-primary"></i> {{ i['class'] }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        
+                      </div>
+                    </td>
+                    <td class="text-right">
+                      <div class="dropdown">
+                       
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+      <div class="row mt-5" id="Saturday">
+        <div class="col">
+          <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Timetable: Saturday</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Timing</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in tt["Saturday"] %}
                     
                   <tr>
                     <th scope="row">
@@ -801,10 +907,13 @@
             $("#Thutext").css("color", "");
             $("#Fristyle").css("background-color", "");
             $("#Fritext").css("color", "");
+            $("#Satstyle").css("background-color", "");
+            $("#Sattext").css("color", "");
             $("#Tuesday").hide();
             $("#Wednesday").hide();
             $("#Thursday").hide();
             $("#Friday").hide();
+            $("#Saturday").hide();
         });
         function Monday(){
             $("#Monday").show();
@@ -818,10 +927,13 @@
             $("#Thutext").css("color", "");
             $("#Fristyle").css("background-color", "");
             $("#Fritext").css("color", "");
+            $("#Satstyle").css("background-color", "");
+            $("#Sattext").css("color", "");
             $("#Tuesday").hide();
             $("#Wednesday").hide();
             $("#Thursday").hide();
             $("#Friday").hide();
+            $("#Saturday").hide();
         }
         function Tuesday(){
             $("#Monday").hide();
@@ -836,9 +948,12 @@
             $("#Thutext").css("color", "");
             $("#Fristyle").css("background-color", "");
             $("#Fritext").css("color", "");
+            $("#Satstyle").css("background-color", "");
+            $("#Sattext").css("color", "");
             $("#Wednesday").hide();
             $("#Thursday").hide();
             $("#Friday").hide();
+            $("#Saturday").hide();
         }
         function Wednesday(){
             $("#Monday").hide();
@@ -854,8 +969,11 @@
             $("#Thutext").css("color", "");
             $("#Fristyle").css("background-color", "");
             $("#Fritext").css("color", "");
+            $("#Satstyle").css("background-color", "");
+            $("#Sattext").css("color", "");
             $("#Thursday").hide();
             $("#Friday").hide();
+            $("#Saturday").hide();
         }
         function Thursday(){
             $("#Monday").hide();
@@ -872,7 +990,10 @@
             $("#Thutext").css("color", "white");
             $("#Fristyle").css("background-color", "");
             $("#Fritext").css("color", "");
+            $("#Satstyle").css("background-color", "");
+            $("#Sattext").css("color", "");
             $("#Friday").hide();
+            $("#Saturday").hide();
         }
         function Friday(){
             $("#Monday").hide();
@@ -890,6 +1011,29 @@
             $("#Thutext").css("color", "");
             $("#Fristyle").css("background-color", "#32325d");
             $("#Fritext").css("color", "white");
+            $("#Satstyle").css("background-color", "");
+            $("#Sattext").css("color", "");
+            $("#Saturday").hide();
+        }
+        function Saturday(){
+            $("#Monday").hide();
+            $("#Tuesday").hide();
+            $("#Wednesday").hide();
+            $("#Thursday").hide();
+            $("#Friday").hide();
+            $("#Monstyle").css("background-color", "");
+            $("#Montext").css("color", "");
+            $("#Tuestyle").css("background-color", "");
+            $("#Tuetext").css("color", "");
+            $("#Wedstyle").css("background-color", "");
+            $("#Wedtext").css("color", "");
+            $("#Thustyle").css("background-color", "");
+            $("#Thutext").css("color", "");
+            $("#Fristyle").css("background-color", "");
+            $("#Fritext").css("color", "");
+            $("#Satstyle").css("background-color", "#32325d");
+            $("#Sattext").css("color", "white");
+            $("#Saturday").show();
         }
     </script>
   <!--   Core   -->

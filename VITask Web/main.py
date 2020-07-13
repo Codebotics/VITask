@@ -9,36 +9,19 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from bs4 import BeautifulSoup
 import firebase_admin
 from firebase_admin import db
-from PIL import Image
-from PIL import ImageFilter
+from PIL import Image, ImageFilter
 from datetime import timezone,datetime,timedelta
-import requests
-import urllib3
-import time
-import pickle
-import re
-import os
-import random
-import hashlib
-import bcrypt
-import requests
-import json
-import time
-import base64
-import zipfile
+import requests, urllib3, time, re, os, random, hashlib, requests, json, base64
 from urllib.request import urlretrieve
-import sys
-from sys import platform as _platform
-from vtop import generate_session
-from vtop import get_attandance
-from vtop import get_student_profile
-from vtop import get_acadhistory
-from vtop import get_timetable
-from vtop import get_marks
-from multiprocessing import Process
-from crypto import magichash
-from crypto import magiccheck
-#For disabling warings this will save msecs..lol
+
+# Initialize Firebase app
+firebase_admin.initialize_app(options={'databaseURL': 'https://vitask.firebaseio.com/'})
+
+from utility import timeconverter, get_timestamp
+from vtop import *
+from constants import *
+from crypto import *
+#Disable warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -51,20 +34,7 @@ port = int(os.environ.get('PORT', 5000))
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'canada$God7972#'
 
-# Initialize Firebase app
-firebase_admin.initialize_app(options={'databaseURL': 'https://vitask.firebaseio.com/'})
-
-
-# Functions for Moodle begin here
-MOODLE_LOGIN_URL = r"https://moodlecc.vit.ac.in/login/index.php"
-
-def get_timestamp():
-    """
-    Utility function to generate current timstamp
-    """
-    dt = datetime.now() - timedelta(15)
-    utc_time = dt.replace(tzinfo = timezone.utc) 
-    return int(utc_time.timestamp())
+ref = db.reference('vitask')
 
 def get_moodle_session(username, password):
     """
@@ -128,7 +98,6 @@ def get_dashboard_json(sess, sess_key):
 ---------------------------------------------------------------"""
 
 def ProfileFunc():
-    ref = db.reference('vitask')
     temp_dict = ref.child('profile').child('profile-'+session['id']).child(session['id']).get()
     name = temp_dict['Name']
     school = temp_dict['School']
@@ -144,55 +113,30 @@ def ProfileFunc():
     return (name, school, branch, program, regno, appno, email, proctoremail, proctorname, api)
 
 def parallel_timetable(sess, username, id):
-    ref = db.reference('vitask')
-    temp = ref.child("timetable").child('timetable-'+id).child(id).child('Timetable').get()
+    temp = ref.child("timetable").child('timetable-'+id).child(id).get() 
     if(temp is None):
         days = {}
-        days, check_timetable, courses = get_timetable(sess, username, id)
-        if(check_timetable == "False"):
-            session['timetable'] = 0
-        else:
-            session['timetable'] = 1
+        days, courses, status = get_timetable(sess, username, id)
+        return status
     
 def parallel_acadhistory(sess, username, id):
-    ref = db.reference('vitask')
-    temp = ref.child("acadhistory").child('acadhistory-'+id).child(id).child('AcadHistory').get()
+    temp = ref.child("acadhistory").child('acadhistory-'+id).child(id).get() 
     if(temp is None):
         acadHistory = {}
         curriculumDetails = {}
-        grades, check_grades = get_acadhistory(sess,username,id)
-        if(check_grades == "False"):
-            session['acadhistory'] = 0
-        else:
-            acadHistory = grades['AcadHistory']
-            curriculumDetails = grades['CurriculumDetails']
-            session['acadhistory'] = 1
+        grades, status = get_acadhistory(sess,username,id)
+        return status
         
 def parallel_attendance(sess, username, id):
     attend = {}
     q = {}
-    attend, q, check_attendance = get_attandance(sess, username, id)
-    if(check_attendance == "False"):
-        session['classes'] = 0
-    else:
-        session['classes'] = 1
+    attend, q, status = get_attendance(sess, username, id)
+    return status
 
 def parallel_marks(sess, username, id):
     marksDict = {}
-    marksDict, check_marks = get_marks(sess, username, id)
-    if(check_marks == "False"):
-        session['marks'] = 0
-    else:
-        session['marks'] = 1
-    
-def runInParallel(*fns):
-    proc = []
-    for fn in fns:
-        p = Process(target=fn)
-        p.start()
-        proc.append(p)
-    for p in proc:
-        p.join()
+    marksDict, status = get_marks(sess, username, id)
+    return status
 
 
 """---------------------------------------------------------------
@@ -254,24 +198,26 @@ def getAccount():
             "error" : "Something broke",
             "code"  : "500"
         })
-    if not valid:
+    if( valid == False ):
         # Password incorrect
         return jsonify({
             "error" : "Incorrect Password"
         })
-    ref = db.reference('vitask')
     try:
         profile = {}
-        profile, check_profile = get_student_profile(sess, username)
+        profile, status = get_student_profile(sess, username)
 
-        if(check_profile == False):
+        if( status == False ):
             return jsonify({"Error": "Internal Error.Please try again."})
+    except Exception as e:
+        print(e)
+        return jsonify({"Error": "Internal Error.Please try again."})
     finally:
         appno = profile['appNo']
         header_value = magichash(appno)
         
-        temp = ref.child("account").child('account-'+appno).child(appno).get()
-
+        temp = ref.child("account").child('account-'+appno).child(appno).get() 
+        
         if(temp is None):
             date = datetime.datetime.now()
             current_date = date.strftime("%d/%m/%Y, %H:%M:%S")
@@ -334,7 +280,7 @@ def getToken():
             "code"  : "400" # Bad request
         })
     check_header = magiccheck(request.headers.get('X-VITASK-API'))
-    if(check_header == "False"):
+    if(check_header == False):
         return jsonify({
             "error" : "Invalid Header",
             "code"  : "403" # Unauthorised
@@ -352,7 +298,7 @@ def getToken():
             "error" : "Something broke",
             "code"  : "500"
         })
-    if not valid:
+    if( valid == False ):
         # Password incorrect
         return jsonify({
             "error" : "Incorrect Password"
@@ -360,36 +306,79 @@ def getToken():
     ref = db.reference('vitask')
     try:
         profile = {}
-        profile, check_profile = get_student_profile(sess, username)
+        profile, status = get_student_profile(sess, username)
+        if( status == False ):
+            print("Failed at profile.")
+            return jsonify({"Error": "Internal Error in fetching profile.Please try again."})
         session['id'] = profile['appNo']
         session['name'] = profile['name']
         session['reg'] = profile['regNo']
         session['loggedin'] = 1
-        if(check_profile == "False"):
-            return jsonify({"Error": "Internal Error in fetching profile.Please try again."})
+    except Exception as e:
+        print(e)
+        return jsonify({"Error": "Internal Error in fetching profile.Please try again."})
     finally:
-        name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
-        # Timetable,Attendance,Acadhistory and Marks fetching in parallel
+        # Timetable,Attendance,Acadhistory and Marks fetching
         try:
-            runInParallel(parallel_timetable(sess, username, session['id']), parallel_attendance(sess, username, session['id']), parallel_acadhistory(sess, username, session['id']), parallel_marks(sess, username, session['id'])) 
+            status = parallel_timetable(sess, username, session['id'])
+            if( status == False ):
+                print("Failed at timetable.")
+                return jsonify({"Error": "Internal Error in fetching timetable.Please try again."})
+        except Exception as e:
+            print(e)
+            print("Exception at timetable.")
+            return jsonify({"Error": "Internal Error in fetching timetable.Please try again."})
         finally:
-            # API Calls logging
-            temp = ref.child("account").child('account-'+appno).child(appno).get()
-            count = int(temp['API-Calls']) + 1
-            tut_ref = ref.child("account")
-            new_ref = tut_ref.child('account-'+appno)
-            new_ref.set({
-                appno: {
-                    'X-VITASK-API': temp['X-VITASK-API'],
-                    'Name': temp['Name'],
-                    'RegNo': temp['RegNo'],
-                    'Account-Type': temp['Account-Type'],
-                    'API-Calls': count,
-                    'Start-Date': temp['Start-Date'],
-                    'End-Date': temp['End-Date']
-                }
-            })
-            return jsonify({'Name': name,'School': school,'Branch': branch,'Program': program,'RegNo': regno,'AppNo': appno,'Email': email,'ProctorEmail': proctoremail,'ProctorName': proctorname,'APItoken': api})
+            try:
+                status = parallel_attendance(sess, username, session['id'])
+                if( status == False ):
+                    print("Failed at attendance.")
+                    return jsonify({"Error": "Internal Error in fetching attendance.Please try again."})
+            except Exception as e:
+                print(e)
+                print("Exception at attendance.")
+                return jsonify({"Error": "Internal Error in fetching attendance.Please try again."})
+            finally:
+                try:
+                    status = parallel_acadhistory(sess, username, session['id'])
+                    if( status == False ):
+                        print("Failed at acadhistory.")
+                        return jsonify({"Error": "Internal Error in fetching academic history.Please try again."})
+                except Exception as e:
+                    print(e)
+                    print("Exception at acadhistory.")
+                    return jsonify({"Error": "Internal Error in fetching academic history.Please try again."})
+                finally:
+                    try:
+                        status = parallel_marks(sess, username, session['id'])
+                        if( status == False ):
+                            print("Failed at marks.")
+                            return jsonify({"Error": "Internal Error in fetching marks.Please try again."})
+                    except Exception as e:
+                        print(e)
+                        print("Exception at marks.")
+                        return jsonify({"Error": "Internal Error in fetching marks.Please try again."})
+                    finally:
+                        # API Calls logging
+                        temp = ref.child("account").child('account-'+profile['appNo']).child(profile['appNo']).get()
+                        count = int(temp['API-Calls']) + 1
+                        tut_ref = ref.child("account")
+                        new_ref = tut_ref.child('account-'+profile['appNo'])
+                        new_ref.set({
+                            profile['appNo']: {
+                                'X-VITASK-API': temp['X-VITASK-API'],
+                                'Name': temp['Name'],
+                                'RegNo': temp['RegNo'],
+                                'Account-Type': temp['Account-Type'],
+                                'API-Calls': count,
+                                'Start-Date': temp['Start-Date'],
+                                'End-Date': temp['End-Date']
+                            }
+                        })
+                        return jsonify({'Name': profile['name'],'School': profile['school'],'Branch': profile['branch'],'Program': profile['program'],'RegNo': profile['regNo'],'AppNo': profile['appNo'],'Email': profile['email'],'ProctorEmail': profile['proctorEmail'],'ProctorName': profile['proctorName'],'APItoken': profile['token']})
+ 
+
+            
 
 # /api/vtop/sync
 @app.route('/api/vtop/sync', methods=['POST'])
@@ -427,7 +416,7 @@ def sync():
             "error" : "403" # Unauthorised
         })
     check_header = magiccheck(request.headers.get('X-VITASK-API'))
-    if(check_header == "False"):
+    if(check_header == False):
         return jsonify({
             "error" : "Invalid Header",
             "code"  : "403" # Unauthorised
@@ -455,17 +444,17 @@ def sync():
                 "error" : "Something broke",
                 "code"  : "500"
             })
-        if not valid:
+        if( valid == False ):
             # Password incorrect
             return jsonify({
                 "error" : "Incorrect Password"
             })
-        attendance, q, check_attendance = get_attandance(sess, username, key)
-        marks, check_marks = get_marks(sess, username, key)
-        if(check_attendance == False):
-            return jsonify({"Error": "Internal Error in fetching Attendance.Please try again."})
-        if(check_marks == False):
-            return jsonify({"Error": "Internal Error in fetching Marks.Please try again."})
+        attendance, q, status_attendance = get_attendance(sess, username, key)
+        marks, status_marks = get_marks(sess, username, key)
+        if( status_attendance == False ):
+            return jsonify({"Error": "Internal Error in fetching attendance.Please try again."})
+        if( status_marks == False ):
+            return jsonify({"Error": "Internal Error in fetching marks.Please try again."})
         
         ref = db.reference('vitask')
         # API Calls logging
@@ -510,23 +499,23 @@ def sync():
                 "error" : "Something broke",
                 "code"  : "500"
             })
-        if not valid:
+        if( valid == False ):
             # Password incorrect
             return jsonify({
                 "error" : "Incorrect Password"
             })
-        attendance, q, check_attendance = get_attandance(sess, username, key)
-        marks, check_marks = get_marks(sess, username, key)
-        acadHistory, check_grades = get_acadhistory(sess,username,key)
-        days, check_timetable, courses = get_timetable(sess, username, key)
-        if(check_attendance == False):
-            return jsonify({"Error": "Internal Error in fetching Attendance.Please try again."})
-        if(check_marks == False):
-            return jsonify({"Error": "Internal Error in fetching Marks.Please try again."})
-        if(check_grades == False):
-            return jsonify({"Error": "Internal Error in fetching Grades.Please try again."})
-        if(check_timetable == False):
-            return jsonify({"Error": "Internal Error in fetching Timetable.Please try again."})
+        attendance, q, status_attendance = get_attendance(sess, username, key)
+        marks, status_marks = get_marks(sess, username, key)
+        acadHistory, status_acadhistory = get_acadhistory(sess,username,key)
+        days, courses, status_timetable = get_timetable(sess, username, key)
+        if(status_attendance == False):
+            return jsonify({"Error": "Internal Error in fetching attendance.Please try again."})
+        if(status_marks == False):
+            return jsonify({"Error": "Internal Error in fetching marks.Please try again."})
+        if(status_acadhistory == False):
+            return jsonify({"Error": "Internal Error in fetching academic history.Please try again."})
+        if(status_timetable == False):
+            return jsonify({"Error": "Internal Error in fetching timetable.Please try again."})
         
         ref = db.reference('vitask')
         # API Calls logging
@@ -576,7 +565,7 @@ def timetableapi():
     user_token = data.get("token",None)
     
     check_header = magiccheck(request.headers.get('X-VITASK-API'))
-    if(check_header == "False"):
+    if(check_header == False):
         return jsonify({
             "error" : "Invalid Header",
             "code"  : "403" # Unauthorised
@@ -653,7 +642,7 @@ def attendanceapi():
     user_token = data.get("token",None)
     
     check_header = magiccheck(request.headers.get('X-VITASK-API'))
-    if(check_header == "False"):
+    if(check_header == False):
         return jsonify({
             "error" : "Invalid Header",
             "code"  : "403" # Unauthorised
@@ -728,7 +717,7 @@ def marksapi():
     user_token = data.get("token",None)
     
     check_header = magiccheck(request.headers.get('X-VITASK-API'))
-    if(check_header == "False"):
+    if(check_header == False):
         return jsonify({
             "error" : "Invalid Header",
             "code"  : "403" # Unauthorised
@@ -801,7 +790,7 @@ def acadhistoryapi():
     user_token = data.get("token",None)
     
     check_header = magiccheck(request.headers.get('X-VITASK-API'))
-    if(check_header == "False"):
+    if(check_header == False):
         return jsonify({
             "error" : "Invalid Header",
             "code"  : "403" # Unauthorised
@@ -1268,37 +1257,75 @@ def index():
 @app.route('/signin', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        session['timetable'] = 0
-        session['classes'] = 0
-        session['moodle'] = 0
-        session['acadhistory'] = 0
         session['loggedin'] = 0
 
         username = request.form['username'].upper()
         password = request.form['password']
         try:
+            valid = True
             sess, valid = generate_session(username, password)
         finally:
             if( valid == False ):
+                print("Password error.")
                 return render_template('login.html',correct=False)
 
             else:
                 try:
                     profile = {}
-                    profile, check_profile = get_student_profile(sess, username)
-                    if(check_profile == False):
+                    profile, status = get_student_profile(sess, username)
+                    if( status == False ):
+                        print("Failed at profile.")
                         return render_template('login.html',correct=False)
                     session['id'] = profile['appNo']
                     session['name'] = profile['name']
                     session['reg'] = profile['regNo']
                     session['loggedin'] = 1
+                except Exception as e:
+                    print(e)
+                    return render_template('login.html',correct=False)
                 finally:
-                    # Timetable,Attendance,Acadhistory and Marks fetching in parallel
+                    # Timetable,Attendance,Acadhistory and Marks fetching
                     try:
-                        runInParallel(parallel_timetable(sess, username, session['id']), parallel_attendance(sess, username, session['id']), parallel_acadhistory(sess, username, session['id']), parallel_marks(sess, username, session['id'])) 
+                        status = parallel_timetable(sess, username, session['id'])
+                        if( status == False ):
+                            print("Failed at timetable.")
+                            return render_template('login.html',correct=False)
+                    except Exception as e:
+                        print(e)
+                        print("Exception at timetable.")
+                        return render_template('login.html',correct=False)
                     finally:
-                        return redirect(url_for('profile'))
-                       
+                        try:
+                            status = parallel_attendance(sess, username, session['id'])
+                            if( status == False ):
+                                print("Failed at attendance.")
+                                return render_template('login.html',correct=False)
+                        except Exception as e:
+                            print(e)
+                            print("Exception at attendance.")
+                            return render_template('login.html',correct=False)
+                        finally:
+                            try:
+                                status = parallel_acadhistory(sess, username, session['id'])
+                                if( status == False ):
+                                    print("Failed at acadhistory.")
+                                    return render_template('login.html',correct=False)
+                            except Exception as e:
+                                print(e)
+                                print("Exception at acadhistory.")
+                                return render_template('login.html',correct=False) 
+                            finally:
+                                try:
+                                    status = parallel_marks(sess, username, session['id'])
+                                    if( status == False ):
+                                        print("Failed at marks.")
+                                        return render_template('login.html',correct=False)
+                                except Exception as e:
+                                    print(e)
+                                    print("Exception at marks.")
+                                    return render_template('login.html',correct=False)
+                                finally:
+                                    return redirect(url_for('profile'))
     else:
         return redirect(url_for('index'))
                                   
@@ -1309,7 +1336,6 @@ def profile():
         return redirect(url_for('index'))
     else:
         name, school, branch, program, regno, appno, email, proctoremail, proctorname, api = ProfileFunc()
-        ref = db.reference('vitask')
         temp = ref.child("account").child('account-'+session['id']).child(session['id']).get()
         return render_template('profile.html',name=name,school=school,branch=branch,program=program,regno=regno,email=email,proctoremail=proctoremail,proctorname=proctorname,appno=appno,account_type=temp['Account-Type'])
 
@@ -1319,7 +1345,6 @@ def timetable():
     if(session['loggedin']==0):
         return redirect(url_for('index'))
     else:
-        ref = db.reference('vitask')
         days = ref.child("timetable").child('timetable-'+session['id']).child(session['id']).child('Timetable').get()
         return render_template('timetable.html',name=session['name'],id=session['id'],tt=days)
 
@@ -1330,7 +1355,6 @@ def classes():
     if(session['loggedin']==0):
         return redirect(url_for('index'))
     else:
-        ref = db.reference('vitask')
         attend = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Attendance').get()
         q = ref.child("attendance").child('attendance-'+session['id']).child(session['id']).child('Track').get()
         return render_template('attendance.html',name = session['name'],id = session['id'],dicti = attend,q = q)
@@ -1341,7 +1365,6 @@ def acadhistory():
     if(session['loggedin']==0):
         return redirect(url_for('index'))
     else:
-        ref = db.reference('vitask')
         acadHistory = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('AcadHistory').get()
         curriculumDetails = ref.child("acadhistory").child('acadhistory-'+session['id']).child(session['id']).child('CurriculumDetails').get()
         return render_template('acadhistory.html',name = session['name'],acadHistory = acadHistory,curriculumDetails = curriculumDetails)    
@@ -1352,7 +1375,6 @@ def marks():
     if(session['loggedin']==0):
         return redirect(url_for('index'))
     else:
-        ref = db.reference('vitask')
         marks = ref.child("marks").child('marks-'+session['id']).child(session['id']).child('Marks').get()
         return render_template('marks.html',name = session['name'], marks = marks)
     
@@ -1510,7 +1532,7 @@ def moodle():
     else:
         ref = db.reference('vitask')
         temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
-        if(session['moodle']==1 or temp is not None):
+        if(temp is not None):
             return redirect(url_for('assignments'))
         else:
             return render_template('moodle.html',name=session['name'])
@@ -1523,7 +1545,7 @@ def moodlelogin():
     else:
         ref = db.reference('vitask')
         temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
-        if(session['moodle']==1 or temp is not None):
+        if(temp is not None):
             return redirect(url_for('assignments'))
         else:
             moodle_username =  request.form['username']
@@ -1588,7 +1610,7 @@ def removeassignment():
             ids = []
             ids.append(int(request.form['id']))
 
-            if(session['moodle']==1 or temp is not None):
+            if(temp is not None):
                 username = temp['Username']
                 password = temp['Password']
                 assignments = temp['Assignments']
@@ -1627,7 +1649,7 @@ def restoreassignment():
             ids = []
             ids.append(int(request.form['id']))
 
-            if(session['moodle']==1 or temp is not None):
+            if(temp is not None):
                 username = temp['Username']
                 password = temp['Password']
                 assignments = temp['Assignments']
@@ -1661,7 +1683,7 @@ def noassignments():
     else:
         ref = db.reference('vitask')
         temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
-        if(session['moodle']==1 or temp is not None):
+        if(temp is not None):
             assignment = temp['Assignments']
             
             no_assignment = []
@@ -1682,7 +1704,7 @@ def assignments():
     else:
         ref = db.reference('vitask')
         temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
-        if(session['moodle']==1 or temp is not None):
+        if(temp is not None):
             assignment = temp['Assignments']
             
             yes_assignment = []
@@ -1782,13 +1804,9 @@ def moodleresync():
 @app.route('/logout')
 def logout():
     session.pop('id', None)
-    session.pop('timetable', 0)
-    session.pop('classes', 0)
     session.pop('name', None)
     session.pop('reg', None)
     session.pop('moodle', 0)
-    session.pop('acadhistory', 0)
-    # session.pop('marks', 0)
     session.pop('loggedin',0)
     return redirect(url_for('home'))
 

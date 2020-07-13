@@ -4,4 +4,6 @@ captcha/
 files/
 credential.txt
 captcha.png
+sample.py
+delete.py
 __pycache__

@@ -16,9 +16,9 @@ def magiccheck(header):
         hold = temp[i]
         for j in hold:
             if(hold[j]['X-VITASK-API']==header):
-                return "True"
+                return True
                 ctr = 1
                 break
         if(ctr==1):
             break
-    return "False"
+    return False
