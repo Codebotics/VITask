@@ -37,11 +37,11 @@ def insert_timetable(id, days, final_dict, sub_entry="timetable"):
     finally:
         return status
         
-def insert_acadhistory(id, acadHistory, curriculumDetails, sub_entry="timetable"):
+def insert_acadhistory(id, acadHistory, curriculumDetails, sub_entry="acadhistory"):
     status = True
     try: 
         tut_ref = ref.child(sub_entry)
-        new_ref = tut_ref.child(sub_entry+id)
+        new_ref = tut_ref.child(sub_entry+"-"+id)
         new_ref.set({
             id: {
                 'AcadHistory': acadHistory,
