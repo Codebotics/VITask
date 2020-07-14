@@ -116,6 +116,21 @@ def parse_timetable(timetable_html):
                     swap_hold = l2[k+1]
                     l2[k+1] = l2[k]
                     l2[k] = swap_hold
+        for j in range(1,len(l1)):
+            for k in range(0,len(l1)-j):
+                temp1 = l1[k]["startTime"].split(":")
+                hours1 = int(temp1[0])
+                mins1 = int(temp1[1])
+                final1 = timeconverter(hours1,mins1)
+
+                temp2 = l1[k+1]["startTime"].split(":")
+                hours2 = int(temp2[0])
+                mins2 = int(temp2[1])
+                final2 = timeconverter(hours2,mins2)
+                if(final1>final2):
+                    swap_hold = l1[k+1]
+                    l1[k+1] = l1[k]
+                    l1[k] = swap_hold
         days[i]=l2+l1
         l1 = []
         l2 = []
