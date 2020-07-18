@@ -120,7 +120,7 @@ Functions for Captcha solver end here
 # Slots for Timetable
 def timetable_slots():
     time_table={'A1':['Monday 8:00 8:50','Tuesday 9:00 9:50','Wednesday 10:00 10:50'],'B1':['Tuesday 8:00 8:50','Wednesday 9:00 9:50','Thursday 10:00 10:50'],'C1':['Wednesday 8:00 8:50','Thursday 9:00 9:50','Friday 10:00 10:50'],
-    'D1':['Thursday 8:00 8:50','Friday 9:50 10:40','Saturday 10:00 10:50'],'E1':['Friday 8:00 8:50','Saturday 9:00 9:50','Monday 11:00 11:50'],'F1':['Monday 10:00 10:50','Tuesday 11:00 11:50'],
+    'D1':['Thursday 8:00 8:50','Friday 9:00 9:50','Saturday 10:00 10:50'],'E1':['Friday 8:00 8:50','Saturday 9:00 9:50','Monday 11:00 11:50'],'F1':['Saturday 8:00 8:50','Monday 10:00 10:50','Tuesday 11:00 11:50'],
     'G1':['Monday 9:00 9:50','Tuesday 10:00 10:50','Wednesday 11:00 11:50'],'S1':['Thursday 12:00 12:50'],'S2':['Friday 1:00 1:50'],'S3':['Saturday 1:00 1:50'],
 
     'TA1':['Thursday 11:00 11:50'],'TB1':['Friday 11:00 11:50'],'TC1':['Saturday 11:00 11:50'],'TD1':['Monday 12:00 12:50'],'TE1':['Tuesday 12:00 12:50'],
