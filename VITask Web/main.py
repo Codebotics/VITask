@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import firebase_admin
 from firebase_admin import db
 from PIL import Image, ImageFilter
-from datetime import timezone,datetime,timedelta
+from datetime import datetime as dt, timedelta, timezone
 import requests, urllib3, time, re, os, random, hashlib, requests, json, base64
 from urllib.request import urlretrieve
 
@@ -42,15 +42,24 @@ def get_moodle_session(username, password):
     return session object and sess_key
     """
     sess = requests.Session()
-    #Moodle passes anchor secretly idk why lol
+    #Moodle passes anchor secretly 
     payload = {
         "username" : username,
         "password" : password,
-        "anchor"   : ""
+        "anchor"   : "",
+        "logintoken" : ""
     }
 
+    # LMS now also requires logintoken
+    prelogin_text = sess.get(MOODLE_LOGIN_URL, verify=False).text
+
+    loginTokenIndex = prelogin_text.find("logintoken")
+    login_token = prelogin_text[loginTokenIndex+19:loginTokenIndex+51]
+    # print(login_token)
+    payload['logintoken'] = login_token
+
     #Using verify = False is deadly but moodle is stupid
-    login_text = sess.post(MOODLE_LOGIN_URL,data=payload, verify=False).text
+    login_text = sess.post(MOODLE_LOGIN_URL, data=payload, verify=False).text
 
     #TODO : Check is password is correct or not
     #For finding session key. This is where moodle sucks lol.
@@ -64,20 +73,27 @@ def get_dashboard_json(sess, sess_key):
     This function returns dashboard json data fields array
     """
     #TODO:Find a better method to format string
-    DASHBOARD_URL = "https://moodlecc.vit.ac.in/lib/ajax/service.php?sesskey="+sess_key+"&info=core_calendar_get_action_events_by_timesort"
-    
+    DASHBOARD_URL = "https://lms.vit.ac.in/lib/ajax/service.php?sesskey="+sess_key+"&info=core_calendar_get_calendar_monthly_view"
+    """
+    Moodle uses the timestamp of current day at 00:00. so rather than using that. I'm just using timestamp-24 hrs or 3600secs
+    """
+    curr_timestamp = int(time.time())
+
+    # Also the args have changed
     dashboard_payload = [
         {
             "index":0,
             "methodname":"core_calendar_get_action_events_by_timesort",
-            "args":{
-                "limitnum":20,
-                "timesortfrom":get_timestamp()
-                }
+            "args": {
+                "limitnum" : 6,
+                "limittononsuspendedevents": True,
+                "timesortfrom" : curr_timestamp-86400, # Get from previos day. lol i forgot seconds in a day are 86400 not 3600 :facepalm:
+                "timesortto" : curr_timestamp+ (7*86400) # Get till next week
+            }
         }
     ]
 
-    dashboard_text = sess.post(DASHBOARD_URL, data = json.dumps(dashboard_payload), verify= False).text
+    dashboard_text = sess.post(DASHBOARD_URL, data = json.dumps(dashboard_payload), verify = False).text
     dashboard_json = json.loads(dashboard_text)
     try:
         due_items = dashboard_json[0]["data"]["events"]
@@ -915,7 +931,7 @@ def moodleLoginapi():
             assignment['id'] = item['id']
             assignment['name'] = item['name']
             assignment['description'] = item['description']
-            assignment['time'] =  datetime.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S') 
+            assignment['time'] =  dt.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S') 
             assignment['url'] = item['url']
             assignment['course'] = item['course']['fullname']
             assignment['show'] = True                # 0 == False, 1 == True
@@ -1067,7 +1083,7 @@ def moodleSyncapi():
                 assignment['id'] = item['id']
                 assignment['name'] = item['name']
                 assignment['description'] = item['description'] # This is Raw HTML, either parse at client end or display accordingly
-                assignment['time'] =  datetime.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S')
+                assignment['time'] =  dt.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S')
                 assignment['url'] = item['url']
                 assignment['course'] = item['course']['fullname']
                 assignment['show'] = True                # 0 == False, 1 == True
@@ -1567,7 +1583,7 @@ def moodlelogin():
                     assignment['id'] = item['id']
                     assignment['name'] = item['name']
                     assignment['description'] = item['description']
-                    assignment['time'] =  datetime.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S')
+                    assignment['time'] =  dt.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S')
                     assignment['url'] = item['url']
                     assignment['course'] = item['course']['fullname']
                     assignment['show'] = True                # 0 == False, 1 == True
@@ -1764,7 +1780,7 @@ def moodleresync():
                 assignment['id'] = item['id']
                 assignment['name'] = item['name']
                 assignment['description'] = item['description'] # This is Raw HTML, either parse at client end or display accordingly
-                assignment['time'] =  datetime.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S')
+                assignment['time'] =  dt.fromtimestamp(int(item['timesort'])).strftime('%d-%m-%Y %H:%M:%S')
                 assignment['url'] = item['url']
                 assignment['course'] = item['course']['fullname']
                 assignment['show'] = True                # 0 == False, 1 == True
