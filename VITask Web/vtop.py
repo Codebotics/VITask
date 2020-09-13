@@ -240,7 +240,7 @@ def get_student_profile(sess,username):
                 temp = ref.child("account").child('account-'+profile['appNo']).child(profile['appNo']).get() 
 
                 if(temp is None):
-                    if(insert_account(profile['regNo'], profile, header_value)):
+                    if(insert_account(profile['appNo'], profile, header_value)):
                         status = True
                     else:
                         status = False
