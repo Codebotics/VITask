@@ -20,18 +20,13 @@ You can check the preqrequistes in the `VITask Web/requirements.txt` file. You r
 2.Installing from `requirements.txt`:
 * Activate virtual environment as told above.
 * Run this `pip install -r requirements.txt`
-     
-3.Next step is running `main.py` . But before do following steps.
-
-* For Windows users, authorize Firebase by saving `firebase.json` in a suitable location and then executing `set GOOGLE_APPLICATION_CREDENTIALS = path_to_your_firebase.json\firebase.json` in cmd.
-* For Linux Users, Authorize Firebase by saving `firebase.json` in a suitable location and then executing `export GOOGLE_APPLICATION_CREDENTIALS = path_to_your_firebase.json\firebase.json` in terminal.
     
-4.Running `main.py`
+3.Running `app.py`
 
 * Activate virtual environment and then make sure you have completed above steps.
-* Now run `py main.py` or `python main.py` or `python3 main.py` or `py3 main.py`
+* Now run `py app.py` or `python app.py` or `python3 app.py` or `py3 app.py`
 * Open your Browser and then enter URL `http://localhost:5000/login` to enter your login details
-* Now Check the `main.py` for the `@app.route` and then head over to the page you want to check for example if you want to check page `xyz`    then it will have an app route as `@app.route('/xyz')`.Then use the URL `http://localhost:5000/xyz`
+* Now Check the `app.py` for the `@app.route` and then head over to the page you want to check for example if you want to check page `xyz`    then it will have an app route as `@app.route('/xyz')`.Then use the URL `http://localhost:5000/xyz`
 
 ---
 ## For Desktop and React Native
@@ -43,4 +38,4 @@ Right now we dont have iOS and MacOS support for the app. So, linking dependenci
 
 ---
 
-_Note that after sometime the `Firebase.json` file may not be valid and made private. This is done for privacy and preventing  Database breach. If you want to contribute to Web Server and check please contact us_
+_Note that after sometime the `firebase.json` file may not be valid and made private. This is done for privacy and preventing  Database breach. If you want to contribute to Web Server and check please contact us_

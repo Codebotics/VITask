@@ -8,14 +8,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from bs4 import BeautifulSoup
 import firebase_admin
-from firebase_admin import db
+from firebase_admin import credentials, db
 from PIL import Image, ImageFilter
 from datetime import datetime as dt, timedelta, timezone
 import requests, urllib3, time, re, os, random, hashlib, requests, json, base64
 from urllib.request import urlretrieve
 
-# Initialize Firebase app
-firebase_admin.initialize_app(options={'databaseURL': 'https://vitask.firebaseio.com/'})
+cred = credentials.Certificate("firebase.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL':'https://vitask.firebaseio.com/'
+})
 
 from utility import timeconverter, get_timestamp
 from vtop import *
@@ -1699,7 +1701,7 @@ def noassignments():
     else:
         ref = db.reference('vitask')
         temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
-        if(temp is not None):
+        if(temp is not None and 'Assignments' in temp):
             assignment = temp['Assignments']
             
             no_assignment = []
@@ -1708,6 +1710,9 @@ def noassignments():
                 if(i["show"] == False):
                     no_assignment.append(i)
                     
+            return render_template('noassignments.html',name=session['name'],assignment=no_assignment)
+        elif(temp is not None and 'Assignments' not in temp):
+            no_assignment = []
             return render_template('noassignments.html',name=session['name'],assignment=no_assignment)
         else:
             return redirect(url_for('moodle'))
@@ -1720,7 +1725,7 @@ def assignments():
     else:
         ref = db.reference('vitask')
         temp = ref.child("moodle").child('moodle-'+session['id']).child(session['id']).get()
-        if(temp is not None):
+        if(temp is not None and 'Assignments' in temp):
             assignment = temp['Assignments']
             
             yes_assignment = []
@@ -1729,6 +1734,9 @@ def assignments():
                 if(i["show"]==True):
                     yes_assignment.append(i)
                     
+            return render_template('assignments.html',name=session['name'],assignment=yes_assignment)
+        elif(temp is not None and 'Assignments' not in temp):
+            yes_assignment = []
             return render_template('assignments.html',name=session['name'],assignment=yes_assignment)
         else:
             return redirect(url_for('moodle'))

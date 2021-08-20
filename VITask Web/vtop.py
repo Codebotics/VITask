@@ -50,7 +50,7 @@ def generate_session(username, password):
             valid = False
         return (sess,valid)
 
-def get_attendance(sess, username, id, semesterID="CH2020211"):
+def get_attendance(sess, username, id, semesterID="CH2021221"):
     """
     This function gets the attendance details, from the VTOP page. Returns a json object with 
     key : slot and value as attendance details
@@ -98,7 +98,7 @@ def get_attendance(sess, username, id, semesterID="CH2020211"):
 
             return (attend, q, status)
 
-def get_timetable(sess, username, id, semesterID="CH2020211"):
+def get_timetable(sess, username, id, semesterID="CH2021221"):
     """
     Returns Timetable 
     Format of timetable : {
@@ -249,7 +249,7 @@ def get_student_profile(sess,username):
 
             return (profile, status)
 
-def get_marks(sess, username, id, semesterID="CH2020211"):
+def get_marks(sess, username, id, semesterID="CH2021221"):
     """
     Returns Marks of the Student
     Format is: {

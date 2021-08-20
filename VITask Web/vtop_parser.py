@@ -49,7 +49,7 @@ def parse_timetable(timetable_html):
     # Parsing logic by Apratim
     soup = BeautifulSoup(timetable_html, 'lxml')
     code_soup = soup.find_all('td', {'bgcolor': '#CCFF33'})
-    list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
+    list_soup = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #b2b2b2;vertical-align: middle;' in s})
     list_code = [i.getText() for i in list_soup]
     courses = {}
     for i in list_code:
@@ -69,14 +69,14 @@ def parse_timetable(timetable_html):
         p = [arr[1],arr[3],arr[4],courses[arr[1]],time_table[arr[0]]]
         slots[arr[0]] = p
 
-    days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[],"Saturday":[]}
+    days = {"Monday":[],"Tuesday":[],"Wednesday":[],"Thursday":[],"Friday":[]}
     p = []
     for i in slots:
         for j in slots[i][4]:
             arr = j.split(" ")
             p = {
                 "slot" : i,
-                "courseName": slots[i][3],
+                "courseName": slots[i][3].strip().split("\n")[0],
                 "code" : slots[i][0],
                 "class" : slots[i][1]+" " +slots[i][2],
                 "startTime": arr[1],
@@ -85,10 +85,10 @@ def parse_timetable(timetable_html):
             # Replaced Code with much shorter code (Cherub)
             days[arr[0]].append(p)
             p = []
-            
+
     l1 = []
     l2 = []
-            
+
     for i in days:
         for j in days[i]:
             temp = j["startTime"].split(":")
@@ -99,7 +99,7 @@ def parse_timetable(timetable_html):
                 l2.append(j)
             else:
                 l1.append(j)
-                
+
         # Time Sorting
         for j in range(1,len(l2)):
             for k in range(0,len(l2)-j):
@@ -134,20 +134,21 @@ def parse_timetable(timetable_html):
         days[i]=l2+l1
         l1 = []
         l2 = []
-        
+
     # Credits fetching for CGPA calculator begins here
     code_soup1 = soup.find_all('td', {'style': lambda s: 'vertical-align: middle; border: 1px solid #b2b2b2; padding: 5px;' in s})
-    list_soup1 = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #3c8dbc;vertical-align: middle;text-align: left;' in s})
+    list_soup1 = soup.find_all('td', {'style': lambda s: 'padding: 3px; font-size: 12px; border-color: #b2b2b2;vertical-align: middle;' in s})
     #print(code_soup)
-    list_course = [i.getText() for i in list_soup1]
+    list_course = [i.getText().strip().split("\n")[0] for i in list_soup1]
     #print(list_course)
     code_course = [i.getText() for i in code_soup1]
     hold_course = []
-
+    
     for i in code_course:
-        if(code_course.index(i)%11==2):
+        if(code_course.index(i)%9==2):
             i=i[len(i)-2:len(i)-1]
             hold_course.append(i)
+        
     course_credits = dict(zip(list_course, hold_course))
 
     final_dict = {}
@@ -159,7 +160,7 @@ def parse_timetable(timetable_html):
             final_dict[prep_string] = int(course_credits[i])
         else:
             final_dict[prep_string] = int(final_dict[prep_string])+int(course_credits[i])
-            
+
     return (days,final_dict)
 
 def parse_acadhistory(acad_html):
@@ -232,14 +233,14 @@ def parse_profile(profile_html):
 
     profile = {
                 'name': tutorial_code[1],
-                'branch': tutorial_code[18],
-                'program': tutorial_code[17],
-                'regNo': tutorial_code[14],
+                'branch': tutorial_code[19],
+                'program': tutorial_code[18],
+                'regNo': tutorial_code[15],
                 'appNo': tutorial_code[0],
-                'school': tutorial_code[19],
+                'school': tutorial_code[20],
                 'email': tutorial_code[29],
-                'proctorName': tutorial_proctor[93],
-                'proctorEmail': tutorial_proctor[98],
+                'proctorName': tutorial_proctor[92],
+                'proctorEmail': tutorial_proctor[97],
                 'token': token
             }
     
